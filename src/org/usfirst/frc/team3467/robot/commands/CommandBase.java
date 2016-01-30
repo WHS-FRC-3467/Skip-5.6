@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 
 import org.usfirst.frc.team3467.robot.OI;
 import org.usfirst.frc.team3467.robot.subsystems.DriveBase.DriveBase;
+//import org.usfirst.frc.team3467.robot.subsystems.NavX_MXP.MXP_IMU;
 
 public class CommandBase extends Command {
 	
@@ -14,6 +15,7 @@ public class CommandBase extends Command {
 	public static CommandBase commandBase;
 	public static OI oi;
 	public static DriveBase driveBase;
+	//public static MXP_IMU imu;
 	
 		//Create vector of with subsystems as elements
 	public static Vector <Subsystem> subsystemList;
@@ -27,6 +29,8 @@ public class CommandBase extends Command {
 		//Add instances of subsystems
 		driveBase = new DriveBase();
 		subsystemList.addElement(driveBase);
+		//imu = new MXP_IMU();
+		//subsystemList.addElement(imu);
 		
 		//Make instance of operator interface
 		oi = new OI();

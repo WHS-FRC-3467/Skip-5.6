@@ -142,7 +142,7 @@ public class MXP_IMU extends Subsystem {
 	        // If you are using the IMUAdvanced class, you can also access the following
 	        // additional functions, at the expense of some extra processing
 	        // that occurs on the CRio processor
-/*	        
+	        
 	        SmartDashboard.putNumber(   "IMU_Accel_X",          imu.getWorldLinearAccelX());
 	        SmartDashboard.putNumber(   "IMU_Accel_Y",          imu.getWorldLinearAccelY());
 	        SmartDashboard.putBoolean(  "IMU_IsMoving",         imu.isMoving());
@@ -154,7 +154,8 @@ public class MXP_IMU extends Subsystem {
 	        SmartDashboard.putNumber(   "Displacement_Y",       imu.getDisplacementY() );      
         }
     }
-		*/
+    */
+
 
     
     
