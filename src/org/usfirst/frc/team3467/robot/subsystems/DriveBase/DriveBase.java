@@ -53,10 +53,6 @@ public class DriveBase extends Subsystem {
 	
 		//DriveBase class constructor
 	public DriveBase() {
-		//Set default control Modes for CANTalons
-		leftTalon.changeControlMode(TalonControlMode.PercentVbus);
-		rightTalon.changeControlMode(TalonControlMode.PercentVbus);
-		
 		//DriveBase instance = the current instance
 		instance = this;
 		
@@ -64,6 +60,9 @@ public class DriveBase extends Subsystem {
 		leftTalon = new CANTalon(RobotMap.drivebase_LeftTalon);
 		rightTalon = new CANTalon(RobotMap.drivebase_RightTalon);
 		
+		//Set default control Modes for CANTalons
+		leftTalon.changeControlMode(TalonControlMode.PercentVbus);
+		rightTalon.changeControlMode(TalonControlMode.PercentVbus);
 	}
 	
 	//Set up Distance Drive

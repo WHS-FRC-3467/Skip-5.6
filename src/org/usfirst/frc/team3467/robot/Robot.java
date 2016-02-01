@@ -8,9 +8,11 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 	//Import subsystem classes from subsystem packages
 import org.usfirst.frc.team3467.robot.subsystems.DriveBase.DriveBase;
+import org.usfirst.frc.team3467.robot.commands.CommandBase;
 	
 	//Import robot commands from command packages
 import org.usfirst.frc.team3467.robot.subsystems.DriveBase.commands.TankDrive;
@@ -24,9 +26,6 @@ import org.usfirst.frc.team3467.robot.subsystems.DriveBase.commands.TankDrive;
  */
 public class Robot extends IterativeRobot {
 
-	
-	public static DriveBase Drivebase;
-	public static OI oi;
 	public static SendableChooser autochooser;
 	
 	
@@ -37,10 +36,8 @@ public class Robot extends IterativeRobot {
      * used for any initialization code.
      */
     public void robotInit() {
-    	//Use constructor methods to create instances of drivebase and OI
-		oi = new OI();
-		Drivebase = new DriveBase();
         // instantiate the command used for the autonomous period
+    	CommandBase.init();
     }
 	
 	public void disabledPeriodic() {
@@ -80,7 +77,7 @@ public class Robot extends IterativeRobot {
      */
     public void teleopPeriodic() {
         Scheduler.getInstance().run();
-        Drivebase.driveTank(oi.getLeft(),oi.getRight());
+        SmartDashboard.putString("Sup", "yo");
     }
     
     /**
