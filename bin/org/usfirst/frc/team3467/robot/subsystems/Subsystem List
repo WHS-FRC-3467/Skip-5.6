@@ -1,16 +1,47 @@
 Subsystem Lists
 
-	-DriveBase (PID)
-		-CANTalon (left)
-		-CANTalon (right)
-	-MXP_IMU
-		-Gyroscope
-	-Power Management (interface)'
-		-Brownout prevention
-	-Utility Bar
-		-Piston - Solenoid
-	-Shooter
-		-CANTalon
+Subsystems called by Operator Interface:
+	- DriveBase (PIDSubsystem directed by Gyro)
+		* Drive
+		- CANTalon (left)
+		- CANTalon (right)
+
+    - Intake
+        * Ball Control
+        - CANTalon (Pull In / Push Out)
+        - Solenoid (Raise / Lower)
+
+    - Utility Bar
+        * Get over/under obstacles
+        - Solenoid (Raise / Lower)
+        - Solenoid (Finger Deploy / Retract)
+
+    - Catapult
+        * Shooter
+        - CANTalon (to load)
+        - Solenoid (to Release)
+        
+
+Utility/Sensor Subsystems:
 	
+	- Gyro
+		* Gyroscope
+		- MXP IMU (or ADIS16448)
 	
-	-Vision Targeting
+	-Brownout
+        * Power Management
+        - Registration interface for Subsystems
+        - Callback vector for subsystem notification
+        - Constant monitoring of voltage level
+	   
+    - Camera
+        * Vision Targeting
+        * Field Vision
+    
+    - Compressor
+        * Intelligent compressor control
+        -Use inline pressure sensor to make decisions about how long to run, etc.
+        
+    - LEDs
+        * On Robot Signals / Feedback for driver
+	
