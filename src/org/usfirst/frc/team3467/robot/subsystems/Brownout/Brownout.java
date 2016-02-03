@@ -8,21 +8,21 @@ import edu.wpi.first.wpilibj.PowerDistributionPanel;
 
 public class Brownout {
 
-	public PowerDistributionPanel Hera = new PowerDistributionPanel();
 
 	PowerDistributionPanel pdp = new PowerDistributionPanel();
-	double current = pdp.getCurrent(1);
-	double voltage = Hera.getVoltage();
+	
 
 	public double getVoltage() {
-		return voltage;
+		return pdp.getVoltage();
 	}
 	
 	public enum PowerLevel
 	{
+		//Sets the levels of power
 	    Normal(1), Chill(2), Critical(3);
 	    public int value;
 
+	    //Sets the number received to a level
 	    public static PowerLevel valueOf(int value) {
 	      for (PowerLevel mode : values()) {
 	        if (mode.value == value) {
@@ -32,6 +32,7 @@ public class Brownout {
 	      return null;
 	    }
 
+	    //Constructor for enumeration
 	    private PowerLevel(int value) {
 	      this.value = value;
 	    }
@@ -39,7 +40,7 @@ public class Brownout {
 	}
 	
 	// The current Power Level
-	private PowerLevel	currentPowerLevel = PowerLevel.Normal;
+	private PowerLevel	batteryLevel = PowerLevel.Normal;
 	
 	// Create vector of consumers to callback
 	public static Vector <PowerConsumer> callbackList;
@@ -56,35 +57,45 @@ public class Brownout {
 		// Add power consumer subsystem to list
 		callbackList.addElement(consumerSubsys);
 	}
-	public int batteryLevel = 1;
 	public int CHILLVOLTAGE = 9;
 	public int CRITICALVOLTAGE = 7;
 
-	public int getLevel() {
+	public PowerLevel getLevel() {
+		
+		return batteryLevel;
+	}
+		
+	public void checkLevel() {
+		
+		PowerLevel oldLevel = batteryLevel;
+
+		double voltage = pdp.getVoltage();
 		
 		//Sets first battery level to above 9 volts
 		if (voltage >= CHILLVOLTAGE) {
-			batteryLevel = 1;
+			batteryLevel = PowerLevel.Normal;
 		}
 			
 		//Sets second level to between 7 and 9 volts
-		if (voltage < CHILLVOLTAGE && voltage >= CRITICALVOLTAGE) {
-			batteryLevel = 2;
+		else if (voltage < CHILLVOLTAGE && voltage >= CRITICALVOLTAGE) {
+			batteryLevel = PowerLevel.Chill;
 		}
 			
 		//Sets third and final level to below 7 volts
-		if (voltage < CRITICALVOLTAGE) {
-			batteryLevel = 3;
+		else if (voltage < CRITICALVOLTAGE) {
+			batteryLevel = PowerLevel.Critical;
 		}
 		
-		return batteryLevel;
+		if (batteryLevel!= oldLevel) {
+			notifyConsumers();
+		}
 	}	
 	public void notifyConsumers()
 	{
 		for (int i = 0; i < callbackList.size(); i++)
 		{
 			PowerConsumer consumer = (PowerConsumer) callbackList.elementAt(i);
-			consumer.callbackAlert(currentPowerLevel);
+			consumer.callbackAlert(batteryLevel);
 		}
 
 	}
