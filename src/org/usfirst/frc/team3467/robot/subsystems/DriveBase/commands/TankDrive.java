@@ -1,27 +1,32 @@
 package org.usfirst.frc.team3467.robot.subsystems.DriveBase.commands;
 
-import org.usfirst.frc.team3467.robot.Robot;
-import org.usfirst.frc.team3467.robot.commands.CommandBase;
-import org.usfirst.frc.team3467.robot.subsystems.DriveBase.DriveBase;
-
-
-import edu.wpi.first.wpilibj.Sendable;
-//import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import org.usfirst.frc.team3467.robot.commands.CommandBase;
+import org.usfirst.frc.team3467.robot.Robot;
+import org.usfirst.frc.team3467.robot.subsystems.DriveBase.DriveBase;
+
 public class TankDrive extends CommandBase {
-	
-	protected void initialize() {
-		//Makes it so the command will not function when if the there is no specific DriveBase is created
+
+	//private DriveBase db;
+	public TankDrive() {
 		requires(driveBase);
+		SmartDashboard.putString("TankDrive", "Instantiated");
+	}
+	
+	@Override
+	protected void initialize() {
+		//db = DriveBase.getinstance();
+		//requires(db);
+		SmartDashboard.putString("TankDrive", "Command init complete");
+		
 	}
 
+	@Override
 	protected void execute() {
-		//Applies the driveTank method to the driveBase object
+		//Robot.driveBase.driveTank(CommandBase.oi.getleft(), CommandBase.oi.getRight());
 		driveBase.driveTank(oi.getLeft(), oi.getRight());
-		SmartDashboard.putString("Hello", "Working");
-		
-		
+		SmartDashboard.putString("TankDrive", "Executing");
 	}
 
 	@Override

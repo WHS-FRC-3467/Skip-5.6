@@ -1,8 +1,6 @@
 
 package org.usfirst.frc.team3467.robot;
 
-import java.util.Vector;
-
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -10,12 +8,8 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-	//Import subsystem classes from subsystem packages
-import org.usfirst.frc.team3467.robot.subsystems.DriveBase.DriveBase;
 import org.usfirst.frc.team3467.robot.commands.CommandBase;
-	
-	//Import robot commands from command packages
-import org.usfirst.frc.team3467.robot.subsystems.DriveBase.commands.TankDrive;
+import org.usfirst.frc.team3467.robot.subsystems.DriveBase.DriveBase;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -25,19 +19,37 @@ import org.usfirst.frc.team3467.robot.subsystems.DriveBase.commands.TankDrive;
  * directory.
  */
 public class Robot extends IterativeRobot {
-
-	public static SendableChooser autochooser;
-	
 	
     Command autonomousCommand;
+    SendableChooser chooser;
 
     /**
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
      */
+    
+    public Robot() {
+ 
+    }
+    
     public void robotInit() {
-        // instantiate the command used for the autonomous period
-    	CommandBase.init();
+    	
+        chooser = new SendableChooser();
+        //chooser.addObject("My Auto", new MyAutoCommand());
+        
+        CommandBase.init();
+        SmartDashboard.putString("Robot", "CommandBase init succesful");
+
+        SmartDashboard.putData("Auto mode", chooser);
+    }
+	
+	/**
+     * This function is called once each time the robot enters Disabled mode.
+     * You can use it to reset any subsystem information you want to clear when
+	 * the robot is disabled.
+     */
+    public void disabledInit(){
+
     }
 	
 	public void disabledPeriodic() {
@@ -45,13 +57,23 @@ public class Robot extends IterativeRobot {
 	}
 
     public void autonomousInit() {
-        // schedule the autonomous command (example)
+        autonomousCommand = (Command) chooser.getSelected();
+        
+		/* String autoSelected = SmartDashboard.getString("Auto Selector", "Default");
+		switch(autoSelected) {
+		case "My Auto":
+			autonomousCommand = new MyAutoCommand();
+			break;
+		case "Default Auto":
+		default:
+			autonomousCommand = new ExampleCommand();
+			break;
+		} */
+    	
+    	// schedule the autonomous command (example)
         if (autonomousCommand != null) autonomousCommand.start();
     }
 
-    /**
-     * This function is called periodically during autonomous
-     */
     public void autonomousPeriodic() {
         Scheduler.getInstance().run();
     }
@@ -65,19 +87,10 @@ public class Robot extends IterativeRobot {
     }
 
     /**
-     * This function is called when the disabled button is hit.
-     * You can use it to reset subsystems before shutting down.
-     */
-    public void disabledInit(){
-
-    }
-
-    /**
      * This function is called periodically during operator control
      */
     public void teleopPeriodic() {
         Scheduler.getInstance().run();
-        SmartDashboard.putString("Sup", "yo");
     }
     
     /**
