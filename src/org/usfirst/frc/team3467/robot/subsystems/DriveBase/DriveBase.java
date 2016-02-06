@@ -11,6 +11,8 @@ import org.usfirst.frc.team3467.robot.RobotMap;
 import org.usfirst.frc.team3467.robot.subsystems.DriveBase.commands.TankDrive;
 
 public class DriveBase extends Subsystem {
+	//Debugging?
+	public static final boolean deBugging = false;
 	
 	//Default Ramp Rate
 	private final double ramp_Rate = 2;
@@ -43,6 +45,7 @@ public class DriveBase extends Subsystem {
 		//Initializing the Default Command
 	protected void initDefaultCommand() {
 		this.setDefaultCommand(new TankDrive());
+		SmartDashboard.putString("DriveBase", "Default command set");
 	}
 	
 		//Positional Pid Constants
@@ -63,6 +66,19 @@ public class DriveBase extends Subsystem {
 		//Set default control Modes for CANTalons
 		leftTalon.changeControlMode(TalonControlMode.PercentVbus);
 		rightTalon.changeControlMode(TalonControlMode.PercentVbus);
+		t_controlMode = CANTalon.TalonControlMode.PercentVbus;
+		
+			//Set SIM encoders as feedback devices
+		leftTalon.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
+		rightTalon.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
+		
+			//Set Izones
+		leftTalon.setIZone(IZone);
+		rightTalon.setIZone(IZone);
+		
+			//Set Voltage ramp rates
+		leftTalon.setCloseLoopRampRate(ramp_Rate);
+		rightTalon.setCloseLoopRampRate(ramp_Rate);
 	}
 	
 	//Set up Distance Drive
@@ -91,10 +107,13 @@ public class DriveBase extends Subsystem {
 	
 	//Set up for Tank Drive
 	public void initTank () {
-		if (t_controlMode != TalonControlMode.PercentVbus);
-			leftTalon.changeControlMode(TalonControlMode.PercentVbus);
-			rightTalon.changeControlMode(TalonControlMode.PercentVbus);
-			t_controlMode = TalonControlMode.PercentVbus;
+		if (t_controlMode != TalonControlMode.PercentVbus); {
+				leftTalon.changeControlMode(TalonControlMode.PercentVbus);
+				rightTalon.changeControlMode(TalonControlMode.PercentVbus);
+				
+				t_controlMode = TalonControlMode.PercentVbus;
+		}
+		leftTalon.reverseOutput(true);
 	}
 	
 	//Use Standard Tank Drive method

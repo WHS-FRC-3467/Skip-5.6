@@ -11,15 +11,18 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class TankDrive extends CommandBase {
 	
+	public TankDrive() {
+		requires(driveBase);
+	}
+	
 	protected void initialize() {
 		//Makes it so the command will not function when if the there is no specific DriveBase is created
-		requires(driveBase);
 	}
 
 	protected void execute() {
 		//Applies the driveTank method to the driveBase object
 		driveBase.driveTank(oi.getLeft(), oi.getRight());
-		SmartDashboard.putString("Hello", "Working");
+		SmartDashboard.putString("TankDrive", "Executing");
 		
 		
 	}
