@@ -8,13 +8,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc.team3467.robot.OI;
 import org.usfirst.frc.team3467.robot.subsystems.DriveBase.DriveBase;
-//import org.usfirst.frc.team3467.robot.subsystems.NavX_MXP.MXP_IMU;
+import org.usfirst.frc.team3467.robot.subsystems.NavX_MXP.MXP_IMU;
 
 public abstract class CommandBase extends Command {
 	
 		//Create universal examples of subsystems
 	public static CommandBase commandBase;
 	public static OI oi;
+	public static MXP_IMU imu;
 	public static DriveBase driveBase;
 	//public static MXP_IMU imu;
 	
@@ -31,8 +32,8 @@ public abstract class CommandBase extends Command {
 		//Add instances of subsystems
 		driveBase = new DriveBase();
 		subsystemList.addElement(driveBase);
-		//imu = new MXP_IMU();
-		//subsystemList.addElement(imu);
+		imu = new MXP_IMU();
+		subsystemList.addElement(imu);
 		
 		//Make instance of operator interface
 		oi = new OI();

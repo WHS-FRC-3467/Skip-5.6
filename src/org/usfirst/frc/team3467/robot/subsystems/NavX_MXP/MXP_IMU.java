@@ -1,6 +1,6 @@
 package org.usfirst.frc.team3467.robot.subsystems.NavX_MXP;
-/*
-import org.usfirst.frc.team3467.robot.subsystems.NavX_MXP.imuUpdateDisplay;
+
+import org.usfirst.frc.team3467.robot.subsystems.NavX_MXP.commands.imuUpdateDisplay;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 
@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class MXP_IMU extends Subsystem {
    
-    SPI.Port spi_port;
+     SPI.Port spi_port;
     
     //IMU imu;			// This class can be used w/nav6 and navX MXP.
     //IMUAdvanced imu;	// This class can be used w/nav6 and navX MXP.
@@ -27,6 +27,7 @@ public class MXP_IMU extends Subsystem {
 	private double 	m_gyroOffset = 0;
 	private static MXP_IMU instance;
 	
+		//Gets instance of MXP_IMU
 	public static MXP_IMU getInstance() {
 		return instance;
 	}
@@ -153,8 +154,8 @@ public class MXP_IMU extends Subsystem {
 	        SmartDashboard.putNumber(   "Displacement_X",       imu.getDisplacementX() );
 	        SmartDashboard.putNumber(   "Displacement_Y",       imu.getDisplacementY() );      
         }
-    }
-    */
+	}
+}
 
 
     
