@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc.team3467.robot.OI;
 import org.usfirst.frc.team3467.robot.subsystems.DriveBase.DriveBase;
+import org.usfirst.frc.team3467.robot.subsystems.Brownout.Brownout;
 import org.usfirst.frc.team3467.robot.subsystems.NavX_MXP.MXP_IMU;
 
 public abstract class CommandBase extends Command {
@@ -17,6 +18,7 @@ public abstract class CommandBase extends Command {
 	public static OI oi;
 	public static MXP_IMU imu;
 	public static DriveBase driveBase;
+	public static Brownout brownout;
 	//public static MXP_IMU imu;
 	
 		//Create vector of with subsystems as elements
@@ -32,6 +34,8 @@ public abstract class CommandBase extends Command {
 		//Add instances of subsystems
 		driveBase = new DriveBase();
 		subsystemList.addElement(driveBase);
+		brownout = new Brownout();
+		subsystemList.addElement(brownout);
 		imu = new MXP_IMU();
 		subsystemList.addElement(imu);
 		

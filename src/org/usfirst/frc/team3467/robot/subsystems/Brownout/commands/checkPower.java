@@ -1,23 +1,33 @@
 package org.usfirst.frc.team3467.robot.subsystems.Brownout.commands;
 
-import edu.wpi.first.wpilibj.command.Command;
+import org.usfirst.frc.team3467.robot.commands.CommandBase;
 
 /**
  *
  */
-public class checkPower extends Command {
+public class checkPower extends CommandBase {
 
-    public checkPower() {
-        // Use requires() here to declare subsystem dependencies
-        // eg. requires(chassis);
+	private int counter;
+
+	public checkPower() {
+    	requires(brownout);
+    	this.setInterruptible(true);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
+    	counter = 0;
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+    	// Only run the update on every 25th pass (about once per half second)
+    	if (counter < 25)
+    		counter++;
+    	else {
+        	brownout.checkLevel();
+        	counter = 0;
+    	}
     }
 
     // Make this return true when this Command no longer needs to run execute()
@@ -32,5 +42,7 @@ public class checkPower extends Command {
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
+    	end();
     }
 }
+
