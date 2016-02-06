@@ -1,5 +1,5 @@
-package org.usfirst.frc.team3467.robot.subsystems.NavX_MXP;
-/*
+package org.usfirst.frc.team3467.robot.subsystems.NavX_MXP.commands;
+
 import org.usfirst.frc.team3467.robot.commands.CommandBase;
 
 public class imuUpdateDisplay extends CommandBase {
@@ -43,4 +43,4 @@ public class imuUpdateDisplay extends CommandBase {
     protected void interrupted() {
     	end();
     }
-    */
+}
