@@ -56,20 +56,24 @@ public class MXP_AHRS extends Subsystem implements PIDOutput {
 		return instance;
 	}
 	
+	public double getGyro() {
+		SmartDashboard.putNumber("Current Angle", ahrs.getAngle());
+		return ahrs.getAngle();
+		
+	}
+	
 	public void operatorControl() {
 		
 	}
 	
 	@Override
 	protected void initDefaultCommand() {
-		
+		this.setDefaultCommand(null);
 	}
 
-	@SuppressWarnings("deprecation")
-	@Override
 	public void pidWrite(double output) {
 		rotateToAngle = output;
-		SmartDashboard.putDouble("Angle", rotateToAngle);
+		SmartDashboard.putNumber("Angle", rotateToAngle);
 	}
 
 }
