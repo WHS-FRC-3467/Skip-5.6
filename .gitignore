@@ -4,3 +4,4 @@ dist/
 .project
 sysProps.xml
 *.class
+*.class
