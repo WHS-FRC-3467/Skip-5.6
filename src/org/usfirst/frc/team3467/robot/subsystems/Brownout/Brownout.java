@@ -3,18 +3,17 @@ package org.usfirst.frc.team3467.robot.subsystems.Brownout;
 import java.util.Vector;
 
 import org.usfirst.frc.team3467.robot.subsystems.Brownout.PowerConsumer;
+import org.usfirst.frc.team3467.robot.subsystems.Brownout.commands.checkPower;
 
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
+import edu.wpi.first.wpilibj.command.Subsystem;
 
-public class Brownout {
+public class Brownout extends Subsystem {
 
+	public int CHILLVOLTAGE = 9;
+	public int CRITICALVOLTAGE = 7;
 
 	PowerDistributionPanel pdp = new PowerDistributionPanel();
-	
-
-	public double getVoltage() {
-		return pdp.getVoltage();
-	}
 	
 	public enum PowerLevel
 	{
@@ -57,9 +56,16 @@ public class Brownout {
 		// Add power consumer subsystem to list
 		callbackList.addElement(consumerSubsys);
 	}
-	public int CHILLVOLTAGE = 9;
-	public int CRITICALVOLTAGE = 7;
 
+	// Initialize the Default Command
+	protected void initDefaultCommand() {
+		this.setDefaultCommand(new checkPower());
+	}
+
+	public double getVoltage() {
+		return pdp.getVoltage();
+	}
+	
 	public PowerLevel getLevel() {
 		
 		return batteryLevel;

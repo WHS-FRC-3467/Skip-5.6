@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc.team3467.robot.OI;
 import org.usfirst.frc.team3467.robot.subsystems.DriveBase.DriveBase;
+import org.usfirst.frc.team3467.robot.subsystems.Brownout.Brownout;
 import org.usfirst.frc.team3467.robot.subsystems.NavX_MXP.MXP_AHRS;
 
 public abstract class CommandBase extends Command {
@@ -17,24 +18,26 @@ public abstract class CommandBase extends Command {
 	public static OI oi;
 	public static MXP_AHRS ahrs;
 	public static DriveBase driveBase;
+	public static Brownout brownout;
 	//public static MXP_IMU imu;
 	
 		//Create vector of with subsystems as elements
 	public static Vector <Subsystem> subsystemList;
 	
-	
 	public static void init() {
-		SmartDashboard.putString("Yo", "Sup");
-		
 		//Make instance of vector known as subsystemList
 		subsystemList = new Vector<Subsystem>();
 		
 		//Add instances of subsystems
 		driveBase = new DriveBase();
 		subsystemList.addElement(driveBase);
+
 		ahrs = new MXP_AHRS();
 		subsystemList.addElement(ahrs);
-		
+
+		brownout = new Brownout();
+		subsystemList.addElement(brownout);
+
 		//Make instance of operator interface
 		oi = new OI();
 	}
@@ -46,5 +49,4 @@ public abstract class CommandBase extends Command {
 	public CommandBase (String name) {
 		super(name);
 	}
-	
 }
