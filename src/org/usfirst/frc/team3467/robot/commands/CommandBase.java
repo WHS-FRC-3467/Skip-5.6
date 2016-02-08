@@ -19,7 +19,6 @@ public abstract class CommandBase extends Command {
 	public static MXP_AHRS ahrs;
 	public static DriveBase driveBase;
 	public static Brownout brownout;
-	//public static MXP_IMU imu;
 	
 		//Create vector of with subsystems as elements
 	public static Vector <Subsystem> subsystemList;
