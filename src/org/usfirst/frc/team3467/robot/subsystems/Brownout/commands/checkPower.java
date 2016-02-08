@@ -3,7 +3,7 @@ package org.usfirst.frc.team3467.robot.subsystems.Brownout.commands;
 import org.usfirst.frc.team3467.robot.commands.CommandBase;
 
 /**
- *
+ * Command that runs continuously to check power levels at PDB
  */
 public class checkPower extends CommandBase {
 
