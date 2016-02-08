@@ -1,8 +1,7 @@
 
 package org.usfirst.frc.team3467.robot;
 
-import java.util.Vector;
-
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -10,12 +9,12 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-	//Import subsystem classes from subsystem packages
-import org.usfirst.frc.team3467.robot.subsystems.DriveBase.DriveBase;
+//Import subsystem classes from subsystem packages
 import org.usfirst.frc.team3467.robot.commands.CommandBase;
 	
-	//Import robot commands from command packages
-import org.usfirst.frc.team3467.robot.subsystems.DriveBase.commands.TankDrive;
+//Import robot commands from command packages
+import org.usfirst.frc.team3467.robot.commands.autonomous.AutoDriveStraight;
+import org.usfirst.frc.team3467.robot.commands.autonomous.AutoNon;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -26,26 +25,51 @@ import org.usfirst.frc.team3467.robot.subsystems.DriveBase.commands.TankDrive;
  */
 public class Robot extends IterativeRobot {
 
-	public static SendableChooser autochooser;
-	
-	
     Command autonomousCommand;
-
+	SendableChooser autoChooser;
+    CameraServer cServer;
+	
     /**
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
      */
     public void robotInit() {
-        // instantiate the command used for the autonomous period
+
+     	// Init camera and start camera server instance
+/*        cServer = CameraServer.getInstance();
+        cServer.setQuality(50);
+        cServer.setSize(1);
+        //the camera name (ex "cam0") can be found through the roborio web interface
+        cServer.startAutomaticCapture("cam0");
+*/     
+
+        // Initialize all subsystems
     	CommandBase.init();
+
+    	// Add autonomous selector
+		autoChooser = new SendableChooser();
+		autoChooser.addDefault("Default Auto", new AutoNon());
+		autoChooser.addObject("Drive Straight", new AutoDriveStraight());
+		
+		SmartDashboard.putData("Auto", autoChooser);
     }
 	
+    /**
+     * This function is called when the disabled button is hit.
+     * You can use it to reset subsystems before shutting down.
+     */
+    public void disabledInit(){
+
+    }
+
 	public void disabledPeriodic() {
 		Scheduler.getInstance().run();
 	}
 
     public void autonomousInit() {
-        // schedule the autonomous command (example)
+
+    	// schedule the autonomous command
+		autonomousCommand = (Command) autoChooser.getSelected();
         if (autonomousCommand != null) autonomousCommand.start();
     }
 
@@ -62,14 +86,6 @@ public class Robot extends IterativeRobot {
         // continue until interrupted by another command, remove
         // this line or comment it out.
         if (autonomousCommand != null) autonomousCommand.cancel();
-    }
-
-    /**
-     * This function is called when the disabled button is hit.
-     * You can use it to reset subsystems before shutting down.
-     */
-    public void disabledInit(){
-
     }
 
     /**
