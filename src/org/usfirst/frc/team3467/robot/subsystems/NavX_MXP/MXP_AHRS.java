@@ -65,7 +65,14 @@ public class MXP_AHRS extends Subsystem implements PIDOutput {
 		this.setDefaultCommand(null);
 	}
 
+	public void GyroReset() {
+		ahrs.reset();
+	}
+	
 	public double getGryoAngle() {
+		if (DEBUGGING) {
+			SmartDashboard.putNumber(ahrs + "Angle", ahrs.getAngle());
+		}
 		return ahrs.getAngle();
 	}
 	
