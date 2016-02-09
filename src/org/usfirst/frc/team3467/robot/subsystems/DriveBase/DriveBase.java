@@ -103,26 +103,48 @@ public class DriveBase extends PIDSubsystem {
 	
 	//Set up Distance Drive
 	public void initDistance (double distance) {
+		
 		t_positionDistance = distance;
+		
+			//Check if CANTalons are on position mode
 		if (t_controlMode != TalonControlMode.Position) {
 			leftTalon.changeControlMode(TalonControlMode.Follower);
 			rightTalon.changeControlMode(TalonControlMode.Position);
 			
-			t_controlMode = TalonControlMode.Position;
+			leftTalon.set(RobotMap.drivebase_LeftTalon);
+			
+			//Reversing Motor Direction?
+				leftTalon.reverseOutput(false);
+				rightTalon.reverseOutput(false);
 		
 			//Set PID parameters for master Talon
 			rightTalon.setIZone(IZone);
 			rightTalon.setCloseLoopRampRate(ramp_Rate);
 			
-			//Initialize Encoder and distance
+			//Initialize Encoder and setPoint (distance)
 			rightTalon.setPosition(0);
 			rightTalon.set(0);
+			
+			//Turn off Motor Safety until we tune the system
+			rightTalon.setSafetyEnabled(false);
+			
+			//Set PID Constnats
+			rightPIDFtalon.setPID(KP_P, KI_P, KD_P, KF_P);
+		
+			t_controlMode = TalonControlMode.Position;
 		}
 	}
 	
 	//Distance Drive
-	public void Distance () {
+	public void distanceDrive () {
 		
+		rightPIDFtalon.setSetpoint(t_positionDistance);
+		
+	}
+	
+	//Have we driven the specified distance
+	public boolean onPosition() {
+		return rightPIDFtalon.onTarget();
 	}
 	
 	//Set up for Tank Drive
