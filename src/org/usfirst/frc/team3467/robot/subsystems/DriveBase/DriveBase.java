@@ -96,6 +96,11 @@ public class DriveBase extends PIDSubsystem {
 		rightPIDFtalon = new PIDF_CANTalon("Right CANTalon", rightTalon, Tolerance, true, t_debugging);
 	}
 	
+	//Set Distance the robot will travel
+	public void setDistance(double distance) {
+		t_positionDistance = distance;
+	}
+	
 	//Set up Distance Drive
 	public void initDistance (double distance) {
 		t_positionDistance = distance;
