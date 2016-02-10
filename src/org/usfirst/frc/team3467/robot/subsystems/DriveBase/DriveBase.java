@@ -5,10 +5,12 @@ import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.RobotDrive;
+import edu.wpi.first.wpilibj.RobotDrive.MotorType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc.team3467.robot.RobotMap;
 import org.usfirst.frc.team3467.robot.subsystems.DriveBase.commands.TankDrive;
+import org.usfirst.frc.team3467.robot.commands.CommandBase;
 import org.usfirst.frc.team3467.robot.pid.PIDF_CANTalon;
 
 public class DriveBase extends PIDSubsystem {
@@ -80,6 +82,17 @@ public class DriveBase extends PIDSubsystem {
 		leftTalon.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
 		rightTalon.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
 		
+			//Instantiate RobotDrive
+		t_drive = new RobotDrive(leftTalon, rightTalon);
+		
+			//RobotDrive Parameters
+		t_drive.setSafetyEnabled(true);
+		t_drive.setExpiration(1.0);
+		t_drive.setSensitivity(0.5);
+		t_drive.setMaxOutput(1.0);
+		t_drive.setInvertedMotor(MotorType.kFrontLeft, false);
+		t_drive.setInvertedMotor(MotorType.kFrontRight, false);
+		
 			//Set Izones
 		leftTalon.setIZone(IZone);
 		rightTalon.setIZone(IZone);
@@ -88,36 +101,57 @@ public class DriveBase extends PIDSubsystem {
 		leftTalon.setCloseLoopRampRate(ramp_Rate);
 		rightTalon.setCloseLoopRampRate(ramp_Rate);
 		
-			//Instantiate RobotDrive
-		t_drive = new RobotDrive(leftTalon, rightTalon);
-		
 			//Create PID Management wrappers
 		leftPIDFtalon = new PIDF_CANTalon("Left CANTalon", leftTalon, Tolerance, true, t_debugging);
 		rightPIDFtalon = new PIDF_CANTalon("Right CANTalon", rightTalon, Tolerance, true, t_debugging);
 	}
 	
+	//Set Distance the robot will travel
+	public void setDistance(double distance) {
+		t_positionDistance = distance;
+	}
+	
 	//Set up Distance Drive
 	public void initDistance (double distance) {
 		t_positionDistance = distance;
+		
+			//Check if CANTalons are on position mode
 		if (t_controlMode != TalonControlMode.Position) {
 			leftTalon.changeControlMode(TalonControlMode.Follower);
 			rightTalon.changeControlMode(TalonControlMode.Position);
 			
-			t_controlMode = TalonControlMode.Position;
+			leftTalon.set(RobotMap.drivebase_LeftTalon);
+			
+			//Reversing Motor Direction?
+				leftTalon.reverseOutput(false);
+				rightTalon.reverseOutput(false);
 		
 			//Set PID parameters for master Talon
 			rightTalon.setIZone(IZone);
 			rightTalon.setCloseLoopRampRate(ramp_Rate);
 			
-			//Initialize Encoder and distance
+			//Initialize Encoder and setPoint (distance)
 			rightTalon.setPosition(0);
 			rightTalon.set(0);
+			
+			//Turn off Motor Safety until we tune the system
+			rightTalon.setSafetyEnabled(false);
+			
+			//Set PID Constants
+			rightPIDFtalon.setPID(KP_P, KI_P, KD_P, KF_P);
+		
+			t_controlMode = TalonControlMode.Position;
 		}
 	}
 	
 	//Distance Drive
-	public void Distance () {
-		
+	public void distanceDrive () {
+		rightPIDFtalon.setSetpoint(t_positionDistance);
+	}
+	
+	//Have we driven the specified distance
+	public boolean onPosition() {
+		return rightPIDFtalon.onTarget();
 	}
 	
 	//Set up for Tank Drive
@@ -132,12 +166,22 @@ public class DriveBase extends PIDSubsystem {
 	}
 	
 	//Use Standard Tank Drive method
-	public void driveTank (double LeftTalon, double RightTalon){
-		leftTalon.set(LeftTalon);
-		rightTalon.set(RightTalon);
+	public void driveTank (double LeftTalon, double RightTalon, boolean squared){
+		t_drive.tankDrive(LeftTalon, RightTalon, squared);
 	}
 
-	@Override
+	public boolean shortestTurnDirection(double angle) {
+		boolean turnClockwise = true;
+		double currentGyroAngle = CommandBase.ahrs.getGryoAngle();
+		
+		if ((angle >= currentGyroAngle && currentGyroAngle - angle <= 180) || (angle < currentGyroAngle && angle - currentGyroAngle > 180)) {
+			turnClockwise = false;
+		}
+		
+		return turnClockwise;
+		
+	}
+	
 	protected double returnPIDInput() {
 		// TODO Auto-generated method stub
 		return 0;
