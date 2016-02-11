@@ -106,11 +106,6 @@ public class DriveBase extends PIDSubsystem {
 		rightPIDFtalon = new PIDF_CANTalon("Right CANTalon", rightTalon, Tolerance, true, t_debugging);
 	}
 	
-	//Set Distance the robot will travel
-	public void setDistance(double distance) {
-		t_positionDistance = distance;
-	}
-	
 	//Set up Distance Drive
 	public void initDistance (double distance) {
 		t_positionDistance = distance;
@@ -170,6 +165,14 @@ public class DriveBase extends PIDSubsystem {
 		t_drive.tankDrive(LeftTalon, RightTalon, squared);
 	}
 
+	//Initiate Arcade Drive with PercentVBus
+	public void initArcade() {
+		if (t_controlMode != TalonControlMode.PercentVbus) {
+			leftTalon.changeControlMode(TalonControlMode.PercentVbus);
+			rightTalon.changeControlMode(TalonControlMode.PercentVbus);
+		}
+	}
+	
 	public boolean shortestTurnDirection(double angle) {
 		boolean turnClockwise = true;
 		double currentGyroAngle = CommandBase.ahrs.getGryoAngle();
