@@ -43,7 +43,7 @@ public class DriveBase extends PIDSubsystem {
 	
 		//Field Centric state (true = on) (false = off)
 	private static boolean t_fieldcentricON = false;
-
+	
 		//DriveBase get instance method
 	public DriveBase getInstance() {
 		return instance;
@@ -167,10 +167,17 @@ public class DriveBase extends PIDSubsystem {
 
 	//Initiate Arcade Drive with PercentVBus
 	public void initArcade() {
+		
 		if (t_controlMode != TalonControlMode.PercentVbus) {
 			leftTalon.changeControlMode(TalonControlMode.PercentVbus);
 			rightTalon.changeControlMode(TalonControlMode.PercentVbus);
+		
+			t_controlMode = TalonControlMode.PercentVbus;
 		}
+	}
+	
+	public void driveArcade(double move, double rotate, boolean square) {
+		t_drive.arcadeDrive(move, rotate, square);
 	}
 	
 	public boolean shortestTurnDirection(double angle) {
