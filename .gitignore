@@ -1,4 +1,7 @@
+/bin/
+build/
+dist/
+.project
+sysProps.xml
 *.class
 *.class
-.classpath
-bin/org/usfirst/frc/team3467/robot/subsystems/DriveBase/DriveBase.class

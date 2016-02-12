@@ -1,16 +1,21 @@
 package org.usfirst.frc.team3467.robot.subsystems.DriveBase;
 
 import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
+import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.RobotDrive;
-import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.RobotDrive.MotorType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc.team3467.robot.RobotMap;
 import org.usfirst.frc.team3467.robot.subsystems.DriveBase.commands.TankDrive;
+import org.usfirst.frc.team3467.robot.commands.CommandBase;
+import org.usfirst.frc.team3467.robot.pid.PIDF_CANTalon;
 
-public class DriveBase extends Subsystem {
+public class DriveBase extends PIDSubsystem {
+	//Debugging?
+	public static final boolean t_debugging = false;
 	
 	//Default Ramp Rate
 	private final double ramp_Rate = 2;
@@ -32,9 +37,13 @@ public class DriveBase extends Subsystem {
 	//Instance of the DriveBase Class
 	private static DriveBase 		instance;
 	
+		//Private PID wraps
+	private PIDF_CANTalon 		leftPIDFtalon;
+	private PIDF_CANTalon		rightPIDFtalon;
+	
 		//Field Centric state (true = on) (false = off)
 	private static boolean t_fieldcentricON = false;
-
+	
 		//DriveBase get instance method
 	public DriveBase getInstance() {
 		return instance;
@@ -43,6 +52,7 @@ public class DriveBase extends Subsystem {
 		//Initializing the Default Command
 	protected void initDefaultCommand() {
 		this.setDefaultCommand(new TankDrive());
+		SmartDashboard.putString("DriveBase", "Default command set");
 	}
 	
 		//Positional Pid Constants
@@ -53,6 +63,9 @@ public class DriveBase extends Subsystem {
 	
 		//DriveBase class constructor
 	public DriveBase() {
+			//Call PIDSubsystem constructor for using Gyro with PID to rotate
+		super("DriveBase", 0.0, 0.0, 0.0);
+		
 		//DriveBase instance = the current instance
 		instance = this;
 		
@@ -63,43 +76,130 @@ public class DriveBase extends Subsystem {
 		//Set default control Modes for CANTalons
 		leftTalon.changeControlMode(TalonControlMode.PercentVbus);
 		rightTalon.changeControlMode(TalonControlMode.PercentVbus);
+		t_controlMode = CANTalon.TalonControlMode.PercentVbus;
+		
+			//Set SIM encoders as feedback devices
+		leftTalon.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
+		rightTalon.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
+		
+			//Instantiate RobotDrive
+		t_drive = new RobotDrive(leftTalon, rightTalon);
+		
+			//RobotDrive Parameters
+		t_drive.setSafetyEnabled(true);
+		t_drive.setExpiration(1.0);
+		t_drive.setSensitivity(0.5);
+		t_drive.setMaxOutput(1.0);
+		t_drive.setInvertedMotor(MotorType.kFrontLeft, false);
+		t_drive.setInvertedMotor(MotorType.kFrontRight, false);
+		
+			//Set Izones
+		leftTalon.setIZone(IZone);
+		rightTalon.setIZone(IZone);
+		
+			//Set Voltage ramp rates
+		leftTalon.setCloseLoopRampRate(ramp_Rate);
+		rightTalon.setCloseLoopRampRate(ramp_Rate);
+		
+			//Create PID Management wrappers
+		leftPIDFtalon = new PIDF_CANTalon("Left CANTalon", leftTalon, Tolerance, true, t_debugging);
+		rightPIDFtalon = new PIDF_CANTalon("Right CANTalon", rightTalon, Tolerance, true, t_debugging);
 	}
 	
 	//Set up Distance Drive
 	public void initDistance (double distance) {
 		t_positionDistance = distance;
+		
+			//Check if CANTalons are on position mode
 		if (t_controlMode != TalonControlMode.Position) {
 			leftTalon.changeControlMode(TalonControlMode.Follower);
 			rightTalon.changeControlMode(TalonControlMode.Position);
 			
-			t_controlMode = TalonControlMode.Position;
+			leftTalon.set(RobotMap.drivebase_LeftTalon);
+			
+			//Reversing Motor Direction?
+				leftTalon.reverseOutput(false);
+				rightTalon.reverseOutput(false);
 		
 			//Set PID parameters for master Talon
 			rightTalon.setIZone(IZone);
 			rightTalon.setCloseLoopRampRate(ramp_Rate);
 			
-			//Initialize Encoder and distance
+			//Initialize Encoder and setPoint (distance)
 			rightTalon.setPosition(0);
 			rightTalon.set(0);
+			
+			//Turn off Motor Safety until we tune the system
+			rightTalon.setSafetyEnabled(false);
+			
+			//Set PID Constants
+			rightPIDFtalon.setPID(KP_P, KI_P, KD_P, KF_P);
+		
+			t_controlMode = TalonControlMode.Position;
 		}
 	}
 	
 	//Distance Drive
-	public void Distance () {
-		
+	public void distanceDrive () {
+		rightPIDFtalon.setSetpoint(t_positionDistance);
+	}
+	
+	//Have we driven the specified distance
+	public boolean onPosition() {
+		return rightPIDFtalon.onTarget();
 	}
 	
 	//Set up for Tank Drive
 	public void initTank () {
-		if (t_controlMode != TalonControlMode.PercentVbus);
-			leftTalon.changeControlMode(TalonControlMode.PercentVbus);
-			rightTalon.changeControlMode(TalonControlMode.PercentVbus);
-			t_controlMode = TalonControlMode.PercentVbus;
+		if (t_controlMode != TalonControlMode.PercentVbus); {
+				leftTalon.changeControlMode(TalonControlMode.PercentVbus);
+				rightTalon.changeControlMode(TalonControlMode.PercentVbus);
+				
+				t_controlMode = TalonControlMode.PercentVbus;
+		}
+		leftTalon.reverseOutput(true);
 	}
 	
 	//Use Standard Tank Drive method
-	public void driveTank (double LeftTalon, double RightTalon){
-		leftTalon.set(LeftTalon);
-		rightTalon.set(RightTalon);
+	public void driveTank (double LeftTalon, double RightTalon, boolean squared){
+		t_drive.tankDrive(LeftTalon, RightTalon, squared);
+	}
+
+	//Initiate Arcade Drive with PercentVBus
+	public void initArcade() {
+		
+		if (t_controlMode != TalonControlMode.PercentVbus) {
+			leftTalon.changeControlMode(TalonControlMode.PercentVbus);
+			rightTalon.changeControlMode(TalonControlMode.PercentVbus);
+		
+			t_controlMode = TalonControlMode.PercentVbus;
+		}
+	}
+	
+	public void driveArcade(double move, double rotate, boolean square) {
+		t_drive.arcadeDrive(move, rotate, square);
+	}
+	
+	public boolean shortestTurnDirection(double angle) {
+		boolean turnClockwise = true;
+		double currentGyroAngle = CommandBase.ahrs.getGryoAngle();
+		
+		if ((angle >= currentGyroAngle && currentGyroAngle - angle <= 180) || (angle < currentGyroAngle && angle - currentGyroAngle > 180)) {
+			turnClockwise = false;
+		}
+		
+		return turnClockwise;
+		
+	}
+	
+	protected double returnPIDInput() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	protected void usePIDOutput(double output) {
+		// TODO Auto-generated method stub
+		
 	}
 }
