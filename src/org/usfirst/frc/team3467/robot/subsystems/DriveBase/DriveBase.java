@@ -43,7 +43,7 @@ public class DriveBase extends PIDSubsystem {
 	
 		//Field Centric state (true = on) (false = off)
 	private static boolean t_fieldcentricON = false;
-
+	
 		//DriveBase get instance method
 	public DriveBase getInstance() {
 		return instance;
@@ -106,11 +106,6 @@ public class DriveBase extends PIDSubsystem {
 		rightPIDFtalon = new PIDF_CANTalon("Right CANTalon", rightTalon, Tolerance, true, t_debugging);
 	}
 	
-	//Set Distance the robot will travel
-	public void setDistance(double distance) {
-		t_positionDistance = distance;
-	}
-	
 	//Set up Distance Drive
 	public void initDistance (double distance) {
 		t_positionDistance = distance;
@@ -170,6 +165,21 @@ public class DriveBase extends PIDSubsystem {
 		t_drive.tankDrive(LeftTalon, RightTalon, squared);
 	}
 
+	//Initiate Arcade Drive with PercentVBus
+	public void initArcade() {
+		
+		if (t_controlMode != TalonControlMode.PercentVbus) {
+			leftTalon.changeControlMode(TalonControlMode.PercentVbus);
+			rightTalon.changeControlMode(TalonControlMode.PercentVbus);
+		
+			t_controlMode = TalonControlMode.PercentVbus;
+		}
+	}
+	
+	public void driveArcade(double move, double rotate, boolean square) {
+		t_drive.arcadeDrive(move, rotate, square);
+	}
+	
 	public boolean shortestTurnDirection(double angle) {
 		boolean turnClockwise = true;
 		double currentGyroAngle = CommandBase.ahrs.getGryoAngle();

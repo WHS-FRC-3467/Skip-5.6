@@ -27,12 +27,16 @@ public class OI {
 	}
 	
 	//Joystick Methods that return values for left and right joysticks
-	public double getLeft(){
+	public double getLeftY(){
 		return leftDrive.getY();
 	}
 	
-	public double getRight(){
+	public double getRightY(){
 		return rightDrive.getY();
+	}
+	
+	public double getRightX(){
+		return rightDrive.getX();
 	}
 	
 	//Method that binds certain commands to certain buttons
