@@ -7,11 +7,11 @@ import org.usfirst.frc.team3467.robot.subsystems.DriveBase.commands.TankDrive;
 import org.usfirst.frc.team3467.robot.subsystems.NavX_MXP.*;
 
 public class OI {
-
+	
 	public static Joystick leftDrive;
 	public static Joystick rightDrive;
 	
-	public void OI(){
+	public OI(){
 		leftDrive = new Joystick(0);
 		rightDrive = new Joystick(1);
 	}
@@ -27,12 +27,16 @@ public class OI {
 	}
 	
 	//Joystick Methods that return values for left and right joysticks
-	public double getLeft(){
+	public double getLeftY(){
 		return leftDrive.getY();
 	}
 	
-	public double getRight(){
+	public double getRightY(){
 		return rightDrive.getY();
+	}
+	
+	public double getRightX(){
+		return rightDrive.getX();
 	}
 	
 	//Method that binds certain commands to certain buttons
