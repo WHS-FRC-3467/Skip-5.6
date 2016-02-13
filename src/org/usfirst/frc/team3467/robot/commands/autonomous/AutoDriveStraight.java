@@ -11,6 +11,6 @@ public class AutoDriveStraight extends CommandGroup {
     
     public  AutoDriveStraight() {
 
-    	addSequential(new DriveStraight());
+    	addSequential(new DriveStraight(5.0));
     }
 }
