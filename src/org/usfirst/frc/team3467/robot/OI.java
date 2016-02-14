@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 
-import org.usfirst.frc.team3467.robot.subsystems.utilitybar.commands.Bar_out;
+import org.usfirst.frc.team3467.robot.subsystems.utilitybar.commands.Bar_actuate;
 import org.usfirst.frc.team3467.robot.control.Gamepad;
 
 public class OI {
@@ -71,7 +71,7 @@ public class OI {
 		//Utility Bar
 			//Extend
 		new JoystickButton(operator, 0)
-		.toggleWhenPressed(new Bar_out());
+		.toggleWhenPressed(new Bar_actuate(true));
 			//Retract
 		new JoystickButton(operator, 0)
 		.toggleWhenActive(null);

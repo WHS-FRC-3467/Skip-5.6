@@ -17,9 +17,20 @@ public class RobotMap {
 		public static final int drivebase_LeftTalon3 = 4;
 		public static final int drivebase_RightTalon2 = 5;
 		public static final int drivebase_RightTalon3 = 6;
-
+		
+		
+	//Important Intake Variables
+		public static final int roller_TalonX = 2;
+		public static final int roller_TalonY = 8;
+		public static final int roller_solenoid = 2;
+		
+		
 	//Important Catapult Variables
 		public static final int catapult_Talon = 7;
-		public static final int catpult_Solenoid = 0;
+		public static final int catpult_Solenoid = 1;
+		
+		
+	//Important Utility Bar Variables
+		public static final int pnumatic_solenoid = 0;
 		
 }
