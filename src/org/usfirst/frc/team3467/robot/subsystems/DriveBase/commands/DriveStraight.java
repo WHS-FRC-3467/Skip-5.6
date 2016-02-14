@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DriveStraight extends CommandBase {
 
-	private double travelDistance;
+	double travelDistance;
 	
 	public DriveStraight(double distance) {
 		
