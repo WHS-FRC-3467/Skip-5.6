@@ -18,4 +18,8 @@ public class RobotMap {
 		public static final int drivebase_RightTalon2 = 5;
 		public static final int drivebase_RightTalon3 = 6;
 
+	//Important Catapult Variables
+		public static final int catapult_Talon = 7;
+		public static final int catpult_Solenoid = 0;
+		
 }
