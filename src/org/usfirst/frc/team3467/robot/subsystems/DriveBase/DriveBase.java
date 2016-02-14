@@ -167,7 +167,7 @@ public class DriveBase extends PIDSubsystem {
 
 	//Initiate Arcade Drive with PercentVBus
 	public void initArcade() {
-		
+			//Check if Control mode is not PercentVbus
 		if (t_controlMode != TalonControlMode.PercentVbus) {
 			leftTalon.changeControlMode(TalonControlMode.PercentVbus);
 			rightTalon.changeControlMode(TalonControlMode.PercentVbus);
@@ -178,6 +178,27 @@ public class DriveBase extends PIDSubsystem {
 	
 	public void driveArcade(double move, double rotate, boolean square) {
 		t_drive.arcadeDrive(move, rotate, square);
+	}
+	
+	public double pidTurnToAngleInput(double angle, boolean clockwise) {
+		double correctAngle = CommandBase.ahrs.getGryoAngle() + 180;
+		boolean wrapAround = ((clockwise = true 
+				&& correctAngle < angle 
+				&& angle - correctAngle > 180) || (clockwise == true
+				&& correctAngle > angle
+				&& angle - correctAngle <=180));
+			
+		if (wrapAround) {
+				if (clockwise == true) {
+					angle = angle + 360;
+				}
+					else {
+						angle = angle - 360;
+					}
+				}
+		
+		double pidInValue = (angle - correctAngle)/180;
+		return pidInValue;
 	}
 	
 	public boolean shortestTurnDirection(double angle) {
@@ -193,8 +214,8 @@ public class DriveBase extends PIDSubsystem {
 	}
 	
 	protected double returnPIDInput() {
-		// TODO Auto-generated method stub
-		return 0;
+		boolean bClockwise = shortestTurnDirection(this.getSetpoint());
+		return pidTurnToAngleInput(this.getSetpoint(), bClockwise);
 	}
 
 	@Override
