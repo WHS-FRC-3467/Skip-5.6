@@ -6,8 +6,20 @@ package org.usfirst.frc.team3467.robot;
  * floating around.
  */
 public class RobotMap {
+	
 	//Important Drivebase Values
+	
 		//CANTalon Ports
 		public static final int drivebase_LeftTalon = 0;
 		public static final int drivebase_RightTalon = 1;
+
+		public static final int drivebase_LeftTalon2 = 3;
+		public static final int drivebase_LeftTalon3 = 4;
+		public static final int drivebase_RightTalon2 = 5;
+		public static final int drivebase_RightTalon3 = 6;
+
+	//Important Catapult Variables
+		public static final int catapult_Talon = 7;
+		public static final int catpult_Solenoid = 0;
+		
 }

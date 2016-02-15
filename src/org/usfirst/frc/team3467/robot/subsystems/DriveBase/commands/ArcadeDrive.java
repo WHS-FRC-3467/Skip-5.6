@@ -2,35 +2,36 @@ package org.usfirst.frc.team3467.robot.subsystems.DriveBase.commands;
 
 import org.usfirst.frc.team3467.robot.commands.CommandBase;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
-public class TankDrive extends CommandBase {
+public class ArcadeDrive extends CommandBase {
 	
-	public TankDrive() {
+	public ArcadeDrive() {
 		requires(driveBase);
 		this.setInterruptible(true);
 	}
 	
 	protected void initialize() {
-
+		driveBase.initArcade();
 	}
 
+	@Override
 	protected void execute() {
-		//Applies the driveTank method to the driveBase object
-		driveBase.driveTank(oi.getLeftY(), oi.getRightY(), true);
-		SmartDashboard.putString("TankDrive", "Executing");
+		driveBase.driveArcade(oi.getRightY(), oi.getRightX(), true);
 	}
 
 	protected boolean isFinished() {
+		// TODO Auto-generated method stub
 		return false;
 	}
 
 	protected void end() {
+		// TODO Auto-generated method stub
 		
 	}
 
+	@Override
 	protected void interrupted() {
-		end();
+		// TODO Auto-generated method stub
+		
 	}
 
 }

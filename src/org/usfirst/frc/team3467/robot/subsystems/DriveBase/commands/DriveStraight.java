@@ -1,27 +1,35 @@
 package org.usfirst.frc.team3467.robot.subsystems.DriveBase.commands;
 
 import org.usfirst.frc.team3467.robot.commands.CommandBase;
+import org.usfirst.frc.team3467.robot.subsystems.DriveBase.DriveBase;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DriveStraight extends CommandBase {
 
-	public DriveStraight() {
+	double travelDistance;
+	
+	public DriveStraight(double distance) {
+		
 		requires(driveBase);
 		this.setInterruptible(true);
+		
+		travelDistance = distance;
+		
 	}
 	
 	protected void initialize() {
+		driveBase.initDistance(travelDistance);
 	}
 
 	protected void execute() {
 		//Applies the driveTank method to the driveBase object
-		driveBase.driveTank(oi.getLeft(), oi.getRight());
+		driveBase.distanceDrive();
 		SmartDashboard.putString("DriveStraight", "Executing");
 	}
 
 	protected boolean isFinished() {
-		return false;
+		return (driveBase.onPosition() || isTimedOut());
 	}
 
 	protected void end() {
