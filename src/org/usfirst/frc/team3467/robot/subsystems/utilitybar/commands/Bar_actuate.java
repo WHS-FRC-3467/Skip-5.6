@@ -2,10 +2,13 @@ package org.usfirst.frc.team3467.robot.subsystems.utilitybar.commands;
 
 import org.usfirst.frc.team3467.robot.commands.CommandBase;
 // Command base is being extended from public class Bar_out
-public class Bar_out extends CommandBase {
+public class Bar_actuate extends CommandBase {
 
-	public Bar_out(){
+	boolean INOROUT;
+	
+	public Bar_actuate(boolean inORout) {
 	 requires(utilitybar);
+	 INOROUT = inORout;
 	}
 	
 	@Override
@@ -16,8 +19,12 @@ public class Bar_out extends CommandBase {
 
 	@Override
 	protected void execute() {
-		// TODO Auto-generated method stub
+		if (INOROUT == true) {
 		utilitybar.setsolenoid(true);
+		}
+		else {
+			utilitybar.setsolenoid(false);
+		}
 	}
 
 	@Override
