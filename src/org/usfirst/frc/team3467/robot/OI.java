@@ -42,6 +42,10 @@ public class OI {
 		return rightDrive.getX();
 	}
 	
+	public double getRightZ() {
+		return rightDrive.getZ();
+	}
+	
 	//Method that binds certain commands to certain buttons
 	public void BindCommands() {
 		
