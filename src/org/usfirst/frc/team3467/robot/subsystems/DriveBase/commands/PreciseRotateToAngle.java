@@ -2,31 +2,18 @@ package org.usfirst.frc.team3467.robot.subsystems.DriveBase.commands;
 
 import org.usfirst.frc.team3467.robot.commands.CommandBase;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+public class PreciseRotateToAngle extends CommandBase {
 
-public class RotateToAngle extends CommandBase {
-
-	boolean precissionMode;
-	double degrees;
-	double speed;
-	
-	
-	public RotateToAngle(double degree, double speed, boolean precise) {
-		requires (driveBase);
-		this.precissionMode = precise;
-		this.degrees = degree;
-		this.speed = speed;
-		this.setInterruptible(false);
+	public PreciseRotateToAngle() {
+		requires(driveBase);
 	}
 	
 	protected void initialize() {
 		ahrs.GyroReset();
 		ahrs.turnController.reset();
-		ahrs.turnController.setSetpoint(degrees);
+		ahrs.turnController.setSetpoint(oi.getRightZ());
 		ahrs.turnController.reset();
 		ahrs.turnController.enable();
-		
-		SmartDashboard.putNumber("Rotating", degrees);
 	}
 
 	@Override
@@ -42,8 +29,8 @@ public class RotateToAngle extends CommandBase {
 
 	@Override
 	protected void end() {
-		// TODO Auto-generated method stub
-		
+		ahrs.turnController.disable();
+		driveBase.driveArcade(0, 0, false);
 	}
 
 	@Override
@@ -51,5 +38,4 @@ public class RotateToAngle extends CommandBase {
 		// TODO Auto-generated method stub
 		
 	}
-
 }
