@@ -14,7 +14,7 @@ public class MXP_AHRS extends Subsystem implements PIDOutput {
 		//Create AHRS and PIDController
 	public static AHRS ahrs;
 	private static MXP_AHRS instance;
-	public static PIDController turnController;
+	public PIDController turnController;
 	
 	private static final boolean 	DEBUGGING = false;
 	
@@ -65,7 +65,14 @@ public class MXP_AHRS extends Subsystem implements PIDOutput {
 		this.setDefaultCommand(null);
 	}
 
+	public void GyroReset() {
+		ahrs.reset();
+	}
+	
 	public double getGryoAngle() {
+		if (DEBUGGING) {
+			SmartDashboard.putNumber(ahrs + "Angle", ahrs.getAngle());
+		}
 		return ahrs.getAngle();
 	}
 	

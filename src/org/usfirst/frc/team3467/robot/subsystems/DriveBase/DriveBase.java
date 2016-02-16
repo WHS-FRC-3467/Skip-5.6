@@ -5,10 +5,12 @@ import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.RobotDrive;
+import edu.wpi.first.wpilibj.RobotDrive.MotorType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc.team3467.robot.RobotMap;
 import org.usfirst.frc.team3467.robot.subsystems.DriveBase.commands.TankDrive;
+import org.usfirst.frc.team3467.robot.commands.CommandBase;
 import org.usfirst.frc.team3467.robot.pid.PIDF_CANTalon;
 
 public class DriveBase extends PIDSubsystem {
@@ -28,7 +30,7 @@ public class DriveBase extends PIDSubsystem {
 	private final int IZone = 20;
 	
 		//CANTalons objects and RobotDrive object
-	private static CANTalon 		leftTalon, rightTalon;
+	private CANTalon 		leftTalon, rightTalon, leftTalon2, rightTalon2, leftTalon3, rightTalon3;
 	private static RobotDrive 		t_drive;
 	private CANTalon.ControlMode 	t_controlMode;
 	private double 					t_positionDistance;
@@ -41,7 +43,7 @@ public class DriveBase extends PIDSubsystem {
 	
 		//Field Centric state (true = on) (false = off)
 	private static boolean t_fieldcentricON = false;
-
+	
 		//DriveBase get instance method
 	public DriveBase getInstance() {
 		return instance;
@@ -70,15 +72,34 @@ public class DriveBase extends PIDSubsystem {
 		//Create instances of CANTalon motor controllers
 		leftTalon = new CANTalon(RobotMap.drivebase_LeftTalon);
 		rightTalon = new CANTalon(RobotMap.drivebase_RightTalon);
+		leftTalon2 = new CANTalon(RobotMap.drivebase_LeftTalon2);
+		rightTalon2 = new CANTalon(RobotMap.drivebase_RightTalon2);
+		leftTalon3 = new CANTalon(RobotMap.drivebase_LeftTalon3);
+		rightTalon3 = new CANTalon(RobotMap.drivebase_RightTalon3);
 		
 		//Set default control Modes for CANTalons
 		leftTalon.changeControlMode(TalonControlMode.PercentVbus);
 		rightTalon.changeControlMode(TalonControlMode.PercentVbus);
+		leftTalon2.changeControlMode(TalonControlMode.Follower);
+		rightTalon2.changeControlMode(TalonControlMode.Follower);
+		leftTalon3.changeControlMode(TalonControlMode.Follower);
+		rightTalon3.changeControlMode(TalonControlMode.Follower);
 		t_controlMode = CANTalon.TalonControlMode.PercentVbus;
 		
 			//Set SIM encoders as feedback devices
 		leftTalon.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
 		rightTalon.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
+		
+			//Instantiate RobotDrive
+		t_drive = new RobotDrive(leftTalon, rightTalon);
+		
+			//RobotDrive Parameters
+		t_drive.setSafetyEnabled(true);
+		t_drive.setExpiration(1.0);
+		t_drive.setSensitivity(0.5);
+		t_drive.setMaxOutput(1.0);
+		t_drive.setInvertedMotor(MotorType.kFrontLeft, false);
+		t_drive.setInvertedMotor(MotorType.kFrontRight, false);
 		
 			//Set Izones
 		leftTalon.setIZone(IZone);
@@ -88,22 +109,13 @@ public class DriveBase extends PIDSubsystem {
 		leftTalon.setCloseLoopRampRate(ramp_Rate);
 		rightTalon.setCloseLoopRampRate(ramp_Rate);
 		
-			//Instantiate RobotDrive
-		t_drive = new RobotDrive(leftTalon, rightTalon);
-		
 			//Create PID Management wrappers
 		leftPIDFtalon = new PIDF_CANTalon("Left CANTalon", leftTalon, Tolerance, true, t_debugging);
 		rightPIDFtalon = new PIDF_CANTalon("Right CANTalon", rightTalon, Tolerance, true, t_debugging);
 	}
 	
-	//Set Distance the robot will travel
-	public void setDistance(double distance) {
-		t_positionDistance = distance;
-	}
-	
 	//Set up Distance Drive
 	public void initDistance (double distance) {
-		
 		t_positionDistance = distance;
 		
 			//Check if CANTalons are on position mode
@@ -128,7 +140,7 @@ public class DriveBase extends PIDSubsystem {
 			//Turn off Motor Safety until we tune the system
 			rightTalon.setSafetyEnabled(false);
 			
-			//Set PID Constnats
+			//Set PID Constants
 			rightPIDFtalon.setPID(KP_P, KI_P, KD_P, KF_P);
 		
 			t_controlMode = TalonControlMode.Position;
@@ -137,9 +149,7 @@ public class DriveBase extends PIDSubsystem {
 	
 	//Distance Drive
 	public void distanceDrive () {
-		
 		rightPIDFtalon.setSetpoint(t_positionDistance);
-		
 	}
 	
 	//Have we driven the specified distance
@@ -159,15 +169,61 @@ public class DriveBase extends PIDSubsystem {
 	}
 	
 	//Use Standard Tank Drive method
-	public void driveTank (double LeftTalon, double RightTalon){
-		leftTalon.set(LeftTalon);
-		rightTalon.set(RightTalon);
+	public void driveTank (double LeftTalon, double RightTalon, boolean squared){
+		t_drive.tankDrive(LeftTalon, RightTalon, squared);
 	}
 
-	@Override
+	//Initiate Arcade Drive with PercentVBus
+	public void initArcade() {
+			//Check if Control mode is not PercentVbus
+		if (t_controlMode != TalonControlMode.PercentVbus) {
+			leftTalon.changeControlMode(TalonControlMode.PercentVbus);
+			rightTalon.changeControlMode(TalonControlMode.PercentVbus);
+		
+			t_controlMode = TalonControlMode.PercentVbus;
+		}
+	}
+	
+	public void driveArcade(double move, double rotate, boolean square) {
+		t_drive.arcadeDrive(move, rotate, square);
+	}
+	
+	public double pidTurnToAngleInput(double angle, boolean clockwise) {
+		double correctAngle = CommandBase.ahrs.getGryoAngle() + 180;
+		boolean wrapAround = ((clockwise = true 
+				&& correctAngle < angle 
+				&& angle - correctAngle > 180) || (clockwise == true
+				&& correctAngle > angle
+				&& angle - correctAngle <=180));
+			
+		if (wrapAround) {
+				if (clockwise == true) {
+					angle = angle + 360;
+				}
+					else {
+						angle = angle - 360;
+					}
+				}
+		
+		double pidInValue = (angle - correctAngle)/180;
+		return pidInValue;
+	}
+	
+	public boolean shortestTurnDirection(double angle) {
+		boolean turnClockwise = true;
+		double currentGyroAngle = CommandBase.ahrs.getGryoAngle();
+		
+		if ((angle >= currentGyroAngle && currentGyroAngle - angle <= 180) || (angle < currentGyroAngle && angle - currentGyroAngle > 180)) {
+			turnClockwise = false;
+		}
+		
+		return turnClockwise;
+		
+	}
+	
 	protected double returnPIDInput() {
-		// TODO Auto-generated method stub
-		return 0;
+		boolean bClockwise = shortestTurnDirection(this.getSetpoint());
+		return pidTurnToAngleInput(this.getSetpoint(), bClockwise);
 	}
 
 	@Override

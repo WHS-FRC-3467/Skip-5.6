@@ -4,11 +4,14 @@ Subsystems called by Operator Interface:
 	- DriveBase (PIDSubsystem directed by Gyro)
 		* Drive
 		- CANTalon (left)
+			- Quadrature Encoder [SIM Encoder] (left)
 		- CANTalon (right)
+			- Quadrature Encoder [SIM Encoder] (Right)
 
     - Intake
         * Ball Control
-        - CANTalon (Pull In / Push Out)
+        - CANTalon (Pull In / Push Out) (X - Direction)
+        - CANTalon (Pull In / Push Out) (Z - Direction)
         - Solenoid (Raise / Lower)
 
     - Utility Bar
@@ -19,6 +22,7 @@ Subsystems called by Operator Interface:
     - Catapult
         * Shooter
         - CANTalon (to load)
+        	-Potentiometer (Angle)
         - Solenoid (to Release)
         
 

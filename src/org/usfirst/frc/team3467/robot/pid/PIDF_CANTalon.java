@@ -1,21 +1,17 @@
 package org.usfirst.frc.team3467.robot.pid;
 
-import edu.wpi.first.wpilibj.livewindow.LiveWindowSendable;
-import edu.wpi.first.wpilibj.tables.ITable;
-import edu.wpi.first.wpilibj.tables.ITableListener;
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 
 /*
  * Class PIDF_CANTalon
  * 
  * Essentially a wrapper around a CANTalon class instance
  * 
- * Manages PIDF constants and updates SmartDashboard/LiveWindow
+ * Manages PIDF constants and updates SmartDashboard
  * with information useful for running a CANTalon in closed-loop mode.
  * 
- * Displayed on SmartDashboard/LiveWindow:
+ * Displayed on SmartDashboard:
  * P:
  * I:
  * I*100:
@@ -30,14 +26,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * 
  */
 
-public class PIDF_CANTalon implements LiveWindowSendable {
+public class PIDF_CANTalon {
 	
 	private String m_name;
 	private CANTalon m_talon;
     private double m_tolerance;  // position range used to check if on target
 	private boolean m_hasFeedForward;
-    
-	private ITable table = null;
     
     private double m_P;     // factor for "proportional" control
     private double m_I;     // factor for "integral" control
@@ -99,12 +93,6 @@ public class PIDF_CANTalon implements LiveWindowSendable {
         m_talon.setI(i);
         m_talon.setD(d);
         
-        if (table != null) {
-            table.putNumber("p", p);
-            table.putNumber("i", i);
-            table.putNumber("d", d);
-        }
-
         if (m_debugging) {
     		SmartDashboard.putNumber(m_name + " P", m_talon.getP());
     		SmartDashboard.putNumber(m_name + " I", m_talon.getI());
@@ -132,12 +120,6 @@ public class PIDF_CANTalon implements LiveWindowSendable {
         m_talon.setD(d);
         m_talon.setF(f);
         
-        if (table != null) {
-            table.putNumber("p", p);
-            table.putNumber("i", i);
-            table.putNumber("d", d);
-            table.putNumber("f", f);
-        }
         if (m_debugging) {
     		SmartDashboard.putNumber(m_name + " P", m_talon.getP());
     		SmartDashboard.putNumber(m_name + " I", m_talon.getI());
@@ -189,9 +171,6 @@ public class PIDF_CANTalon implements LiveWindowSendable {
 
     	reportPosition(m_talon.getPosition());
     	
-        if (table != null)
-            table.putNumber("setpoint", m_setpoint);
-        
         if (m_debugging)
         	SmartDashboard.putNumber(m_name + " Talon Setpoint", m_setpoint);
 
@@ -229,9 +208,6 @@ public class PIDF_CANTalon implements LiveWindowSendable {
     }
 
     private void reportPosition(double position) {
-        if (table != null)
-            table.putNumber("position", position);
-        
         if (m_debugging)
         	SmartDashboard.putNumber(m_name + " Position", position);
 
@@ -262,9 +238,6 @@ public class PIDF_CANTalon implements LiveWindowSendable {
         m_talon.ClearIaccum();        
     	m_talon.enableControl();
 
-        if (table != null) {
-            table.putBoolean("enabled", true);
-        }
         if (m_debugging)
         	SmartDashboard.putBoolean(m_name + " Enabled", true);
     }
@@ -276,9 +249,6 @@ public class PIDF_CANTalon implements LiveWindowSendable {
         m_talon.ClearIaccum();
     	m_talon.disableControl();
 
-        if (table != null) {
-            table.putBoolean("enabled", false);
-        }
         if (m_debugging)
         	SmartDashboard.putBoolean(m_name + " Enabled", false);
     }
@@ -311,109 +281,5 @@ public class PIDF_CANTalon implements LiveWindowSendable {
 	
 	}
 
-    
-/*
- * Overrides for LiveWindowSendable
- */
-    
-    @Override
-    public String getSmartDashboardType() {
-        return "PIDF_CANTalon";
-    }
-
-    private final ITableListener listener = new ITableListener()
-    {
-        @Override
-        public void valueChanged(ITable table, String key, Object value, boolean isNew)
-        {    	
-            if (key.equals("p") ||
-            	key.equals("i") ||
-            	key.equals("d") ||
-            	key.equals("f"))
-            {
-                if (getP() != table.getNumber("p", 0.0) ||
-                	getI() != table.getNumber("i", 0.0) ||
-                    getD() != table.getNumber("d", 0.0) ||
-                    getF() != table.getNumber("f", 0.0))
-                    	setPID(table.getNumber("p", 0.0),
-                    		   table.getNumber("i", 0.0),
-                    		   table.getNumber("d", 0.0),
-                    		   table.getNumber("f", 0.0));
-            }
-            else if (key.equals("setpoint"))
-            {
-                if (getSetpoint() != ((Double) value).doubleValue())
-                    setSetpoint(((Double) value).doubleValue());
-            }
-            else if (key.equals("tolerance"))
-            {
-                if (m_tolerance != ((Integer) value).intValue())
-                    m_tolerance = (((Integer) value).intValue());
-            }
-            else if (key.equals("enabled"))
-            {
-                if (isEnabled() != ((Boolean) value).booleanValue())
-                {
-                    if (((Boolean) value).booleanValue())
-                        enable();
-                    else
-                        disable();
-                }
-            }
-        }
-    };
-
-    @Override
-    public void initTable(ITable table)
-    {
-        if(this.table!=null)
-            this.table.removeTableListener(listener);
-
-        this.table = table;
-        if(table!=null)
-        {
-            table.putNumber("p", getP());
-            table.putNumber("i", getI());
-            table.putNumber("d", getD());
-            table.putNumber("f", getF());
-            table.putNumber("setpoint", getSetpoint());
-            table.putNumber("position", getPosition());
-            table.putNumber("tolerance", m_tolerance);
-            table.putNumber("error", m_talon.getClosedLoopError());
-            table.putNumber("output", m_talon.getOutputVoltage());
-            table.putBoolean("enabled", isEnabled());
-            table.addTableListener(listener, false);
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public ITable getTable() {
-        return table;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void updateTable() {
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void startLiveWindowMode() {
-        disable();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void stopLiveWindowMode() {
-    }
 }
 

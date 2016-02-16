@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 public class AutoDriveStraight extends CommandGroup {
     
     public  AutoDriveStraight() {
-
     	addSequential(new DriveStraight(5.0));
     }
 }
