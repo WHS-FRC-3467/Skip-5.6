@@ -12,6 +12,7 @@ import org.usfirst.frc.team3467.robot.subsystems.Brownout.Brownout;
 import org.usfirst.frc.team3467.robot.subsystems.NavX_MXP.MXP_AHRS;
 import org.usfirst.frc.team3467.robot.subsystems.utilitybar.Pnumatic_system;
 import org.usfirst.frc.team3467.robot.subsystems.Catapult.Catapult;
+import org.usfirst.frc.team3467.robot.subsystems.Intake.Rollers;
 
 public abstract class CommandBase extends Command {
 	
@@ -23,6 +24,7 @@ public abstract class CommandBase extends Command {
 	public static Brownout brownout;
 	public static Pnumatic_system utilitybar;
 	public static Catapult pultaCat;
+	public static Rollers intake;
 		//Create vector of with subsystems as elements
 	public static Vector <Subsystem> subsystemList;
 	
@@ -44,7 +46,8 @@ public abstract class CommandBase extends Command {
 		subsystemList.addElement(utilitybar);
 		pultaCat = new Catapult();
 		subsystemList.addElement(pultaCat);
-		
+		intake = new Rollers();
+		subsystemList.addElement(intake);
 		//Make instance of operator interface
 		oi = new OI();
 	}
