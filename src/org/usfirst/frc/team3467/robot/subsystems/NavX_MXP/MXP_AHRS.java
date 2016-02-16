@@ -14,7 +14,7 @@ public class MXP_AHRS extends Subsystem implements PIDOutput {
 		//Create AHRS and PIDController
 	public static AHRS ahrs;
 	private static MXP_AHRS instance;
-	public static PIDController turnController;
+	public PIDController turnController;
 	
 	private static final boolean 	DEBUGGING = false;
 	

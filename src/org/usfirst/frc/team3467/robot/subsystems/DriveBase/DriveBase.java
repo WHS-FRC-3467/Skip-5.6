@@ -30,7 +30,7 @@ public class DriveBase extends PIDSubsystem {
 	private final int IZone = 20;
 	
 		//CANTalons objects and RobotDrive object
-	private static CANTalon 		leftTalon, rightTalon;
+	private CANTalon 		leftTalon, rightTalon, leftTalon2, rightTalon2, leftTalon3, rightTalon3;
 	private static RobotDrive 		t_drive;
 	private CANTalon.ControlMode 	t_controlMode;
 	private double 					t_positionDistance;
@@ -72,10 +72,18 @@ public class DriveBase extends PIDSubsystem {
 		//Create instances of CANTalon motor controllers
 		leftTalon = new CANTalon(RobotMap.drivebase_LeftTalon);
 		rightTalon = new CANTalon(RobotMap.drivebase_RightTalon);
+		leftTalon2 = new CANTalon(RobotMap.drivebase_LeftTalon2);
+		rightTalon2 = new CANTalon(RobotMap.drivebase_RightTalon2);
+		leftTalon3 = new CANTalon(RobotMap.drivebase_LeftTalon3);
+		rightTalon3 = new CANTalon(RobotMap.drivebase_RightTalon3);
 		
 		//Set default control Modes for CANTalons
 		leftTalon.changeControlMode(TalonControlMode.PercentVbus);
 		rightTalon.changeControlMode(TalonControlMode.PercentVbus);
+		leftTalon2.changeControlMode(TalonControlMode.Follower);
+		rightTalon2.changeControlMode(TalonControlMode.Follower);
+		leftTalon3.changeControlMode(TalonControlMode.Follower);
+		rightTalon3.changeControlMode(TalonControlMode.Follower);
 		t_controlMode = CANTalon.TalonControlMode.PercentVbus;
 		
 			//Set SIM encoders as feedback devices

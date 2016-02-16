@@ -3,7 +3,6 @@ package org.usfirst.frc.team3467.robot.pid;
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-
 /*
  * Class PIDF_CANTalon
  * 
