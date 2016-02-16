@@ -18,7 +18,7 @@ public class PreciseRotateToAngle extends CommandBase {
 
 	@Override
 	protected void execute() {
-		driveBase.driveArcade(0, ahrs.turnController.get(), false);
+		driveBase.driveArcade(0, (ahrs.turnController.get()/90) * 15, false);
 	}
 
 	@Override
