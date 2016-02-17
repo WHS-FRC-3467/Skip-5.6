@@ -17,7 +17,8 @@ public class AutoCheval extends CommandGroup {
 	
 	public AutoCheval() {
 		addSequential(new DriveStraight(5.0));
-		addSequential(null);
+		addSequential(new Bar_actuate(true));
+		addSequential(new DriveStraight(5.0));
 	}
 
 }
