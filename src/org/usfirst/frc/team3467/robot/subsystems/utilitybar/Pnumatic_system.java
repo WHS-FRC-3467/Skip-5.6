@@ -3,23 +3,30 @@ package org.usfirst.frc.team3467.robot.subsystems.utilitybar;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.Relay;
+
+import org.usfirst.frc.team3467.robot.Robot;
+import org.usfirst.frc.team3467.robot.RobotMap;
 
 public class Pnumatic_system extends Subsystem {
 	
 	//Objects in Pnumatic_system
-	public static Relay scorpionrelay;
 	public static Solenoid scorpionsolenoid;
 	public static Compressor scorpioncompressor;
+	private static Pnumatic_system instance; 
 	
 	//Variables in Pnumatic_system
 	public float CompressorCurrent = 0;
 	public boolean CompressorSwitch = false;
 	
+	//Gets instnace of Pnumatic System
+	public Pnumatic_system getInstance() {
+		return instance;
+	}
+	
 	//Constructor method for Pnumatic_system class
 	public Pnumatic_system() {
-		scorpionrelay = new Relay(0);
-		scorpionsolenoid = new Solenoid(1);
+		instance = this;
+		scorpionsolenoid = new Solenoid(RobotMap.pnumatic_solenoid);
 		scorpioncompressor = new Compressor();
 	}
 	
