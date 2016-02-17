@@ -13,10 +13,10 @@ public class Brownout extends Subsystem {
 	public int CHILLVOLTAGE = 9;
 	public int CRITICALVOLTAGE = 7;
 
-	PowerDistributionPanel pdp = new PowerDistributionPanel();
-	
-	public enum PowerLevel
-	{
+	public PowerDistributionPanel pdp; 
+
+	//Sets PowerLevel as am enumeration
+	public enum PowerLevel {
 		//Sets the levels of power
 	    Normal(1), Chill(2), Critical(3);
 	    public int value;
@@ -44,11 +44,13 @@ public class Brownout extends Subsystem {
 	// Create vector of consumers to callback
 	public static Vector <PowerConsumer> callbackList;
 
+	//Brownout Class Constructor
 	public Brownout() {
-
+		//Instantiate PowerDistributionPanel
+		pdp = new PowerDistributionPanel();
+		
 		// Instantiate power consumer callback list
 		callbackList = new Vector<PowerConsumer>();
-
 	}
 
 	public void registerCallback(PowerConsumer consumerSubsys)
@@ -72,7 +74,6 @@ public class Brownout extends Subsystem {
 	}
 		
 	public void checkLevel() {
-		
 		PowerLevel oldLevel = batteryLevel;
 
 		double voltage = pdp.getVoltage();
@@ -95,14 +96,12 @@ public class Brownout extends Subsystem {
 		if (batteryLevel!= oldLevel) {
 			notifyConsumers();
 		}
-	}	
-	public void notifyConsumers()
-	{
-		for (int i = 0; i < callbackList.size(); i++)
-		{
+	}
+	
+	public void notifyConsumers() {
+		for (int i = 0; i < callbackList.size(); i++) {
 			PowerConsumer consumer = (PowerConsumer) callbackList.elementAt(i);
 			consumer.callbackAlert(batteryLevel);
 		}
-
 	}
 }
