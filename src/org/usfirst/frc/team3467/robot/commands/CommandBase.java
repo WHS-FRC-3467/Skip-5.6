@@ -10,8 +10,8 @@ import org.usfirst.frc.team3467.robot.OI;
 import org.usfirst.frc.team3467.robot.subsystems.DriveBase.DriveBase;
 import org.usfirst.frc.team3467.robot.subsystems.Brownout.Brownout;
 import org.usfirst.frc.team3467.robot.subsystems.NavX_MXP.MXP_AHRS;
+import org.usfirst.frc.team3467.robot.subsystems.Shooter.commands.Catapult;
 import org.usfirst.frc.team3467.robot.subsystems.utilitybar.Pnumatic_system;
-import org.usfirst.frc.team3467.robot.subsystems.Catapult.Catapult;
 
 public abstract class CommandBase extends Command {
 	
