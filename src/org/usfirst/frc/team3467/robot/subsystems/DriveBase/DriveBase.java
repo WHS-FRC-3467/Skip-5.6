@@ -12,8 +12,10 @@ import org.usfirst.frc.team3467.robot.RobotMap;
 import org.usfirst.frc.team3467.robot.subsystems.DriveBase.commands.TankDrive;
 import org.usfirst.frc.team3467.robot.commands.CommandBase;
 import org.usfirst.frc.team3467.robot.pid.PIDF_CANTalon;
+import org.usfirst.frc.team3467.robot.subsystems.Brownout.Brownout.PowerLevel;
+import org.usfirst.frc.team3467.robot.subsystems.Brownout.PowerConsumer;
 
-public class DriveBase extends PIDSubsystem {
+public class DriveBase extends PIDSubsystem implements PowerConsumer {
 	//Debugging?
 	public static final boolean t_debugging = false;
 	
@@ -114,6 +116,11 @@ public class DriveBase extends PIDSubsystem {
 		rightPIDFtalon = new PIDF_CANTalon("Right CANTalon", rightTalon, Tolerance, true, t_debugging);
 	}
 	
+		//Calls for a PowerLevel update (See Brownout)
+		public void callbackAlert(PowerLevel newLevel) {
+		
+	}
+		
 	//Set up Distance Drive
 	public void initDistance (double distance) {
 		t_positionDistance = distance;
@@ -231,4 +238,6 @@ public class DriveBase extends PIDSubsystem {
 		// TODO Auto-generated method stub
 		
 	}
+
+
 }
