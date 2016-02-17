@@ -1,4 +1,4 @@
-package org.usfirst.frc.team3467.robot.subsystems.Catapult;
+package org.usfirst.frc.team3467.robot.subsystems.Shooter;
 
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.AnalogInput;
