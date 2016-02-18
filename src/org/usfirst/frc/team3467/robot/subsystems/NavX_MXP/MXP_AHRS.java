@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.SPI;
 public class MXP_AHRS extends Subsystem implements PIDOutput {
 		
 		//Create AHRS and PIDController
-	public static AHRS ahrs;
+	public AHRS ahrs;
 	private static MXP_AHRS instance;
 	public PIDController turnController;
 	
@@ -30,6 +30,7 @@ public class MXP_AHRS extends Subsystem implements PIDOutput {
 		//Tolerance
 	static final double t_tolerance = 0.0;
 	
+		//AHRS constructor
 	public MXP_AHRS() {
 		
 		instance = this;
@@ -56,11 +57,6 @@ public class MXP_AHRS extends Subsystem implements PIDOutput {
 		return instance;
 	}
 	
-	public void operatorControl() {
-		
-	}
-	
-	@Override
 	protected void initDefaultCommand() {
 		this.setDefaultCommand(null);
 	}
