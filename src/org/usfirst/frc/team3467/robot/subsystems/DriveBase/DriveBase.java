@@ -16,6 +16,7 @@ import org.usfirst.frc.team3467.robot.subsystems.Brownout.Brownout.PowerLevel;
 import org.usfirst.frc.team3467.robot.subsystems.Brownout.PowerConsumer;
 
 public class DriveBase extends PIDSubsystem implements PowerConsumer {
+	
 	//Debugging?
 	public static final boolean t_debugging = false;
 	
@@ -81,14 +82,20 @@ public class DriveBase extends PIDSubsystem implements PowerConsumer {
 		
 		//Set default control Modes for CANTalons
 		leftTalon.changeControlMode(TalonControlMode.PercentVbus);
-		rightTalon.changeControlMode(TalonControlMode.PercentVbus);
 		leftTalon2.changeControlMode(TalonControlMode.Follower);
-		rightTalon2.changeControlMode(TalonControlMode.Follower);
 		leftTalon3.changeControlMode(TalonControlMode.Follower);
+		rightTalon.changeControlMode(TalonControlMode.PercentVbus);
+		rightTalon2.changeControlMode(TalonControlMode.Follower);
 		rightTalon3.changeControlMode(TalonControlMode.Follower);
+		
+		leftTalon2.set(RobotMap.drivebase_LeftTalon);
+		leftTalon3.set(RobotMap.drivebase_LeftTalon);
+		rightTalon2.set(RobotMap.drivebase_RightTalon);
+		rightTalon3.set(RobotMap.drivebase_RightTalon);
+		
 		t_controlMode = CANTalon.TalonControlMode.PercentVbus;
 		
-			//Set SIM encoders as feedback devices
+		//Set SIM encoders as feedback devices
 		leftTalon.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
 		rightTalon.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
 		
@@ -176,7 +183,7 @@ public class DriveBase extends PIDSubsystem implements PowerConsumer {
 	}
 	
 	//Use Standard Tank Drive method
-	public void driveTank (double LeftTalon, double RightTalon, boolean squared){
+	public void driveTank (double LeftTalon, double RightTalon, boolean squared) {
 		t_drive.tankDrive(LeftTalon, RightTalon, squared);
 	}
 
@@ -233,7 +240,6 @@ public class DriveBase extends PIDSubsystem implements PowerConsumer {
 		return pidTurnToAngleInput(this.getSetpoint(), bClockwise);
 	}
 
-	@Override
 	protected void usePIDOutput(double output) {
 		// TODO Auto-generated method stub
 		
