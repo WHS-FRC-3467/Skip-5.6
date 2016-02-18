@@ -2,40 +2,40 @@ package org.usfirst.frc.team3467.robot.subsystems.Intake.commands;
 
 import org.usfirst.frc.team3467.robot.commands.CommandBase;
 
-public class Roll_In extends CommandBase {
+public class Roller_Actuate extends CommandBase {
 
-	private boolean FAST;
+	private boolean EXTEND;
 	
-	public Roll_In(boolean fast) {
+	public Roller_Actuate(boolean Extend) {
 		requires(INTAKE);
-		FAST = fast;
+		EXTEND = Extend;
 	}
 	
 	protected void initialize() {
-		
+
 	}
 
 	protected void execute() {
-		if (FAST) {
-			INTAKE.intakeFast();
+		if (EXTEND) {
+			INTAKE.extend();
 		}
 		else {
-			INTAKE.intakeSlow();
+			INTAKE.retract();
 		}
 	}
 
 	protected boolean isFinished() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	protected void end() {
-		// TODO Auto-generated method stub
-		
+
 	}
 
 	protected void interrupted() {
-		// TODO Auto-generated method stub
-		
+
 	}
+	
+	
+
 }

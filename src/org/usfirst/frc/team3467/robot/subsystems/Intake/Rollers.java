@@ -53,6 +53,6 @@ public class Rollers extends Subsystem {
 	
 	
 	protected void initDefaultCommand() {
-
+		this.setDefaultCommand(null);
 	}
 }
