@@ -72,13 +72,15 @@ public class OI {
 		
 		//Catapult
 		
+	
+		
 		//Utility Bar
 			//Extend
-		new JoystickButton(operator, 0)
+		new JoystickButton(operator, Gamepad.leftBumper)
 		.toggleWhenPressed(new Bar_actuate(true));
 			//Retract
-		new JoystickButton(operator, 0)
-		.toggleWhenActive(null);
+		new JoystickButton(operator, Gamepad.leftBumper)
+		.toggleWhenActive(new Bar_actuate(false));
 		
 	}
 }
