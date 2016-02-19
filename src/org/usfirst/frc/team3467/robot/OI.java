@@ -4,6 +4,8 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 
+import org.usfirst.frc.team3467.robot.subsystems.Intake.Intake;
+import org.usfirst.frc.team3467.robot.subsystems.Intake.commands.IntakeDrive;
 import org.usfirst.frc.team3467.robot.subsystems.utilitybar.commands.Bar_actuate;
 import org.usfirst.frc.team3467.robot.control.Gamepad;
 
@@ -12,6 +14,11 @@ public class OI {
 	public static Joystick leftDrive;
 	public static Joystick rightDrive;
 	public static Gamepad operator;
+	
+	
+	public Gamepad getGamepad() {
+		return operator;
+	}
 	
 	public OI(){
 		leftDrive = new Joystick(0);
@@ -53,22 +60,22 @@ public class OI {
 		new JoystickButton(operator, Gamepad.leftBumper)
 		.whenPressed(null);
 		
-		//Rollers
-			//Slow Intake
-		new JoystickButton(operator, Gamepad.aButton)
-		.whileHeld(null);
-			//Fast Intake
-		new JoystickButton(operator, Gamepad.bButton)
-		.whileHeld(null);
-			//Slow Spitout
+		// Intake - Eject Slow
 		new JoystickButton(operator, Gamepad.xButton)
-		.whileHeld(null);
-			//Fast Spitout
-		new JoystickButton(operator, Gamepad.yButton)
-		.whileHeld(null);
-			//Rollers In
+			.whileHeld(new IntakeDrive(Intake.kEjectSlow));
 		
-			//Rollers Out
+		// Intake - Eject Fast
+		new JoystickButton(operator, Gamepad.yButton)
+			.whileHeld(new IntakeDrive(Intake.kEjectFast));
+		
+		// Intake - Intake Slow
+		new JoystickButton(operator, Gamepad.aButton)
+			.whileHeld(new IntakeDrive(Intake.kIntakeSlow));
+		
+		// Intake - Intake Fast
+		new JoystickButton(operator, Gamepad.bButton)
+			.whileHeld(new IntakeDrive(Intake.kIntakeFast));
+	
 		
 		//Catapult
 		
