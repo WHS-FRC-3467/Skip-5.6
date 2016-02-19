@@ -107,8 +107,8 @@ public class DriveBase extends PIDSubsystem implements PowerConsumer {
 		t_drive.setExpiration(1.0);
 		t_drive.setSensitivity(0.5);
 		t_drive.setMaxOutput(1.0);
-		t_drive.setInvertedMotor(MotorType.kFrontLeft, false);
-		t_drive.setInvertedMotor(MotorType.kFrontRight, false);
+		//t_drive.setInvertedMotor(MotorType.kFrontLeft, false);
+		//t_drive.setInvertedMotor(MotorType.kFrontRight, false);
 		
 			//Set Izones
 		leftTalon.setIZone(IZone);
