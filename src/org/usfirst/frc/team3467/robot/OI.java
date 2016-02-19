@@ -3,11 +3,15 @@ package org.usfirst.frc.team3467.robot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc.team3467.robot.subsystems.Intake.Intake;
 import org.usfirst.frc.team3467.robot.subsystems.Intake.commands.IntakeDrive;
+import org.usfirst.frc.team3467.robot.subsystems.Shooter.commands.ShooterCalibrate;
+import org.usfirst.frc.team3467.robot.subsystems.Shooter.commands.ShooterReset;
 import org.usfirst.frc.team3467.robot.subsystems.utilitybar.commands.Bar_actuate;
 import org.usfirst.frc.team3467.robot.control.Gamepad;
+
 
 public class OI {
 	
@@ -15,15 +19,25 @@ public class OI {
 	public static Joystick rightDrive;
 	public static Gamepad operator;
 	
-	
-	public Gamepad getGamepad() {
-		return operator;
-	}
+/*
+ * Joystick Mappings (done elsewhere in code)
+ * 
+ * Joystick leftDrive - used for Tank Drive (along with rightDrive)
+ * Joystick rightDrive - used for Tank or Arcade Drive
+ * 
+ * Gamepad getRightStickX() - used for manual drive of Intake rollers
+ * Gamepad getLeftStickY() - used for manual drive of Catapult reset bar
+ * 
+ */
 	
 	public OI(){
 		leftDrive = new Joystick(0);
 		rightDrive = new Joystick(1);
 		operator = new Gamepad(2);
+	}
+	
+	public Gamepad getGamepad() {
+		return operator;
 	}
 	
 	//Get method for leftDrive Joystick instance
@@ -78,8 +92,10 @@ public class OI {
 	
 		
 		//Catapult
+		// Halt Reset Bar PID and switch to manual mode
+		new JoystickButton(operator, Gamepad.leftBumper)
+			.whileHeld(new ShooterReset());
 		
-	
 		
 		//Utility Bar
 			//Extend
@@ -88,6 +104,11 @@ public class OI {
 			//Retract
 		new JoystickButton(operator, Gamepad.leftBumper)
 		.toggleWhenActive(new Bar_actuate(false));
+		
+		
+		// SmartDashboard Buttons
+		SmartDashboard.putData("Shooter Calibrate", new ShooterCalibrate());
+
 		
 	}
 }

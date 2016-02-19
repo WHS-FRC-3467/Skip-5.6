@@ -30,7 +30,7 @@ public class RobotMap {
 		public static final int catapult_Talon = 9;
 		public static final int catapult_solenoid_latch = 3;
 		public static final int catapult_solenoid_release = 4;
-		public static final int catapult_analog_input = 0;
+		public static final int catapult_potentiometer_port = 0;
 		
 		
 	//Important Utility Bar Variables
@@ -39,7 +39,7 @@ public class RobotMap {
 		public static final int utilitybar_compressor = 0;
 		
 	//Important Utility Finger Variables
-		public static final int utilityfinger_solenoid_in = 8;
+		public static final int utilityfinger_solenoid_in = 0;
 		public static final int utilityfinger_solenoid_out = 7;
 		
 }
