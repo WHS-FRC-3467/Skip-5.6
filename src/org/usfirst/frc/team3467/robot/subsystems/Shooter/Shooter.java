@@ -44,8 +44,8 @@ public class Shooter extends PIDSubsystem {
 	boolean m_usePID;
 
 	// Reset bar setpoints
-	private double clearPoint = 0.0;  // bar is out of the way of catapult
-	private double latchPoint = 5.0; // bar is holding catapult so it can be latched
+	private double clearPoint = 0.70;  // bar is out of the way of catapult
+	private double latchPoint = 0.33; // bar is holding catapult so it can be latched
 
 	private Shooter instance;
 	
