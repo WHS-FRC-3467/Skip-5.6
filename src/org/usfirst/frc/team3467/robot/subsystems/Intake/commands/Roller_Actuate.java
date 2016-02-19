@@ -7,7 +7,7 @@ public class Roller_Actuate extends CommandBase {
 	private boolean EXTEND;
 	
 	public Roller_Actuate(boolean Extend) {
-		requires(INTAKE);
+		requires(intake);
 		EXTEND = Extend;
 	}
 	
@@ -17,10 +17,10 @@ public class Roller_Actuate extends CommandBase {
 
 	protected void execute() {
 		if (EXTEND) {
-			INTAKE.extend();
+			intake.extend();
 		}
 		else {
-			INTAKE.retract();
+			intake.retract();
 		}
 	}
 
