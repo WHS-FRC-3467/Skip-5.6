@@ -46,6 +46,7 @@ public abstract class CommandBase extends Command {
 		subsystemList.addElement(ahrs);
 		utilitybar = new Pnumatic_system();
 		subsystemList.addElement(utilitybar);
+		utilitybar.setCompressorEnabled(true);
 		pultaCat = new Shooter();
 		subsystemList.addElement(pultaCat);
 		intake = new Intake();
@@ -53,6 +54,7 @@ public abstract class CommandBase extends Command {
 		
 		//Make instance of operator interface
 		oi = new OI();
+		oi.BindCommands();
 	}
 	
 	public CommandBase() {

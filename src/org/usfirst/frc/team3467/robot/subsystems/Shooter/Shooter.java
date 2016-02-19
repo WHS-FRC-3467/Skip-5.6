@@ -3,7 +3,8 @@ package org.usfirst.frc.team3467.robot.subsystems.Shooter;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.CANTalon;
-import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -13,7 +14,7 @@ public class Shooter extends PIDSubsystem{
 
 	//Catapult Objects
 	public CANTalon can;
-	public Solenoid sun;
+	public DoubleSolenoid sun;
 	public AnalogPotentiometer pot;
 	public AnalogInput ai;
 	
@@ -31,10 +32,11 @@ public class Shooter extends PIDSubsystem{
 
 		instance = this;
 		
-		ai = new AnalogInput(RobotMap.catapult_AnalogIn);
+		ai = new AnalogInput(RobotMap.catapult_analog_input);
 		pot = new AnalogPotentiometer(ai);
 		can = new CANTalon(RobotMap.catapult_Talon);
-		sun = new Solenoid(RobotMap.catpult_Solenoid);
+		sun = new DoubleSolenoid(RobotMap.catapult_solenoid_latch, 
+								RobotMap.catapult_solenoid_release);
 	}
 		
 	//Returns instance of Shooter Subsystem
@@ -42,14 +44,9 @@ public class Shooter extends PIDSubsystem{
 		return instance;
 	}
 	
-	//Gets solenoid value
-	public boolean getSun() {
-		return sun.get();
-	}
-	
 	//Set solenoid value
-	public void setSun(boolean extend) {
-		sun.set(extend);
+	public void setSun(Value actuate) {
+		sun.set(actuate);
 	}
 	
 	//Sets CANTalon Value
