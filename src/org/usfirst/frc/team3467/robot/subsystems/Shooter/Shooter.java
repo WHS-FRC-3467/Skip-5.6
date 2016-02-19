@@ -5,12 +5,17 @@ import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+import org.usfirst.frc.team3467.robot.RobotMap;
 
 public class Shooter extends PIDSubsystem{
 
 	//Catapult Objects
 	public CANTalon can;
 	public Solenoid sun;
+	public AnalogPotentiometer pot;
+	public AnalogInput ai;
 	
 	//PID Constant
 	private final double Shoot_P = 0.0;
@@ -26,8 +31,10 @@ public class Shooter extends PIDSubsystem{
 
 		instance = this;
 		
-		can = new CANTalon(0);
-		sun = new Solenoid(0);
+		ai = new AnalogInput(RobotMap.catapult_AnalogIn);
+		pot = new AnalogPotentiometer(ai);
+		can = new CANTalon(RobotMap.catapult_Talon);
+		sun = new Solenoid(RobotMap.catpult_Solenoid);
 	}
 		
 	//Returns instance of Shooter Subsystem
@@ -41,29 +48,31 @@ public class Shooter extends PIDSubsystem{
 	}
 	
 	//Set solenoid value
-	public void setSun(boolean abcdefghijklmnopqrstuvwxyz) {
-		sun.set(abcdefghijklmnopqrstuvwxyz);
+	public void setSun(boolean extend) {
+		sun.set(extend);
 	}
 	
-	//Sets 
+	//Sets CANTalon Value
 	public void setCan (double voot) {
 		can.set(voot);
 	}
 
+	public void SetPoint(double setpoint) {
+		this.setSetpoint(setpoint);
+	}
+	
+	
 	protected double returnPIDInput() {
-		// TODO Auto-generated method stub
-		return 0;
+		return pot.get();
 	}
 
-	@Override
 	protected void usePIDOutput(double output) {
-		// TODO Auto-generated method stub
-		
+		SmartDashboard.putNumber("Shooter SetPoint", this.getSetpoint());
+		can.set(output);
 	}
 
 	protected void initDefaultCommand() {
-		// TODO Auto-generated method stub
-		
+		this.setDefaultCommand(null);
 	}
 
 }
