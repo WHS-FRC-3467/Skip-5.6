@@ -27,7 +27,7 @@ public abstract class CommandBase extends Command {
 	public static Shooter pultaCat;
 	public static Intake intake;
 	
-		//Create vector of with subsystems as elements
+		//Create vector with subsystemss as elements for global subsystem commands
 	public static Vector <Subsystem> subsystemList;
 	
 	
@@ -46,13 +46,13 @@ public abstract class CommandBase extends Command {
 		subsystemList.addElement(ahrs);
 		utilitybar = new Pnumatic_system();
 		subsystemList.addElement(utilitybar);
-		utilitybar.setCompressorEnabled(true);
+		utilitybar.setCompressorEnabled();
+		SmartDashboard.putString("CommandBase", "Compressor still on");
 		pultaCat = new Shooter();
 		subsystemList.addElement(pultaCat);
 		intake = new Intake();
 		subsystemList.addElement(intake);
 		
-		//Make instance of operator interface
 		oi = new OI();
 		oi.BindCommands();
 	}
@@ -64,5 +64,4 @@ public abstract class CommandBase extends Command {
 	public CommandBase (String name) {
 		super(name);
 	}
-	
 }
