@@ -22,15 +22,22 @@ public class RobotMap {
 	//Important Intake Variables
 		public static final int roller_TalonX = 2;
 		public static final int roller_TalonY = 8;
-		public static final int roller_solenoid = 2;
+		public static final int intake_solenoid_extend = 1;
+		public static final int intake_solenoid_retract = 6;
 		
 		
 	//Important Catapult Variables
 		public static final int catapult_Talon = 7;
-		public static final int catpult_Solenoid = 1;
+		public static final int catapult_solenoid_latch = 3;
+		public static final int catapult_solenoid_release = 4;
 		
 		
 	//Important Utility Bar Variables
-		public static final int pnumatic_solenoid = 0;
+		public static final int utilitybar_solenoid_deploy = 2;
+		public static final int utilitybar_solenoid_retract = 5;
+		
+	//Important Utility Finger Variables
+		public static final int utilityfinger_solenoid_in = 0;
+		public static final int utilityfinger_solenoid_out = 7;
 		
 }

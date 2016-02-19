@@ -1,6 +1,7 @@
 package org.usfirst.frc.team3467.robot.subsystems.utilitybar;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Compressor;
 
@@ -10,7 +11,7 @@ import org.usfirst.frc.team3467.robot.RobotMap;
 public class Pnumatic_system extends Subsystem {
 	
 	//Objects in Pnumatic_system
-	public static Solenoid scorpionsolenoid;
+	public static DoubleSolenoid scorpionsolenoid;
 	public static Compressor scorpioncompressor;
 	private static Pnumatic_system instance; 
 	
@@ -26,18 +27,15 @@ public class Pnumatic_system extends Subsystem {
 	//Constructor method for Pnumatic_system class
 	public Pnumatic_system() {
 		instance = this;
-		scorpionsolenoid = new Solenoid(RobotMap.pnumatic_solenoid);
+		scorpionsolenoid = new DoubleSolenoid(RobotMap.utilitybar_solenoid_deploy,
+				RobotMap.utilitybar_solenoid_retract);
+		
 		scorpioncompressor = new Compressor();
 	}
 	
 	//Sets value of solenoid
-	public void setsolenoid(boolean yes) {
-		scorpionsolenoid.set(yes);
-	}
-	
-	//Gets value of solenoid
-	public boolean getsolenoid() {
-		return scorpionsolenoid.get();	
+	public void setsolenoid(boolean state) {
+		scorpionsolenoid.set(DoubleSolenoid.Value.kForward);
 	}
 	
 	//Turns compressor on or off based on a boolean
