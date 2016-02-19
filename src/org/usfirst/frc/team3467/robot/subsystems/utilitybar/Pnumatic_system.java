@@ -28,9 +28,9 @@ public class Pnumatic_system extends Subsystem {
 	public Pnumatic_system() {
 		instance = this;
 		scorpionsolenoid = new DoubleSolenoid(RobotMap.utilitybar_solenoid_deploy,
-				RobotMap.utilitybar_solenoid_retract);
+											RobotMap.utilitybar_solenoid_retract);
 		
-		scorpioncompressor = new Compressor();
+		scorpioncompressor = new Compressor(0);
 	}
 	
 	//Sets value of solenoid
@@ -64,6 +64,5 @@ public class Pnumatic_system extends Subsystem {
 	}
 
 	protected void initDefaultCommand() {
-		this.setDefaultCommand(null);
 	}
 }

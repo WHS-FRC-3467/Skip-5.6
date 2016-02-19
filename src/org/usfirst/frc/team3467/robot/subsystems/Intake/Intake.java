@@ -36,10 +36,10 @@ public class Intake extends Subsystem {
 		
 		//Set Up CANTalon ControlMode
 		rollerTalonX.changeControlMode(TalonControlMode.PercentVbus);
-		rollerTalonX.reverseOutput(true);
+		rollerTalonX.reverseOutput(false);
 
-		rollerTalonY.changeControlMode(TalonControlMode.Follower);
-		rollerTalonY.set(RobotMap.roller_TalonX);
+		rollerTalonY.changeControlMode(TalonControlMode.PercentVbus);
+		rollerTalonY.reverseOutput(false);
 	}
 
 	protected void initDefaultCommand() {
@@ -51,7 +51,8 @@ public class Intake extends Subsystem {
 		if (debugging) {
 	    	SmartDashboard.putNumber("Intake Speed", speed);
 		}
-		rollerTalonX.set(speed);
+		rollerTalonY.set(speed);
+		rollerTalonX.set(Math.abs(speed));
 	}
 	
 	// Extend or Retract Intake
