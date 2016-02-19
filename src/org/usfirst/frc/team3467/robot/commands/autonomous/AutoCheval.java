@@ -1,5 +1,6 @@
 package org.usfirst.frc.team3467.robot.commands.autonomous;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
 import org.usfirst.frc.team3467.robot.subsystems.DriveBase.commands.DriveStraight;
@@ -17,7 +18,7 @@ public class AutoCheval extends CommandGroup {
 	
 	public AutoCheval() {
 		addSequential(new DriveStraight(5.0));
-		addSequential(new Bar_actuate(true));
+		addSequential(new Bar_actuate(Value.kForward));
 		addSequential(new DriveStraight(5.0));
 	}
 
