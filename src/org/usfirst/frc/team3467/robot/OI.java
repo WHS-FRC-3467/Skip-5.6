@@ -9,6 +9,7 @@ import org.usfirst.frc.team3467.robot.subsystems.Intake.Intake;
 import org.usfirst.frc.team3467.robot.subsystems.Intake.commands.IntakeDrive;
 import org.usfirst.frc.team3467.robot.subsystems.Shooter.commands.ShooterCalibrate;
 import org.usfirst.frc.team3467.robot.subsystems.Shooter.commands.ShooterReset;
+import org.usfirst.frc.team3467.robot.subsystems.utilitybar.Pnumatic_system;
 import org.usfirst.frc.team3467.robot.subsystems.utilitybar.commands.Bar_actuate;
 import org.usfirst.frc.team3467.robot.control.Gamepad;
 
@@ -71,8 +72,7 @@ public class OI {
 	public void BindCommands() {
 		
 		//Interupts the previous command
-		new JoystickButton(operator, Gamepad.leftBumper)
-		.whenPressed(null);
+		new JoystickButton(operator, Gamepad.leftBumper);
 		
 		// Intake - Eject Slow
 		new JoystickButton(operator, Gamepad.xButton)
@@ -98,12 +98,12 @@ public class OI {
 		
 		
 		//Utility Bar
-			//Extend
-		new JoystickButton(operator, Gamepad.leftBumper)
-		.toggleWhenPressed(new Bar_actuate(true));
-			//Retract
-		new JoystickButton(operator, Gamepad.leftBumper)
-		.toggleWhenActive(new Bar_actuate(false));
+			//Extend Using the Right Trigger
+		new JoystickButton(rightDrive, 1)
+		.whenPressed(new Bar_actuate(Pnumatic_system.kOut));
+			//Retract Using the Right Shoulder Button
+		new JoystickButton(operator, 2)
+		.whenPressed(new Bar_actuate(Pnumatic_system.kIn));
 		
 		
 		// SmartDashboard Buttons
