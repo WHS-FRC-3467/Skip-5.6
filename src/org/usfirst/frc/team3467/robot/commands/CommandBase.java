@@ -32,7 +32,7 @@ public abstract class CommandBase extends Command {
 	
 	
 	public static void init() {
-		SmartDashboard.putString("Yo", "Sup");
+		System.out.println("Command Base Initialized");
 		
 		//Make instance of vector known as subsystemList
 		subsystemList = new Vector<Subsystem>();
@@ -54,7 +54,7 @@ public abstract class CommandBase extends Command {
 		subsystemList.addElement(intake);
 		
 		oi = new OI();
-		oi.BindCommands();
+		oi.BindCommands(oi.getUserlogin());
 	}
 	
 	public CommandBase() {

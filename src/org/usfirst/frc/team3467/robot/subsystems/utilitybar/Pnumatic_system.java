@@ -18,7 +18,8 @@ public class Pnumatic_system extends Subsystem {
 	public static final Value kOff = Value.kOff;
 	
 	//Objects in Pnumatic_system
-	public static DoubleSolenoid scorpionsolenoid;
+	public static DoubleSolenoid barSolenoid;
+	public static DoubleSolenoid fingerSolenoid;
 	public static Compressor scorpioncompressor;
 	private static Pnumatic_system instance; 
 	
@@ -34,17 +35,24 @@ public class Pnumatic_system extends Subsystem {
 	//Constructor method for Pnumatic_system class
 	public Pnumatic_system() {
 		instance = this;
-		scorpionsolenoid = new DoubleSolenoid(RobotMap.utilitybar_solenoid_deploy,
+		
+		barSolenoid = new DoubleSolenoid(RobotMap.utilitybar_solenoid_deploy,
 											RobotMap.utilitybar_solenoid_retract);
+		fingerSolenoid = new DoubleSolenoid(RobotMap.utilityfinger_solenoid_out, 
+											RobotMap.utilityfinger_solenoid_in);
 		
 		scorpioncompressor = new Compressor();
 		scorpioncompressor.start();
 		SmartDashboard.putString("UtilityBar", "Compressor is on");
 	}
 	
-	//Sets value of solenoid
-	public void setsolenoid(Value actuate) {
-		scorpionsolenoid.set(actuate);
+	//Use Class Constants
+	public void setBar(Value actuate) {
+		barSolenoid.set(actuate);
+	}
+	
+	public void setFinger(Value actuate) {
+		fingerSolenoid.set(actuate);
 	}
 	
 	//Turns compressor on or off based on a boolean

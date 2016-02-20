@@ -3,6 +3,7 @@ package org.usfirst.frc.team3467.robot.subsystems.utilitybar.commands;
 import org.usfirst.frc.team3467.robot.commands.CommandBase;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+
 // Command base is being extended from public class Bar_out
 public class Bar_actuate extends CommandBase {
 	
@@ -16,18 +17,15 @@ public class Bar_actuate extends CommandBase {
 	public Bar_actuate() {
 		requires(utilitybar);
 	}
-	
-	@Override
+
 	protected void initialize() {
 		// TODO Auto-generated method stub
 	}
 
-	@Override
 	protected void execute() {
-		utilitybar.setsolenoid(INOROUT);
+		utilitybar.setBar(INOROUT);
 	}
 
-	@Override
 	protected boolean isFinished() {
 		// TODO Auto-generated method stub
 		return false;
