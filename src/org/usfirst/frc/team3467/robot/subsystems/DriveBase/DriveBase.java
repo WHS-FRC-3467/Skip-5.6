@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc.team3467.robot.RobotMap;
 import org.usfirst.frc.team3467.robot.subsystems.DriveBase.commands.TankDrive;
+import org.usfirst.frc.team3467.robot.subsystems.DriveBase.commands.ArcadeDrive;
 import org.usfirst.frc.team3467.robot.commands.CommandBase;
 import org.usfirst.frc.team3467.robot.pid.PIDF_CANTalon;
 import org.usfirst.frc.team3467.robot.subsystems.Brownout.Brownout.PowerLevel;
@@ -22,6 +23,9 @@ public class DriveBase extends PIDSubsystem implements PowerConsumer {
 	
 	//Default Ramp Rate
 	private final double ramp_Rate = 2;
+	
+	//Use to Toggle Arcade Drive, and Tank Drive
+	public boolean Tank = true;
 	
 	//Sets Default tolerance for closed-loop error
 	private final double Tolerance = 20;
@@ -53,9 +57,15 @@ public class DriveBase extends PIDSubsystem implements PowerConsumer {
 	}
 
 		//Initializing the Default Command
-	protected void initDefaultCommand() {
-		this.setDefaultCommand(new TankDrive());
-		SmartDashboard.putString("DriveBase", "Default command set");
+	public void initDefaultCommand() {
+		if (Tank) {
+			this.setDefaultCommand(new TankDrive());
+			SmartDashboard.putString("DriveBase", "Set to TankDrive");
+		}
+		else {
+			this.setDefaultCommand(new ArcadeDrive());
+			SmartDashboard.putString("DriveBase", "Set to ArcadeDrive");
+		}
 	}
 	
 		//Positional Pid Constants
@@ -126,6 +136,10 @@ public class DriveBase extends PIDSubsystem implements PowerConsumer {
 		//Calls for a PowerLevel update (See Brownout)
 		public void callbackAlert(PowerLevel newLevel) {
 		
+	}
+	
+	public void setDriveMode(boolean tank) {
+		Tank = tank;
 	}
 		
 	//Set up Distance Drive
