@@ -14,8 +14,9 @@ public class ShooterLatch extends CommandBase {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	pultaCat.initPIDMode();
-    	pultaCat.latch();
+    	pultaCat.cataLatch();    // Close the pneumatic latch ...
+    	pultaCat.initPIDMode();  // and use PID...
+    	pultaCat.latch();		 // to drive the reset arm to the latch point
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -29,6 +30,7 @@ public class ShooterLatch extends CommandBase {
 
     // Called once after isFinished returns true
     protected void end() {
+    	pultaCat.cataStop();
     }
 
     // Called when another command which requires one or more of the same

@@ -10,6 +10,7 @@ public class ShooterClear extends CommandBase {
 
     public ShooterClear() {
         requires(pultaCat);
+        setInterruptible(false);
     }
 
     // Called just before this Command runs the first time
@@ -29,6 +30,7 @@ public class ShooterClear extends CommandBase {
 
     // Called once after isFinished returns true
     protected void end() {
+    	pultaCat.cataStop();
     }
 
     // Called when another command which requires one or more of the same
