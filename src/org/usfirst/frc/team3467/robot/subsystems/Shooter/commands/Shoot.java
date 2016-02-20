@@ -1,38 +1,37 @@
 package org.usfirst.frc.team3467.robot.subsystems.Shooter.commands;
 
-import org.usfirst.frc.team3467.robot.Robot;
-
 import org.usfirst.frc.team3467.robot.commands.CommandBase;
 
 public class Shoot extends CommandBase {
+	
+	boolean shotFired = false;
 	
 	public Shoot() {
 		requires(pultaCat);
 	}
 	
+	protected void initialize() {
+		
+	}
+
+	protected void execute() {
+		// Check to make sure reset bar is out of the way before shooting
+		if (pultaCat.resetBarIsClear()) {
+
+			pultaCat.cataShoot();
+			shotFired = true;
+		}
+	}
+
 	public boolean isFinished() {
-		return false;
+		return shotFired;
 	}
 	
 	public void end() {
 	}
 
-	@Override
-	protected void initialize() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	protected void execute() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	protected void interrupted() {
-		// TODO Auto-generated method stub
-		
+		end();
 	}
 
 }
