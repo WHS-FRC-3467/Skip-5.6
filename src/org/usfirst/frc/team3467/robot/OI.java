@@ -118,11 +118,11 @@ public class OI {
 		
 		//Reload Catapult
 		new JoystickButton(operator, Gamepad.rightTrigger_Axis)
-			.whenPressed(null);
+			.whenPressed(new ShooterPrepare());
 		
 		//Fire Catapult
 		new JoystickButton(operator, Gamepad.rightBumper)
-			.whenPressed(null);
+			.whenPressed(new Shoot());
 		
 	//Utility Bar/Finger
 			//Extend Using the Right Trigger
