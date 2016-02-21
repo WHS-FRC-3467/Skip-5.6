@@ -13,7 +13,8 @@ import org.usfirst.frc.team3467.robot.subsystems.NavX_MXP.MXP_AHRS;
 import org.usfirst.frc.team3467.robot.subsystems.utilitybar.Pnumatic_system;
 import org.usfirst.frc.team3467.robot.subsystems.Intake.Intake;
 import org.usfirst.frc.team3467.robot.subsystems.Shooter.Shooter;
-
+import org.usfirst.frc.team3467.robot.subsystems.Vision.Flashlight;
+import org.usfirst.frc.team3467.robot.subsystems.Vision.Video;
 
 public abstract class CommandBase extends Command {
 	
@@ -26,6 +27,8 @@ public abstract class CommandBase extends Command {
 	public static Pnumatic_system utilitybar;
 	public static Shooter pultaCat;
 	public static Intake intake;
+	public static Flashlight light;
+	public static Video video;
 	
 		//Create vector with subsystemss as elements for global subsystem commands
 	public static Vector <Subsystem> subsystemList;
@@ -52,9 +55,14 @@ public abstract class CommandBase extends Command {
 		subsystemList.addElement(pultaCat);
 		intake = new Intake();
 		subsystemList.addElement(intake);
+		light = new Flashlight();
+		subsystemList.addElement(light);
 		
+		video = new Video();
 		oi = new OI();
-		oi.BindCommands(oi.getUserlogin());
+//		oi.BindCommands(oi.getUserlogin());
+//		oi.getUserlogin();
+		oi.BindCommands();
 	}
 	
 	public CommandBase() {
