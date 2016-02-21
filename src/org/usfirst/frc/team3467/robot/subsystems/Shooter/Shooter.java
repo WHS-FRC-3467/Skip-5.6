@@ -44,8 +44,8 @@ public class Shooter extends PIDSubsystem {
 	boolean m_usePID;
 
 	// Reset bar setpoints
-	private double clearPoint = 0.0;  // bar is out of the way of catapult
-	private double latchPoint = 5.0; // bar is holding catapult so it can be latched
+	private double clearPoint = 0.70;  // bar is out of the way of catapult
+	private double latchPoint = 0.33; // bar is holding catapult so it can be latched
 
 	private Shooter instance;
 	
@@ -61,13 +61,12 @@ public class Shooter extends PIDSubsystem {
 		catLatch = new DoubleSolenoid(RobotMap.catapult_solenoid_latch, RobotMap.catapult_solenoid_release);
 
 		m_resetBarSetpoint = resetAngle.get();
-		m_usePID = true;
+		m_usePID = false;
 		this.setAbsoluteTolerance(TOLERANCE);
 	}
 		
 	protected void initDefaultCommand() {
-		this.setDefaultCommand(new ShooterReset());	// Drive Manually
-//		this.setDefaultCommand(new ShooterReset(true));		// Use PID
+		this.setDefaultCommand(new ShooterReset());	// Drive Manually by default
 	}
 	
 	//Returns instance of Shooter Subsystem
@@ -95,17 +94,9 @@ public class Shooter extends PIDSubsystem {
 	
 	public void driveManual(double speed) {
 		
-		// If trying to drive and a limit switch is hit, then stop...
-		if(resetBar.isFwdLimitSwitchClosed() && speed > 0.0) {
-			speed = 0.0;
-		}
-		else if(resetBar.isRevLimitSwitchClosed() && speed < 0.0) {
-			speed = 0.0;
-		}
-		else
-		{
-			resetBar.set(speed);	
-		}
+		// Drive reset bar at commanded speed,
+		// being sure to check for limit switches
+		resetBar.set(check4Endpoints(speed));	
 
 		// Update the reset bar setpoint even while in manual mode
 		// to avoid surprises when returning to PID control
@@ -156,6 +147,10 @@ public class Shooter extends PIDSubsystem {
 			SmartDashboard.putNumber("Shooter Setpoint", m_resetBarSetpoint);
 	}
 	
+	public boolean resetBarIsClear() {
+		// As long as reset angle is less than clearPoint, return false
+		return (resetAngle.get() >= clearPoint);
+	}
 	
 	
 	// Control the solenoid that latches the catapult
@@ -185,7 +180,17 @@ public class Shooter extends PIDSubsystem {
 		if (debugging) {
 			SmartDashboard.putNumber("Shooter SetPoint", this.getSetpoint());
 		}
-		resetBar.set(output);
+		resetBar.set(check4Endpoints(output));
 	}
 
+	private double check4Endpoints(double speed) {
+		// If trying to drive and a limit switch is hit, then stop...
+		if(resetBar.isFwdLimitSwitchClosed() && speed > 0.0) {
+			speed = 0.0;
+		}
+		else if(resetBar.isRevLimitSwitchClosed() && speed < 0.0) {
+			speed = 0.0;
+		}
+		return(speed);
+	}
 }
