@@ -7,11 +7,11 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 // Command base is being extended from public class Bar_out
 public class Bar_actuate extends CommandBase {
 	
-	private Value INOROUT;
+	private Value INorOUT;
 	
 	public Bar_actuate(Value inORout) {
 	 requires(utilitybar);
-	 INOROUT = inORout;
+	 INorOUT = inORout;
 	}
 	
 	public Bar_actuate() {
@@ -23,7 +23,7 @@ public class Bar_actuate extends CommandBase {
 	}
 
 	protected void execute() {
-		utilitybar.setBar(INOROUT);
+		utilitybar.setBar(INorOUT);
 	}
 
 	protected boolean isFinished() {
@@ -31,10 +31,8 @@ public class Bar_actuate extends CommandBase {
 		return false;
 	}
 
-	@Override
 	protected void end() {
-		// TODO Auto-generated method stub
-		
+		utilitybar.setBar(Value.kOff);
 	}
 
 	@Override

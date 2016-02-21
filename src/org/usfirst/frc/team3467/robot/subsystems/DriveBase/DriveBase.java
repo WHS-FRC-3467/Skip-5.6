@@ -246,7 +246,6 @@ public class DriveBase extends PIDSubsystem implements PowerConsumer {
 		}
 		
 		return turnClockwise;
-		
 	}
 	
 	protected double returnPIDInput() {
@@ -258,6 +257,4 @@ public class DriveBase extends PIDSubsystem implements PowerConsumer {
 		// TODO Auto-generated method stub
 		
 	}
-
-
 }

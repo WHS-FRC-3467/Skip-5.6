@@ -35,7 +35,4 @@ public class Roller_Actuate extends CommandBase {
 	protected void interrupted() {
 
 	}
-	
-	
-
 }
