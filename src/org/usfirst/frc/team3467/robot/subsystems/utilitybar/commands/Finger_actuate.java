@@ -6,11 +6,11 @@ import org.usfirst.frc.team3467.robot.commands.CommandBase;
 
 public class Finger_actuate extends CommandBase {
 
-	Value INOROUT;
+	Value INorOUT;
 	
 	public Finger_actuate(Value inORout) {
 		requires(utilitybar);
-		INOROUT = inORout;
+		INorOUT = inORout;
 	}
 	
 	protected void initialize() {
@@ -18,7 +18,8 @@ public class Finger_actuate extends CommandBase {
 	}
 
 	protected void execute() {
-		utilitybar.setFinger(INOROUT);
+		utilitybar.setFinger(INorOUT);
+		utilitybar.setFinger(Value.kOff);
 	}
 
 	protected boolean isFinished() {
