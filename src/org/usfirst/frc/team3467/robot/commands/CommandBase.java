@@ -11,7 +11,10 @@ import org.usfirst.frc.team3467.robot.subsystems.DriveBase.DriveBase;
 import org.usfirst.frc.team3467.robot.subsystems.Brownout.Brownout;
 import org.usfirst.frc.team3467.robot.subsystems.NavX_MXP.MXP_AHRS;
 import org.usfirst.frc.team3467.robot.subsystems.utilitybar.Pnumatic_system;
-import org.usfirst.frc.team3467.robot.subsystems.Catapult.Catapult;
+import org.usfirst.frc.team3467.robot.subsystems.Intake.Intake;
+import org.usfirst.frc.team3467.robot.subsystems.Shooter.Shooter;
+import org.usfirst.frc.team3467.robot.subsystems.Vision.Flashlight;
+import org.usfirst.frc.team3467.robot.subsystems.Vision.Video;
 
 public abstract class CommandBase extends Command {
 	
@@ -22,13 +25,17 @@ public abstract class CommandBase extends Command {
 	public static DriveBase driveBase;
 	public static Brownout brownout;
 	public static Pnumatic_system utilitybar;
-	public static Catapult pultaCat;
-		//Create vector of with subsystems as elements
+	public static Shooter pultaCat;
+	public static Intake intake;
+	public static Flashlight light;
+	public static Video video;
+	
+		//Create vector with subsystemss as elements for global subsystem commands
 	public static Vector <Subsystem> subsystemList;
 	
 	
 	public static void init() {
-		SmartDashboard.putString("Yo", "Sup");
+		System.out.println("Command Base Initialized");
 		
 		//Make instance of vector known as subsystemList
 		subsystemList = new Vector<Subsystem>();
@@ -42,11 +49,20 @@ public abstract class CommandBase extends Command {
 		subsystemList.addElement(ahrs);
 		utilitybar = new Pnumatic_system();
 		subsystemList.addElement(utilitybar);
-		pultaCat = new Catapult();
+		utilitybar.setCompressorEnabled();
+		SmartDashboard.putString("CommandBase", "Compressor still on");
+		pultaCat = new Shooter();
 		subsystemList.addElement(pultaCat);
+		intake = new Intake();
+		subsystemList.addElement(intake);
+		light = new Flashlight();
+		subsystemList.addElement(light);
 		
-		//Make instance of operator interface
+		video = new Video();
 		oi = new OI();
+//		oi.BindCommands(oi.getUserlogin());
+//		oi.getUserlogin();
+		oi.BindCommands();
 	}
 	
 	public CommandBase() {
@@ -56,5 +72,4 @@ public abstract class CommandBase extends Command {
 	public CommandBase (String name) {
 		super(name);
 	}
-	
 }

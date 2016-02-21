@@ -15,6 +15,7 @@ import org.usfirst.frc.team3467.robot.commands.CommandBase;
 //Import robot commands from command packages
 import org.usfirst.frc.team3467.robot.commands.autonomous.AutoDriveStraight;
 import org.usfirst.frc.team3467.robot.commands.autonomous.AutoNon;
+import org.usfirst.frc.team3467.robot.commands.CommandBase;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -85,6 +86,7 @@ public class Robot extends IterativeRobot {
         // teleop starts running. If you want the autonomous to 
         // continue until interrupted by another command, remove
         // this line or comment it out.
+    	SmartDashboard.putString("Robot", "Teleop Inabled");
         if (autonomousCommand != null) autonomousCommand.cancel();
     }
 
@@ -93,6 +95,8 @@ public class Robot extends IterativeRobot {
      */
     public void teleopPeriodic() {
         Scheduler.getInstance().run();
+		CommandBase.utilitybar.setCompressorEnabled();
+		SmartDashboard.putString("CommandBase", "Compressor On");
         SmartDashboard.putString("Robot", "Teleop Periodic");
     }
     

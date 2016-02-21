@@ -76,8 +76,8 @@ public class Brownout extends Subsystem {
 	public void checkLevel() {
 		PowerLevel oldLevel = batteryLevel;
 
-		double voltage = pdp.getVoltage();
-		
+		//double voltage = pdp.getVoltage();
+		double voltage = 12;
 		//Sets first battery level to above 9 volts
 		if (voltage >= CHILLVOLTAGE) {
 			batteryLevel = PowerLevel.Normal;
