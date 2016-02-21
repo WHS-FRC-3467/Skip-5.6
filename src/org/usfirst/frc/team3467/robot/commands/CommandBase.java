@@ -43,7 +43,7 @@ public abstract class CommandBase extends Command {
 		//Add instances of subsystems
 		driveBase = new DriveBase();
 		subsystemList.addElement(driveBase);
-		brownout = new Brownout();
+		brownout = Brownout.getInstance();
 		subsystemList.addElement(brownout);
 		ahrs = new MXP_AHRS();
 		subsystemList.addElement(ahrs);

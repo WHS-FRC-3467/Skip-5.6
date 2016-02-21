@@ -8,6 +8,8 @@ import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc.team3467.robot.RobotMap;
+import org.usfirst.frc.team3467.robot.subsystems.Brownout.Brownout;
+import org.usfirst.frc.team3467.robot.subsystems.Brownout.PowerConsumer;
 import org.usfirst.frc.team3467.robot.subsystems.Shooter.commands.ShooterReset;
 
 /*
@@ -22,22 +24,29 @@ import org.usfirst.frc.team3467.robot.subsystems.Shooter.commands.ShooterReset;
  */
 
 
-public class Shooter extends PIDSubsystem {
+public class Shooter extends PIDSubsystem implements PowerConsumer {
 
 	// Controls display to SmartDashboard
 	private static final boolean debugging = true;
-
+	
+	// Talon PDP channel number
+	private static final int WINCH_PDP_CHANNEL = 1;
+	
+	// Brownout power level
+	private Brownout.PowerLevel powerlevel = Brownout.PowerLevel.Normal;
+	private double maxWinchSpeed = 1.0;
+	
 	//Catapult Objects
 	public CANTalon resetBar;
 	public DoubleSolenoid catLatch;
 	public AnalogPotentiometer resetAngle;
 	
 	//PID Constants
-	private static final double SHOOT_P = 0.0;
-	private static final double SHOOT_I = 0.0;
+	private static final double SHOOT_P = 5.0;
+	private static final double SHOOT_I = 0.01;
 	private static final double SHOOT_D = 0.0;
 	
-	private static final double TOLERANCE = 0.1;
+	private static final double TOLERANCE = 0.01;
 	
 	// PID variables
 	double m_resetBarSetpoint;
@@ -47,14 +56,10 @@ public class Shooter extends PIDSubsystem {
 	private double clearPoint = 0.70;  // bar is out of the way of catapult
 	private double latchPoint = 0.33; // bar is holding catapult so it can be latched
 
-	private Shooter instance;
-	
 	//Shooter Constructor
 	public Shooter() {
 
 		super("Shooter", SHOOT_P, SHOOT_I, SHOOT_D);
-
-		instance = this;
 
 		resetAngle = new AnalogPotentiometer(new AnalogInput(RobotMap.catapult_potentiometer_port));
 		resetBar = new CANTalon(RobotMap.catapult_Talon);
@@ -63,15 +68,13 @@ public class Shooter extends PIDSubsystem {
 		m_resetBarSetpoint = resetAngle.get();
 		m_usePID = false;
 		this.setAbsoluteTolerance(TOLERANCE);
+		
+		// Register with Brownout subsystem
+		Brownout.getInstance().registerCallback(this);		
 	}
 		
 	protected void initDefaultCommand() {
 		this.setDefaultCommand(new ShooterReset());	// Drive Manually by default
-	}
-	
-	//Returns instance of Shooter Subsystem
-	public Shooter getInstance() {
-		return instance;
 	}
 	
 	public void SetPoint(double setpoint) {
@@ -166,6 +169,20 @@ public class Shooter extends PIDSubsystem {
 		catLatch.set(DoubleSolenoid.Value.kOff);		
 	}
 
+	// PowerConsumer
+	public void callbackAlert(Brownout.PowerLevel level) {
+		switch (level) {
+		case Chill:
+			break;
+			
+		case Critical:
+			break;
+			
+		default:
+			break;
+		}
+	}
+	
 	// PIDController methods
 	protected double returnPIDInput() {
 		double angle = resetAngle.get();
@@ -179,17 +196,24 @@ public class Shooter extends PIDSubsystem {
 	protected void usePIDOutput(double output) {
 		if (debugging) {
 			SmartDashboard.putNumber("Shooter SetPoint", this.getSetpoint());
+			SmartDashboard.putNumber("Shooter Current",
+					Brownout.getInstance().getCurrent(WINCH_PDP_CHANNEL));			
 		}
 		resetBar.set(check4Endpoints(output));
 	}
 
 	private double check4Endpoints(double speed) {
+		SmartDashboard.putBoolean("Shooter Out of Calibration", false);
 		// If trying to drive and a limit switch is hit, then stop...
 		if(resetBar.isFwdLimitSwitchClosed() && speed > 0.0) {
 			speed = 0.0;
+			if (Math.abs(resetAngle.get() - clearPoint) > .2)
+				SmartDashboard.putBoolean("Shooter Out of Calibration", true);
 		}
 		else if(resetBar.isRevLimitSwitchClosed() && speed < 0.0) {
 			speed = 0.0;
+			if (Math.abs(resetAngle.get() - latchPoint) > .2)
+				SmartDashboard.putBoolean("Shooter Out of Calibration", true);
 		}
 		return(speed);
 	}
