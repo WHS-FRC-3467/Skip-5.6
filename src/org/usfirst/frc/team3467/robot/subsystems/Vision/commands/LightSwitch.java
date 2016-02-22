@@ -20,7 +20,7 @@ public class LightSwitch extends CommandBase {
 	protected void execute() {
 		if(On) {
 			light.lightOn();
-		}
+			}
 		else {
 			light.lightOff();
 		}
