@@ -25,7 +25,7 @@ public class ShooterClear extends CommandBase {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return pultaCat.onTarget();
+        return (pultaCat.onTarget() || pultaCat.checkClearLimit());
     }
 
     // Called once after isFinished returns true
