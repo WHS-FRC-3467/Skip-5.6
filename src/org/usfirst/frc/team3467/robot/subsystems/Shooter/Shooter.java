@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -30,7 +31,7 @@ public class Shooter extends PIDSubsystem implements PowerConsumer {
 	private static final boolean debugging = true;
 	
 	// Talon PDP channel number
-	private static final int WINCH_PDP_CHANNEL = 1;
+	private static final int WINCH_PDP_CHANNEL = 0;
 	
 	// Brownout power level
 	private Brownout.PowerLevel powerlevel = Brownout.PowerLevel.Normal;
@@ -42,8 +43,8 @@ public class Shooter extends PIDSubsystem implements PowerConsumer {
 	public AnalogPotentiometer resetAngle;
 	
 	//PID Constants
-	private static final double SHOOT_P = 5.0;
-	private static final double SHOOT_I = 0.01;
+	private static final double SHOOT_P = 20.0;
+	private static final double SHOOT_I = 0.5;
 	private static final double SHOOT_D = 0.0;
 	
 	private static final double TOLERANCE = 0.01;
@@ -56,6 +57,9 @@ public class Shooter extends PIDSubsystem implements PowerConsumer {
 	private double clearPoint = 0.70;  // bar is out of the way of catapult
 	private double latchPoint = 0.33; // bar is holding catapult so it can be latched
 
+	// The roboRio Preferences
+	Preferences prefs = Preferences.getInstance();
+	
 	//Shooter Constructor
 	public Shooter() {
 
@@ -65,9 +69,22 @@ public class Shooter extends PIDSubsystem implements PowerConsumer {
 		resetBar = new CANTalon(RobotMap.catapult_Talon);
 		catLatch = new DoubleSolenoid(RobotMap.catapult_solenoid_latch, RobotMap.catapult_solenoid_release);
 
+		// Start with setpoint at the current potentiometer reading 
 		m_resetBarSetpoint = resetAngle.get();
 		m_usePID = false;
 		this.setAbsoluteTolerance(TOLERANCE);
+		
+		// Update reset bar setpoints from Preferences
+		double cp = clearPoint; double lp = latchPoint;
+		clearPoint = prefs.getDouble("Shooter Clear Point", cp);
+		latchPoint = prefs.getDouble("Shooter Latch Point", lp);
+		
+		// Update PID gains from Preferences
+		double p, i, d;
+		p = prefs.getDouble("Shooter P Gain", SHOOT_P);
+		i = prefs.getDouble("Shooter P Gain", SHOOT_I);
+		d = prefs.getDouble("Shooter P Gain", SHOOT_D);
+		this.getPIDController().setPID(p, i, d);		
 		
 		// Register with Brownout subsystem
 		Brownout.getInstance().registerCallback(this);		
@@ -183,6 +200,16 @@ public class Shooter extends PIDSubsystem implements PowerConsumer {
 		}
 	}
 	
+	// Check Clear catapult limit switch
+	public boolean checkClearLimit() {
+		return resetBar.isFwdLimitSwitchClosed();
+	}
+	
+	// Check Latch catapult limit switch
+	public boolean checkLatchLimit() {
+		return resetBar.isRevLimitSwitchClosed();
+	}
+	
 	// PIDController methods
 	protected double returnPIDInput() {
 		double angle = resetAngle.get();
@@ -195,7 +222,7 @@ public class Shooter extends PIDSubsystem implements PowerConsumer {
 
 	protected void usePIDOutput(double output) {
 		if (debugging) {
-			SmartDashboard.putNumber("Shooter SetPoint", this.getSetpoint());
+			SmartDashboard.putNumber("Shooter Setpoint", this.getSetpoint());
 			SmartDashboard.putNumber("Shooter Current",
 					Brownout.getInstance().getCurrent(WINCH_PDP_CHANNEL));			
 		}
@@ -205,12 +232,12 @@ public class Shooter extends PIDSubsystem implements PowerConsumer {
 	private double check4Endpoints(double speed) {
 		SmartDashboard.putBoolean("Shooter Out of Calibration", false);
 		// If trying to drive and a limit switch is hit, then stop...
-		if(resetBar.isFwdLimitSwitchClosed() && speed > 0.0) {
+		if(checkClearLimit() && speed > 0.0) {
 			speed = 0.0;
 			if (Math.abs(resetAngle.get() - clearPoint) > .2)
 				SmartDashboard.putBoolean("Shooter Out of Calibration", true);
 		}
-		else if(resetBar.isRevLimitSwitchClosed() && speed < 0.0) {
+		else if(checkLatchLimit() && speed < 0.0) {
 			speed = 0.0;
 			if (Math.abs(resetAngle.get() - latchPoint) > .2)
 				SmartDashboard.putBoolean("Shooter Out of Calibration", true);

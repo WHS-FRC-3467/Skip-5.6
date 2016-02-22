@@ -19,12 +19,8 @@ public class LightSwitch extends CommandBase {
 	@Override
 	protected void execute() {
 		if(On) {
-			try {
-				light.flash();
-			} catch (Exception noLight) {
-				noLight.printStackTrace();
+			light.lightOn();
 			}
-		}
 		else {
 			light.lightOff();
 		}
