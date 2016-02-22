@@ -15,7 +15,7 @@ public class ArcadeDrive extends CommandBase {
 
 	@Override
 	protected void execute() {
-		driveBase.driveArcade(oi.getRightY(), oi.getRightX(), true);
+		driveBase.driveArcade(oi.getPrimeY(), oi.getPrimeX(), true);
 	}
 
 	protected boolean isFinished() {

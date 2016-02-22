@@ -6,6 +6,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc.team3467.robot.subsystems.Vision.commands.LightSwitch;
 import org.usfirst.frc.team3467.robot.commands.CommandBase;
+import org.usfirst.frc.team3467.robot.subsystems.DriveBase.commands.ArcadeDrive;
+import org.usfirst.frc.team3467.robot.subsystems.DriveBase.commands.PreciseRotateToAngle;
 import org.usfirst.frc.team3467.robot.subsystems.Intake.Intake;
 import org.usfirst.frc.team3467.robot.subsystems.Intake.commands.IntakeDrive;
 import org.usfirst.frc.team3467.robot.subsystems.Intake.commands.Roller_Actuate;
@@ -21,8 +23,8 @@ import org.usfirst.frc.team3467.robot.triggers.DPadUp;
 
 public class OI {
 	
-	public static Joystick leftDrive;
-	public static Joystick rightDrive;
+	public static Joystick PrimaryStick;
+	public static Joystick SecondaryStick;
 	public static Gamepad operator;
 	
 	//User numbers for different button layouts
@@ -42,8 +44,8 @@ public class OI {
  */
 	
 	public OI(){
-		leftDrive = new Joystick(0);
-		rightDrive = new Joystick(1);
+		PrimaryStick = new Joystick(0);
+		SecondaryStick = new Joystick(1);
 		operator = new Gamepad(2);
 	}
 	
@@ -53,29 +55,29 @@ public class OI {
 	
 	//Get method for leftDrive Joystick instance
 	public Joystick getleftDrive() {
-		return leftDrive;
+		return PrimaryStick;
 	}
 	
 	//Get method for rightDrive Joystick instance
 	public Joystick getrightDrive() {
-		return rightDrive;
+		return SecondaryStick;
 	}
 	
 	//Joystick Methods that return values for left and right joysticks
-	public double getLeftY(){
-		return leftDrive.getY();
+	public double getPrimeY(){
+		return PrimaryStick.getY();
 	}
 	
-	public double getRightY(){
-		return rightDrive.getY();
+	public double getSecondaryY(){
+		return SecondaryStick.getY();
 	}
 	
-	public double getRightX(){
-		return rightDrive.getX();
+	public double getPrimeX(){
+		return PrimaryStick.getX();
 	}
 	
-	public double getRightZ() {
-		return rightDrive.getZ();
+	public double getPrimeTwist() {
+		return PrimaryStick.getTwist();
 	}
 	
 	public int getUserlogin() {
@@ -100,6 +102,14 @@ public class OI {
 		//new JoystickButton(operator, Gamepad.leftBumper);
 		
 		
+	//DriveBase
+		//Toggle in and out of precision angle mode
+		new JoystickButton(PrimaryStick, 9)
+		.whenPressed(new PreciseRotateToAngle());
+		
+		new JoystickButton(PrimaryStick, 10)
+		.whenPressed(new ArcadeDrive());
+		
 	//Intake
 		//Eject Slow
 		new JoystickButton(operator, Gamepad.xButton)
@@ -118,10 +128,10 @@ public class OI {
 			.whileHeld(new IntakeDrive(Intake.kIntakeFast));
 		
 		//Intake Extend
-		new JoystickButton(leftDrive, 1)
+		new JoystickButton(SecondaryStick, 1)
 		.whenPressed(new Roller_Actuate(true));
 		
-		new JoystickButton(leftDrive, 2)
+		new JoystickButton(SecondaryStick, 2)
 		.whenPressed(new Roller_Actuate(false));
 		
 	
@@ -165,19 +175,19 @@ public class OI {
 		
 	//Utility Bar/Finger
 			//Extend Using the Right Trigger
-		new JoystickButton(rightDrive, 1)
+		new JoystickButton(PrimaryStick, 1)
 			.whenPressed(new Bar_actuate(Pnumatic_system.kOut));
 		
 			//Retract Using the Right Shoulder Button
-		new JoystickButton(rightDrive, 2)
+		new JoystickButton(PrimaryStick, 2)
 			.whenPressed(new Bar_actuate(Pnumatic_system.kIn));
 		
 			//Extend Finger using Top left button
-		new JoystickButton(rightDrive, 3)
+		new JoystickButton(PrimaryStick, 3)
 			.whenPressed(new Finger_actuate(Pnumatic_system.kOut));
 		
 			//Retract Finger using Top Right Button
-		new JoystickButton(rightDrive, 4)
+		new JoystickButton(PrimaryStick, 4)
 			.whenActive(new Finger_actuate(Pnumatic_system.kIn));
 		
 		// SmartDashboard Buttons
