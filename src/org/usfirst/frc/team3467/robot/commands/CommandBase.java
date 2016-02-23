@@ -49,8 +49,6 @@ public abstract class CommandBase extends Command {
 		subsystemList.addElement(ahrs);
 		utilitybar = new Pnumatic_system();
 		subsystemList.addElement(utilitybar);
-		utilitybar.setCompressorEnabled();
-		SmartDashboard.putString("CommandBase", "Compressor still on");
 		pultaCat = new Shooter();
 		subsystemList.addElement(pultaCat);
 		intake = new Intake();

@@ -43,7 +43,6 @@ public class Pnumatic_system extends Subsystem {
 		
 		scorpioncompressor = new Compressor();
 		scorpioncompressor.start();
-		SmartDashboard.putString("UtilityBar", "Compressor is on");
 	}
 	
 	//Use Class Constants
