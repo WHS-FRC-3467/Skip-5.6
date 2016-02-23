@@ -15,17 +15,18 @@ public class DriveStraight extends CommandBase {
 		this.setInterruptible(true);
 		
 		travelDistance = distance;
+		setTimeout(5);
 		
 	}
 	
 	protected void initialize() {
 		driveBase.initDistance(travelDistance);
-	}
-
-	protected void execute() {
 		//Applies the driveTank method to the driveBase object
 		driveBase.distanceDrive();
 		SmartDashboard.putString("DriveStraight", "Executing");
+	}
+
+	protected void execute() {
 	}
 
 	protected boolean isFinished() {
@@ -33,7 +34,7 @@ public class DriveStraight extends CommandBase {
 	}
 
 	protected void end() {
-		
+		SmartDashboard.putString("DriveStraight", "Done");
 	}
 
 	protected void interrupted() {
