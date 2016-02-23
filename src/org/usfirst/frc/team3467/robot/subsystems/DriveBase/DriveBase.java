@@ -19,7 +19,7 @@ import org.usfirst.frc.team3467.robot.subsystems.Brownout.PowerConsumer;
 public class DriveBase extends PIDSubsystem implements PowerConsumer {
 	
 	//Debugging?
-	public static final boolean t_debugging = false;
+	public static final boolean t_debugging = true;
 	
 	//Default Ramp Rate
 	private final double ramp_Rate = 2;
@@ -34,7 +34,7 @@ public class DriveBase extends PIDSubsystem implements PowerConsumer {
 	//The iZone is the zone around the target setpoint in which the I term
 	//is actually used. This number defines the size of the iZone ON EACH SIDE
 	//of the desired setpoint.
-	private final int IZone = 20;
+	private final int IZone = 100;
 	
 		//CANTalons objects and RobotDrive object
 	private CANTalon 		leftTalon, rightTalon, leftTalon2, rightTalon2, leftTalon3, rightTalon3;
@@ -69,14 +69,15 @@ public class DriveBase extends PIDSubsystem implements PowerConsumer {
 	}
 	
 		//Positional Pid Constants
-	private final double KP_P = 0.0;
-	private final double KI_P = 0.0;
-	private final double KD_P = 0.0;
+	private final double KP_P = 10.0;
+	private final double KI_P = 0.1;
+	private final double KD_P = 2.0;
 	private final double KF_P = 0.0;
 	
 		//DriveBase class constructor
 	public DriveBase() {
-			//Call PIDSubsystem constructor for using Gyro with PID to rotate
+
+		//Call PIDSubsystem constructor for using Gyro with PID to rotate
 		super("DriveBase", 0.0, 0.0, 0.0);
 		
 		//DriveBase instance = the current instance
@@ -133,8 +134,8 @@ public class DriveBase extends PIDSubsystem implements PowerConsumer {
 		rightPIDFtalon = new PIDF_CANTalon("Right CANTalon", rightTalon, Tolerance, true, t_debugging);
 	}
 	
-		//Calls for a PowerLevel update (See Brownout)
-		public void callbackAlert(PowerLevel newLevel) {
+	//Called for a PowerLevel update (See Brownout)
+	public void callbackAlert(PowerLevel newLevel) {
 		
 	}
 	
@@ -144,32 +145,42 @@ public class DriveBase extends PIDSubsystem implements PowerConsumer {
 		
 	//Set up Distance Drive
 	public void initDistance (double distance) {
+		
 		t_positionDistance = distance;
 		
-			//Check if CANTalons are on position mode
+		//Check if CANTalons are on position mode
 		if (t_controlMode != TalonControlMode.Position) {
-			leftTalon.changeControlMode(TalonControlMode.Follower);
+
 			rightTalon.changeControlMode(TalonControlMode.Position);
-			
-			leftTalon.set(RobotMap.drivebase_LeftTalon);
+			leftTalon.changeControlMode(TalonControlMode.Position);
 			
 			//Reversing Motor Direction?
-				leftTalon.reverseOutput(false);
-				rightTalon.reverseOutput(false);
+			leftTalon.reverseOutput(true);
+			rightTalon.reverseOutput(false);
 		
 			//Set PID parameters for master Talon
 			rightTalon.setIZone(IZone);
+			leftTalon.setIZone(IZone);
+
 			rightTalon.setCloseLoopRampRate(ramp_Rate);
+			leftTalon.setCloseLoopRampRate(ramp_Rate);
+			
+			rightTalon.configNominalOutputVoltage(+2, -2);
+			leftTalon.configPeakOutputVoltage(8, -8);;
 			
 			//Initialize Encoder and setPoint (distance)
 			rightTalon.setPosition(0);
 			rightTalon.set(0);
+			leftTalon.setPosition(0);
+			leftTalon.set(0);
 			
 			//Turn off Motor Safety until we tune the system
 			rightTalon.setSafetyEnabled(false);
+			leftTalon.setSafetyEnabled(false);
 			
 			//Set PID Constants
 			rightPIDFtalon.setPID(KP_P, KI_P, KD_P, KF_P);
+			leftPIDFtalon.setPID(KP_P, KI_P, KD_P, KF_P);
 		
 			t_controlMode = TalonControlMode.Position;
 		}
@@ -178,11 +189,15 @@ public class DriveBase extends PIDSubsystem implements PowerConsumer {
 	//Distance Drive
 	public void distanceDrive () {
 		rightPIDFtalon.setSetpoint(t_positionDistance);
+		leftPIDFtalon.setSetpoint(t_positionDistance);
+		if (true) {
+			reportEncoders();
+		}
 	}
 	
 	//Have we driven the specified distance
 	public boolean onPosition() {
-		return rightPIDFtalon.onTarget();
+		return (rightPIDFtalon.onTarget() && leftPIDFtalon.onTarget());
 	}
 	
 	//Set up for Tank Drive
@@ -193,12 +208,18 @@ public class DriveBase extends PIDSubsystem implements PowerConsumer {
 				
 				t_controlMode = TalonControlMode.PercentVbus;
 		}
-		leftTalon.reverseOutput(true);
+		// Don't need to invert because the sticks give negative values
+		// in the forward direction
+		leftTalon.setInverted(false);
+		rightTalon.setInverted(false);
 	}
 	
 	//Use Standard Tank Drive method
 	public void driveTank (double LeftTalon, double RightTalon, boolean squared) {
 		t_drive.tankDrive(LeftTalon, RightTalon, squared);
+		if (true) {
+			reportEncoders();
+		}
 	}
 
 	//Initiate Arcade Drive with PercentVBus
@@ -210,10 +231,27 @@ public class DriveBase extends PIDSubsystem implements PowerConsumer {
 		
 			t_controlMode = TalonControlMode.PercentVbus;
 		}
+		// Don't need to invert because the sticks give negative values
+		// in the forward direction
+		leftTalon.setInverted(false);
+		rightTalon.setInverted(false);
 	}
 	
 	public void driveArcade(double move, double rotate, boolean square) {
 		t_drive.arcadeDrive(move, rotate, square);
+		if (true) {
+			reportEncoders();
+		}
+	}
+
+	public void reportEncoders() {
+		SmartDashboard.putNumber("Left Encoder", leftTalon.getPosition());
+		SmartDashboard.putNumber("Right Encoder", rightTalon.getPosition());			
+	}
+
+	public void resetEncoders() {
+		leftTalon.setPosition(0);
+		rightTalon.setPosition(0);
 	}
 	
 	public double pidTurnToAngleInput(double angle, boolean clockwise) {
