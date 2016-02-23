@@ -19,6 +19,7 @@ import org.usfirst.frc.team3467.robot.triggers.DPadDown;
 import org.usfirst.frc.team3467.robot.triggers.DPadLeft;
 import org.usfirst.frc.team3467.robot.triggers.DPadRight;
 import org.usfirst.frc.team3467.robot.triggers.DPadUp;
+import org.usfirst.frc.team3467.robot.triggers.DoubleButton;
 
 
 public class OI {
@@ -35,8 +36,8 @@ public class OI {
 /*
  * Joystick Mappings (done elsewhere in code)
  * 
- * Joystick leftDrive - used for Tank Drive (along with rightDrive)
- * Joystick rightDrive - used for Tank or Arcade Drive
+ * Joystick PrimaryStick - used for Tank or Arcade Drive
+ * Joystick SecondaryStick - used for Tank Drive (along with PrimaryStick)
  * 
  * Gamepad getRightStickX() - used for manual drive of Intake rollers
  * Gamepad getLeftStickY() - used for manual drive of Catapult reset bar
@@ -51,16 +52,6 @@ public class OI {
 	
 	public Gamepad getGamepad() {
 		return operator;
-	}
-	
-	//Get method for leftDrive Joystick instance
-	public Joystick getleftDrive() {
-		return PrimaryStick;
-	}
-	
-	//Get method for rightDrive Joystick instance
-	public Joystick getrightDrive() {
-		return SecondaryStick;
 	}
 	
 	//Joystick Methods that return values for left and right joysticks
@@ -87,6 +78,8 @@ public class OI {
 	
 	//Method that binds certain commands to certain buttons
 	public void BindCommands() {
+
+	// Set the drive mode	
 		switch (userlogin) {
 		case Tank: 
 		default: 
@@ -148,6 +141,7 @@ public class OI {
 		new JoystickButton(operator, Gamepad.rightBumper)
 			.whenPressed(new Shoot());
 	
+		/*
 		// DPad Up
 		new DPadUp(operator)
 			.whenActive(new ShooterLatch());
@@ -163,6 +157,10 @@ public class OI {
 		// DPad Left
 		new DPadLeft(operator)
 			.whenActive(new ShooterClear());
+		 */
+		
+		// Quick latch reset (emergency use only)
+		new DoubleButton(SecondaryStick, 7, 12).whenActive(new ShooterRetryUnlatch());
 		
 		
 	//Camera Commands
