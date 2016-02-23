@@ -17,14 +17,13 @@ public class Video {
 	public static Image frame;
 	public static AxisCamera Camera;
 	
-	
-	
 	public Video() {
 		frame = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_RGB, 0);
+		
+		//Activates Axis Camera on the following IP Address
 		Camera = new AxisCamera("169.254.44.56");
-		
-		
 	}
+	
 	public boolean operatorControl() {
 		NIVision.Rect rect = new NIVision.Rect(10, 10, 100, 100);
 		
@@ -38,7 +37,5 @@ public class Video {
 			Timer.delay(0.005);
 		}
 		return false;
-
 	}
-	
 }

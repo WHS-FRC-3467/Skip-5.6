@@ -60,11 +60,11 @@ public class DriveBase extends PIDSubsystem implements PowerConsumer {
 	public void initDefaultCommand() {
 		if (Tank) {
 			this.setDefaultCommand(new TankDrive());
-			SmartDashboard.putString("DriveBase", "Set to TankDrive");
+			System.out.println("DriveBase: Set to TankDrive");
 		}
 		else {
 			this.setDefaultCommand(new ArcadeDrive());
-			SmartDashboard.putString("DriveBase", "Set to ArcadeDrive");
+			System.out.println("DriveBase: Set to ArcadeDrive");
 		}
 	}
 	

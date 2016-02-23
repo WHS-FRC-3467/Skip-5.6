@@ -18,7 +18,7 @@ public class TankDrive extends CommandBase {
 	protected void execute() {
 		//Applies the driveTank method to the driveBase object
 		driveBase.driveTank(oi.getSecondaryY(), oi.getPrimeY(), true);
-		SmartDashboard.putString("TankDrive", "Executing");
+		System.out.println("TankDrive Executing");
 	}
 
 	protected boolean isFinished() {

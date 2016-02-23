@@ -191,7 +191,6 @@ public class OI {
 		// SmartDashboard Buttons
 		SmartDashboard.putData("Shooter Calibrate", new ShooterCalibrate());
 
-		
 	}
 }
 
