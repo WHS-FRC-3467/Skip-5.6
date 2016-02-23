@@ -8,6 +8,7 @@ import org.usfirst.frc.team3467.robot.subsystems.Vision.commands.LightSwitch;
 import org.usfirst.frc.team3467.robot.commands.CommandBase;
 import org.usfirst.frc.team3467.robot.subsystems.DriveBase.commands.ArcadeDrive;
 import org.usfirst.frc.team3467.robot.subsystems.DriveBase.commands.PreciseRotateToAngle;
+import org.usfirst.frc.team3467.robot.subsystems.DriveBase.commands.ResetDriveEncoders;
 import org.usfirst.frc.team3467.robot.subsystems.Intake.Intake;
 import org.usfirst.frc.team3467.robot.subsystems.Intake.commands.IntakeDrive;
 import org.usfirst.frc.team3467.robot.subsystems.Intake.commands.Roller_Actuate;
@@ -190,6 +191,7 @@ public class OI {
 		
 		// SmartDashboard Buttons
 		SmartDashboard.putData("Shooter Calibrate", new ShooterCalibrate());
+		SmartDashboard.putData("Drivebase: Reset Encoders", new ResetDriveEncoders());
 
 	}
 }
