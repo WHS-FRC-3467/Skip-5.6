@@ -9,40 +9,35 @@ public class LightSwitch extends CommandBase {
 	public LightSwitch(boolean onORoff) {
 		requires(light);
 		On = onORoff;
+		this.setTimeout(0.6);
 	}
 	
 	protected void initialize() {
 		// TODO Auto-generated method stub
 		
 	}
-
-	@Override
+	
 	protected void execute() {
 		if(On) {
-			light.lightOn();
+			try {
+				light.lightPulse();
+					}
+			catch (Exception Interupted) {
+				Interupted.printStackTrace();
 			}
+		}
 		else {
 			light.lightOff();
 		}
 	}
 
-	@Override
 	protected boolean isFinished() {
-		// TODO Auto-generated method stub
-		return false;
+		return isTimedOut();
 	}
 
-	@Override
 	protected void end() {
-		// TODO Auto-generated method stub
-		
 	}
 
-	@Override
 	protected void interrupted() {
-		// TODO Auto-generated method stub
-		
 	}
-	
-
 }
