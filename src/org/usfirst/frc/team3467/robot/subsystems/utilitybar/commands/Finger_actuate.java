@@ -19,7 +19,6 @@ public class Finger_actuate extends CommandBase {
 
 	protected void execute() {
 		utilitybar.setFinger(INorOUT);
-		utilitybar.setFinger(Value.kOff);
 	}
 
 	protected boolean isFinished() {
@@ -27,10 +26,10 @@ public class Finger_actuate extends CommandBase {
 	}
 
 	protected void end() {
-
+		utilitybar.setFinger(Value.kOff);
 	}
 
 	protected void interrupted() {
-
+		end();
 	}
 }
