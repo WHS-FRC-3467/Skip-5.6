@@ -30,7 +30,7 @@ public class LightSwitch extends CommandBase {
 			light.lightOff();
 		}
 	}
-
+	
 	protected boolean isFinished() {
 		return isTimedOut();
 	}
