@@ -106,6 +106,9 @@ public class DriveBase extends PIDSubsystem implements PowerConsumer {
 		
 		t_controlMode = CANTalon.TalonControlMode.PercentVbus;
 		
+		// Turn off Brake mode
+		setTalonBrakes(false);
+		
 		//Set SIM encoders as feedback devices
 		leftTalon.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
 		rightTalon.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
@@ -252,6 +255,11 @@ public class DriveBase extends PIDSubsystem implements PowerConsumer {
 	public void resetEncoders() {
 		leftTalon.setPosition(0);
 		rightTalon.setPosition(0);
+	}
+	
+	public void setTalonBrakes(boolean setBrake) {
+		leftTalon.enableBrakeMode(setBrake);
+		rightTalon.enableBrakeMode(setBrake);
 	}
 	
 	public double pidTurnToAngleInput(double angle, boolean clockwise) {

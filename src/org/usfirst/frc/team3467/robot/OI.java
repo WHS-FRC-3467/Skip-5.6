@@ -9,6 +9,7 @@ import org.usfirst.frc.team3467.robot.commands.CommandBase;
 import org.usfirst.frc.team3467.robot.subsystems.DriveBase.commands.ArcadeDrive;
 import org.usfirst.frc.team3467.robot.subsystems.DriveBase.commands.PreciseRotateToAngle;
 import org.usfirst.frc.team3467.robot.subsystems.DriveBase.commands.ResetDriveEncoders;
+import org.usfirst.frc.team3467.robot.subsystems.DriveBase.commands.SetBrakeMode;
 import org.usfirst.frc.team3467.robot.subsystems.Intake.Intake;
 import org.usfirst.frc.team3467.robot.subsystems.Intake.commands.IntakeDrive;
 import org.usfirst.frc.team3467.robot.subsystems.Intake.commands.Roller_Actuate;
@@ -142,19 +143,19 @@ public class OI {
 		new JoystickButton(operator, Gamepad.rightBumper)
 			.whenPressed(new Shoot());
 	
-		/*
 		// DPad Up
 		new DPadUp(operator)
-			.whenActive(new ShooterLatch());
+			.whenActive(new SetBrakeMode(false));
 
+		// DPad Down
+		new DPadDown(operator)
+			.whenActive(new SetBrakeMode(true));
+ 		
+		/*
 		// DPad Right
 		new DPadRight(operator)
 			.whenActive(new ShooterLatch());
 
-		// DPad Down
-		new DPadDown(operator)
-			.whenActive(new ShooterClear());
- 		
 		// DPad Left
 		new DPadLeft(operator)
 			.whenActive(new ShooterClear());
