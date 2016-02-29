@@ -15,23 +15,23 @@ public class TurnAndShoot extends CommandGroup {
 		RobotPosition = Position;
 		switch (Position) {
 		case 1: addSequential(new DriveStraight(5.0));
-				addSequential(new AutoRotateToAngle(1.0, 1.0));
+				addSequential(new AutoRotateToAngle(1.0));
 				break;
 				
 		case 2: addSequential(new DriveStraight(5.0));
-				addSequential(new AutoRotateToAngle(1.0, 1.0));
+				addSequential(new AutoRotateToAngle(1.0));
 				break;
 				
 		case 3: addSequential(new DriveStraight(5.0));
-				addSequential(new AutoRotateToAngle(1.0, 1.0));
+				addSequential(new AutoRotateToAngle(1.0));
 				break;
 				
 		case 4: addSequential(new DriveStraight(5.0));
-				addSequential(new AutoRotateToAngle(1.0, 1.0));
+				addSequential(new AutoRotateToAngle(1.0));
 				break;
 				
 		case 5: addSequential(new DriveStraight(5.0));
-				addSequential(new AutoRotateToAngle(1.0, 1.0));
+				addSequential(new AutoRotateToAngle(1.0));
 				break;
 			
 		default: break;

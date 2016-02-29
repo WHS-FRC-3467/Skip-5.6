@@ -2,6 +2,8 @@ package org.usfirst.frc.team3467.robot.subsystems.NavX_MXP.command;
 
 import org.usfirst.frc.team3467.robot.commands.CommandBase;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 public class AHRS_Update extends CommandBase {
 
 	private int counter;
@@ -15,30 +17,25 @@ public class AHRS_Update extends CommandBase {
 		counter = 0;
 	}
 
-	@Override
 	protected void execute() {
 		if (counter < 50) {
 			counter++;
 		}
 		else {
+			SmartDashboard.putNumber("Gyro Angle", ahrs.getGyroAngle());
+			SmartDashboard.putNumber("Gyro Yaw", ahrs.getGyroYaw());
 		}
 	}
 
-	@Override
 	protected boolean isFinished() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
-	@Override
 	protected void end() {
-		// TODO Auto-generated method stub
 		
 	}
 
-	@Override
 	protected void interrupted() {
-		// TODO Auto-generated method stub
-		
+		end();
 	}
 }

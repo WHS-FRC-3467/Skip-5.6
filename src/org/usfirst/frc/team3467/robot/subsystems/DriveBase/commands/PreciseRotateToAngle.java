@@ -12,15 +12,8 @@ public class PreciseRotateToAngle extends CommandBase {
 	}
 	
 	protected void initialize() {
-		/*ahrs.GyroReset();
-		ahrs.turnController.reset();
-		ahrs.turnController.setSetpoint(oi.getPrimeZ());
-		ahrs.turnController.reset();
-		ahrs.turnController.enable();
-		*/
 	}
 
-	@Override
 	protected void execute() {
 		PreciseInput = oi.getPrimeTwist()/5;
 		//driveBase.driveArcade(0, (ahrs.turnController.get()/90) * 15, false);
@@ -32,15 +25,11 @@ public class PreciseRotateToAngle extends CommandBase {
 		return false;
 	}
 
-	@Override
 	protected void end() {
-		ahrs.turnController.disable();
 		driveBase.driveArcade(0, 0, false);
 	}
 
-	@Override
 	protected void interrupted() {
-		// TODO Auto-generated method stub
-		
+		end();
 	}
 }
