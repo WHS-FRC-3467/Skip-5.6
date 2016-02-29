@@ -100,8 +100,6 @@ public class Robot extends IterativeRobot {
      */
     public void teleopPeriodic() {
         Scheduler.getInstance().run();
-		CommandBase.utilitybar.setCompressorEnabled();
-		SmartDashboard.putString("CommandBase", "Compressor On");
         SmartDashboard.putString("Robot", "Teleop Periodic");
     }
     

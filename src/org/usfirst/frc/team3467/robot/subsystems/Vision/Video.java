@@ -22,6 +22,8 @@ public class Video {
 		
 		//Activates Axis Camera on the following IP Address
 		Camera = new AxisCamera("169.254.44.56");
+	
+		//session = NIVision.
 	}
 	
 	public boolean operatorControl() {

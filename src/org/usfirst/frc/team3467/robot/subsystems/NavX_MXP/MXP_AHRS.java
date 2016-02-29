@@ -16,7 +16,7 @@ public class MXP_AHRS extends Subsystem implements PIDOutput {
 	private static MXP_AHRS instance;
 	public PIDController turnController;
 	
-	private static final boolean 	DEBUGGING = false;
+	private static final boolean 	DEBUGGING = true;
 	
 		//Rotate to the angle
 	public double rotateToAngle;
@@ -67,7 +67,8 @@ public class MXP_AHRS extends Subsystem implements PIDOutput {
 	
 	public double getGryoAngle() {
 		if (DEBUGGING) {
-			SmartDashboard.putNumber(ahrs + "Angle", ahrs.getAngle());
+			SmartDashboard.putNumber("Angle", ahrs.getAngle());
+			SmartDashboard.putNumber("Yaw", ahrs.getYaw());
 		}
 		return ahrs.getAngle();
 	}

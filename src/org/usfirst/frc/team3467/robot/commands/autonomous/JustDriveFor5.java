@@ -17,12 +17,14 @@ public class JustDriveFor5 extends CommandBase {
     protected void initialize() {
     	driveBase.initTank();
     	driveBase.resetEncoders();
+    	ahrs.GyroReset();
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	// Need to give negative values to simulate sticks in forward direction
     	driveBase.driveTank(-0.5, -0.5, true);
+    	ahrs.getGryoAngle();
     }
 
     // Make this return true when this Command no longer needs to run execute()
