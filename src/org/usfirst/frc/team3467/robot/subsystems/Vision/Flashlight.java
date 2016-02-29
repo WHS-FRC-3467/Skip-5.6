@@ -28,25 +28,18 @@ public class Flashlight extends Subsystem{
 
 	public void lightPulse() throws Exception {
 		Thread.sleep(500);
-		m_lightMode = (m_lightMode + 1) % 3;
-		switch (m_lightMode) {
-		case 0:
-				flashSpike.set(Value.kOff);
-				Thread.sleep(100);
-				flashSpike.set(Value.kOn);
-				break;
-		case 1:
-				flashSpike.set(Value.kOff);
-				Thread.sleep(100);
-				flashSpike.set(Value.kOn);
-				break;
-		case 2:
-				flashSpike.set(Value.kOff);
-				Thread.sleep(100);
-				flashSpike.set(Value.kOn);
-				break;
+		flashSpike.set(Value.kOff);
+		Thread.sleep(10);
+		flashSpike.set(Value.kOn);
+		Thread.sleep(10);
+		flashSpike.set(Value.kOff);
+		Thread.sleep(10);
+		flashSpike.set(Value.kOn);
+		Thread.sleep(10);
+		//flashSpike.set(Value.kOff);
+		//Thread.sleep(15);
+		//flashSpike.set(Value.kOn);
 		}
-	}
 	
 	protected void initDefaultCommand() {
 

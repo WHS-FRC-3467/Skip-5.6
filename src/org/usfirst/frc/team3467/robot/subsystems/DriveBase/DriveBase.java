@@ -28,7 +28,7 @@ public class DriveBase extends PIDSubsystem implements PowerConsumer {
 	public boolean Tank = true;
 	
 	//Sets Default tolerance for closed-loop error
-	private final double Tolerance = 20;
+	private final double Tolerance = 100;
 	
 	//Sets the Izone, the zone
 	//The iZone is the zone around the target setpoint in which the I term
@@ -152,7 +152,9 @@ public class DriveBase extends PIDSubsystem implements PowerConsumer {
 		if (t_controlMode != TalonControlMode.Position) {
 
 			rightTalon.changeControlMode(TalonControlMode.Position);
-			leftTalon.changeControlMode(TalonControlMode.Position);
+			leftTalon.changeControlMode(TalonControlMode.Follower);
+			
+			leftTalon.set(RobotMap.drivebase_RightTalon);
 			
 			//Reversing Motor Direction?
 			leftTalon.reverseOutput(true);
@@ -160,27 +162,30 @@ public class DriveBase extends PIDSubsystem implements PowerConsumer {
 		
 			//Set PID parameters for master Talon
 			rightTalon.setIZone(IZone);
-			leftTalon.setIZone(IZone);
+			//leftTalon.setIZone(IZone);
 
 			rightTalon.setCloseLoopRampRate(ramp_Rate);
-			leftTalon.setCloseLoopRampRate(ramp_Rate);
+			//leftTalon.setCloseLoopRampRate(ramp_Rate);
 			
+			//Regardless of PID loop, outputs a minimum and a maximum voltage to CANTalons
 			rightTalon.configNominalOutputVoltage(+2, -2);
-			leftTalon.configPeakOutputVoltage(8, -8);;
+			rightTalon.configPeakOutputVoltage(6, -6);
+			//leftTalon.configNominalOutputVoltage(+2, -2);
+			//leftTalon.configPeakOutputVoltage(6, -6);
 			
 			//Initialize Encoder and setPoint (distance)
 			rightTalon.setPosition(0);
 			rightTalon.set(0);
-			leftTalon.setPosition(0);
-			leftTalon.set(0);
+			//leftTalon.setPosition(0);
+			//leftTalon.set(0);
 			
 			//Turn off Motor Safety until we tune the system
 			rightTalon.setSafetyEnabled(false);
-			leftTalon.setSafetyEnabled(false);
+			//leftTalon.setSafetyEnabled(false);
 			
 			//Set PID Constants
 			rightPIDFtalon.setPID(KP_P, KI_P, KD_P, KF_P);
-			leftPIDFtalon.setPID(KP_P, KI_P, KD_P, KF_P);
+			//leftPIDFtalon.setPID(KP_P, KI_P, KD_P, KF_P);
 		
 			t_controlMode = TalonControlMode.Position;
 		}
@@ -189,7 +194,7 @@ public class DriveBase extends PIDSubsystem implements PowerConsumer {
 	//Distance Drive
 	public void distanceDrive () {
 		rightPIDFtalon.setSetpoint(t_positionDistance);
-		leftPIDFtalon.setSetpoint(t_positionDistance);
+		//leftPIDFtalon.setSetpoint(t_positionDistance);
 		if (true) {
 			reportEncoders();
 		}
@@ -197,7 +202,8 @@ public class DriveBase extends PIDSubsystem implements PowerConsumer {
 	
 	//Have we driven the specified distance
 	public boolean onPosition() {
-		return (rightPIDFtalon.onTarget() && leftPIDFtalon.onTarget());
+		reportEncoders();
+		return (rightPIDFtalon.onTarget()/* && leftPIDFtalon.onTarget()*/);
 	}
 	
 	//Set up for Tank Drive
@@ -241,6 +247,7 @@ public class DriveBase extends PIDSubsystem implements PowerConsumer {
 		t_drive.arcadeDrive(move, rotate, square);
 		if (true) {
 			reportEncoders();
+			CommandBase.ahrs.getGryoAngle();
 		}
 	}
 
