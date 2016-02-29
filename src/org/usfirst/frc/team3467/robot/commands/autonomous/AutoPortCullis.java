@@ -12,6 +12,6 @@ public class AutoPortCullis extends CommandGroup {
 	public AutoPortCullis() {
 	addSequential(new DriveStraight(5.0));
 	addSequential(new Bar_actuate(Value.kForward));
-	addSequential(new AutoRotateToAngle(0.0, 0.0));
+	addSequential(new AutoRotateToAngle(0.0));
 	}
 }
