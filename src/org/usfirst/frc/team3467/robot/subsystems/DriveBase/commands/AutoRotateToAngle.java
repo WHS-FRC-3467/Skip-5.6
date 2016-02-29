@@ -8,7 +8,8 @@ import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
 
 /**
- * Turn the given distance in degrees (negative values go counterclockwise).
+ * Turn the robot to a given heading (in degrees relative to last reset heading;
+ * negative values go counterclockwise).
  * Uses a local PID controller to run a simple PID loop that is only
  * enabled while this command is running. The input is the yaw() value from AHRS.
  */
@@ -49,7 +50,6 @@ public class AutoRotateToAngle extends CommandBase {
     // Called just before this Command runs the first time
     protected void initialize() {
     	// Get everything in a safe starting state.
-        ahrs.gyroReset();
     	pid.reset();
         pid.enable();
     }
