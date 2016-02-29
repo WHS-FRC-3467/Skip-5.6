@@ -10,7 +10,12 @@ public class ShooterClear extends CommandBase {
 
     public ShooterClear() {
         requires(pultaCat);
-        setInterruptible(false);
+
+// Originally we thought this should be uninterruptible due to importance of getting the bar
+// out of the way before firing, but if the command never finishes (missed or broken limit
+// switch, never reaches target setpoint, etc) we want to be able to fire or do something
+// else to end this command and stop the PID loop.
+//        setInterruptible(false);
     }
 
     // Called just before this Command runs the first time

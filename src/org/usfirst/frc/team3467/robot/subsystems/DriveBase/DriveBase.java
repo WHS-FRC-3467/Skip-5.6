@@ -1,64 +1,41 @@
 package org.usfirst.frc.team3467.robot.subsystems.DriveBase;
 
 import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
-import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.RobotDrive;
-import edu.wpi.first.wpilibj.RobotDrive.MotorType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc.team3467.robot.RobotMap;
 import org.usfirst.frc.team3467.robot.subsystems.DriveBase.commands.TankDrive;
 import org.usfirst.frc.team3467.robot.subsystems.DriveBase.commands.ArcadeDrive;
-import org.usfirst.frc.team3467.robot.commands.CommandBase;
-import org.usfirst.frc.team3467.robot.pid.PIDF_CANTalon;
 import org.usfirst.frc.team3467.robot.subsystems.Brownout.Brownout.PowerLevel;
 import org.usfirst.frc.team3467.robot.subsystems.Brownout.PowerConsumer;
 
-public class DriveBase extends PIDSubsystem implements PowerConsumer {
+public class DriveBase extends Subsystem implements PowerConsumer {
 	
 	//Debugging?
-	public static final boolean t_debugging = true;
+	private static final boolean t_debugging = true;
 	
-	//Default Ramp Rate
-	private final double ramp_Rate = 2;
+	//Use to Toggle Arcade Drive, and t_useTank Drive
+	private boolean t_useTank = true;
 	
-	//Use to Toggle Arcade Drive, and Tank Drive
-	public boolean Tank = true;
-	
-	//Sets Default tolerance for closed-loop error
-	private final double Tolerance = 100;
-	
-	//Sets the Izone, the zone
-	//The iZone is the zone around the target setpoint in which the I term
-	//is actually used. This number defines the size of the iZone ON EACH SIDE
-	//of the desired setpoint.
-	private final int IZone = 100;
-	
-		//CANTalons objects and RobotDrive object
+	//CANTalons objects and RobotDrive object
 	private CANTalon 		leftTalon, rightTalon, leftTalon2, rightTalon2, leftTalon3, rightTalon3;
 	private static RobotDrive 		t_drive;
 	private CANTalon.ControlMode 	t_controlMode;
-	private double 					t_positionDistance;
+
 	//Instance of the DriveBase Class
 	private static DriveBase 		instance;
 	
-		//Private PID wraps
-	private PIDF_CANTalon 		leftPIDFtalon;
-	private PIDF_CANTalon		rightPIDFtalon;
-	
-		//Field Centric state (true = on) (false = off)
-	private static boolean t_fieldcentricON = false;
-	
-		//DriveBase get instance method
+	//DriveBase get instance method
 	public DriveBase getInstance() {
 		return instance;
 	}
 
-		//Initializing the Default Command
+	//Initializing the Default Command
 	public void initDefaultCommand() {
-		if (Tank) {
+		if (t_useTank) {
 			this.setDefaultCommand(new TankDrive());
 			System.out.println("DriveBase: Set to TankDrive");
 		}
@@ -68,18 +45,9 @@ public class DriveBase extends PIDSubsystem implements PowerConsumer {
 		}
 	}
 	
-		//Positional Pid Constants
-	private final double KP_P = 10.0;
-	private final double KI_P = 0.1;
-	private final double KD_P = 2.0;
-	private final double KF_P = 0.0;
-	
-		//DriveBase class constructor
+	//DriveBase class constructor
 	public DriveBase() {
 
-		//Call PIDSubsystem constructor for using Gyro with PID to rotate
-		super("DriveBase", 0.0, 0.0, 0.0);
-		
 		//DriveBase instance = the current instance
 		instance = this;
 		
@@ -106,14 +74,17 @@ public class DriveBase extends PIDSubsystem implements PowerConsumer {
 		
 		t_controlMode = CANTalon.TalonControlMode.PercentVbus;
 		
+		// Turn off Brake mode
+		setTalonBrakes(false);
+		
 		//Set SIM encoders as feedback devices
 		leftTalon.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
 		rightTalon.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
 		
-			//Instantiate RobotDrive
+		//Instantiate RobotDrive
 		t_drive = new RobotDrive(leftTalon, rightTalon);
 		
-			//RobotDrive Parameters
+		//RobotDrive Parameters
 		t_drive.setSafetyEnabled(true);
 		t_drive.setExpiration(1.0);
 		t_drive.setSensitivity(0.5);
@@ -121,17 +92,6 @@ public class DriveBase extends PIDSubsystem implements PowerConsumer {
 		//t_drive.setInvertedMotor(MotorType.kFrontLeft, false);
 		//t_drive.setInvertedMotor(MotorType.kFrontRight, false);
 		
-			//Set Izones
-		leftTalon.setIZone(IZone);
-		rightTalon.setIZone(IZone);
-		
-			//Set Voltage ramp rates
-		leftTalon.setCloseLoopRampRate(ramp_Rate);
-		rightTalon.setCloseLoopRampRate(ramp_Rate);
-		
-			//Create PID Management wrappers
-		leftPIDFtalon = new PIDF_CANTalon("Left CANTalon", leftTalon, Tolerance, true, t_debugging);
-		rightPIDFtalon = new PIDF_CANTalon("Right CANTalon", rightTalon, Tolerance, true, t_debugging);
 	}
 	
 	//Called for a PowerLevel update (See Brownout)
@@ -139,73 +99,11 @@ public class DriveBase extends PIDSubsystem implements PowerConsumer {
 		
 	}
 	
-	public void setDriveMode(boolean tank) {
-		Tank = tank;
+	// Set drive mode
+	public void setDriveMode(boolean usetank) {
+		t_useTank = usetank;
 	}
 		
-	//Set up Distance Drive
-	public void initDistance (double distance) {
-		
-		t_positionDistance = distance;
-		
-		//Check if CANTalons are on position mode
-		if (t_controlMode != TalonControlMode.Position) {
-
-			rightTalon.changeControlMode(TalonControlMode.Position);
-			leftTalon.changeControlMode(TalonControlMode.Follower);
-			
-			leftTalon.set(RobotMap.drivebase_RightTalon);
-			
-			//Reversing Motor Direction?
-			leftTalon.reverseOutput(true);
-			rightTalon.reverseOutput(false);
-		
-			//Set PID parameters for master Talon
-			rightTalon.setIZone(IZone);
-			//leftTalon.setIZone(IZone);
-
-			rightTalon.setCloseLoopRampRate(ramp_Rate);
-			//leftTalon.setCloseLoopRampRate(ramp_Rate);
-			
-			//Regardless of PID loop, outputs a minimum and a maximum voltage to CANTalons
-			rightTalon.configNominalOutputVoltage(+2, -2);
-			rightTalon.configPeakOutputVoltage(6, -6);
-			//leftTalon.configNominalOutputVoltage(+2, -2);
-			//leftTalon.configPeakOutputVoltage(6, -6);
-			
-			//Initialize Encoder and setPoint (distance)
-			rightTalon.setPosition(0);
-			rightTalon.set(0);
-			//leftTalon.setPosition(0);
-			//leftTalon.set(0);
-			
-			//Turn off Motor Safety until we tune the system
-			rightTalon.setSafetyEnabled(false);
-			//leftTalon.setSafetyEnabled(false);
-			
-			//Set PID Constants
-			rightPIDFtalon.setPID(KP_P, KI_P, KD_P, KF_P);
-			//leftPIDFtalon.setPID(KP_P, KI_P, KD_P, KF_P);
-		
-			t_controlMode = TalonControlMode.Position;
-		}
-	}
-	
-	//Distance Drive
-	public void distanceDrive () {
-		rightPIDFtalon.setSetpoint(t_positionDistance);
-		//leftPIDFtalon.setSetpoint(t_positionDistance);
-		if (true) {
-			reportEncoders();
-		}
-	}
-	
-	//Have we driven the specified distance
-	public boolean onPosition() {
-		reportEncoders();
-		return (rightPIDFtalon.onTarget()/* && leftPIDFtalon.onTarget()*/);
-	}
-	
 	//Set up for Tank Drive
 	public void initTank () {
 		if (t_controlMode != TalonControlMode.PercentVbus); {
@@ -247,9 +145,20 @@ public class DriveBase extends PIDSubsystem implements PowerConsumer {
 		t_drive.arcadeDrive(move, rotate, square);
 		if (true) {
 			reportEncoders();
-			CommandBase.ahrs.getGryoAngle();
 		}
 	}
+
+	// pass-thru to RobotDrive drive() method (used in autonomous)
+	public void drive(double outputMagnitude, double curve) {
+
+		t_drive.drive(outputMagnitude, curve);
+	}
+
+	// return the distance driven (average of left and right encoders).
+	public double getDistance() {
+		return (Math.abs(leftTalon.getPosition()) + Math.abs(rightTalon.getPosition()))/2;
+	}
+
 
 	public void reportEncoders() {
 		SmartDashboard.putNumber("Left Encoder", leftTalon.getPosition());
@@ -261,45 +170,9 @@ public class DriveBase extends PIDSubsystem implements PowerConsumer {
 		rightTalon.setPosition(0);
 	}
 	
-	public double pidTurnToAngleInput(double angle, boolean clockwise) {
-		double correctAngle = CommandBase.ahrs.getGryoAngle() + 180;
-		boolean wrapAround = ((clockwise = true 
-				&& correctAngle < angle 
-				&& angle - correctAngle > 180) || (clockwise == true
-				&& correctAngle > angle
-				&& angle - correctAngle <=180));
-			
-		if (wrapAround) {
-				if (clockwise == true) {
-					angle = angle + 360;
-				}
-					else {
-						angle = angle - 360;
-					}
-				}
-		
-		double pidInValue = (angle - correctAngle)/180;
-		return pidInValue;
+	public void setTalonBrakes(boolean setBrake) {
+		leftTalon.enableBrakeMode(setBrake);
+		rightTalon.enableBrakeMode(setBrake);
 	}
 	
-	public boolean shortestTurnDirection(double angle) {
-		boolean turnClockwise = true;
-		double currentGyroAngle = CommandBase.ahrs.getGryoAngle();
-		
-		if ((angle >= currentGyroAngle && currentGyroAngle - angle <= 180) || (angle < currentGyroAngle && angle - currentGyroAngle > 180)) {
-			turnClockwise = false;
-		}
-		
-		return turnClockwise;
-	}
-	
-	protected double returnPIDInput() {
-		boolean bClockwise = shortestTurnDirection(this.getSetpoint());
-		return pidTurnToAngleInput(this.getSetpoint(), bClockwise);
-	}
-
-	protected void usePIDOutput(double output) {
-		// TODO Auto-generated method stub
-		
-	}
 }

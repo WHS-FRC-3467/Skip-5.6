@@ -9,6 +9,6 @@ public class AutoLowBar extends CommandGroup {
 	
 	public AutoLowBar() {
 		addSequential(new DriveStraight(5.0));
-		addSequential(new AutoRotateToAngle(10.0, 50));
+		addSequential(new AutoRotateToAngle(50));
 	}
 }
