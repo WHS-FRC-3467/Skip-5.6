@@ -12,13 +12,13 @@ public class TankDrive extends CommandBase {
 	}
 	
 	protected void initialize() {
-
+		driveBase.initTank();
 	}
 
 	protected void execute() {
 		//Applies the driveTank method to the driveBase object
-		driveBase.driveTank(oi.getLeftY(), oi.getRightY(), true);
-		SmartDashboard.putString("TankDrive", "Executing");
+		driveBase.driveTank(oi.getSecondaryY(), oi.getPrimeY(), true);
+		System.out.println("TankDrive Executing");
 	}
 
 	protected boolean isFinished() {

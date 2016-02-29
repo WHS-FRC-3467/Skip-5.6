@@ -15,11 +15,11 @@ public class Intake extends Subsystem {
 	private static final boolean debugging = true;
 
 	// Constants for some useful speeds
-	public static final double kIntakeFast = -0.6;
-	public static final double kIntakeSlow = -0.3;
+	public static final double kIntakeFast = -0.8;
+	public static final double kIntakeSlow = -0.4;
 	public static final double kStop = 0;
-	public static final double kEjectSlow = 0.25;
-	public static final double kEjectFast = 0.5;
+	public static final double kEjectSlow = 0.8;
+	public static final double kEjectFast = 0.4;
 
 	//Roller Class objects
 	public CANTalon rollerTalonX, rollerTalonY;
@@ -36,10 +36,10 @@ public class Intake extends Subsystem {
 		
 		//Set Up CANTalon ControlMode
 		rollerTalonX.changeControlMode(TalonControlMode.PercentVbus);
-		rollerTalonX.reverseOutput(true);
+		rollerTalonX.reverseOutput(false);
 
-		rollerTalonY.changeControlMode(TalonControlMode.Follower);
-		rollerTalonY.set(RobotMap.roller_TalonX);
+		rollerTalonY.changeControlMode(TalonControlMode.PercentVbus);
+		rollerTalonY.reverseOutput(false);
 	}
 
 	protected void initDefaultCommand() {
@@ -51,7 +51,8 @@ public class Intake extends Subsystem {
 		if (debugging) {
 	    	SmartDashboard.putNumber("Intake Speed", speed);
 		}
-		rollerTalonX.set(speed);
+		rollerTalonY.set(speed);
+		rollerTalonX.set(Math.abs(speed));
 	}
 	
 	// Extend or Retract Intake

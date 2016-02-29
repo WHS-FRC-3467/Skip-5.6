@@ -9,12 +9,17 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+
+
+
 //Import subsystem classes from subsystem packages
 import org.usfirst.frc.team3467.robot.commands.CommandBase;
 	
 //Import robot commands from command packages
 import org.usfirst.frc.team3467.robot.commands.autonomous.AutoDriveStraight;
 import org.usfirst.frc.team3467.robot.commands.autonomous.AutoNon;
+import org.usfirst.frc.team3467.robot.commands.autonomous.JustDriveFor5;
+
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -50,6 +55,7 @@ public class Robot extends IterativeRobot {
 		autoChooser = new SendableChooser();
 		autoChooser.addDefault("Default Auto", new AutoNon());
 		autoChooser.addObject("Drive Straight", new AutoDriveStraight());
+		autoChooser.addObject("Drive for 5 secs", new JustDriveFor5());
 		
 		SmartDashboard.putData("Auto", autoChooser);
     }
@@ -85,6 +91,7 @@ public class Robot extends IterativeRobot {
         // teleop starts running. If you want the autonomous to 
         // continue until interrupted by another command, remove
         // this line or comment it out.
+    	SmartDashboard.putString("Robot", "Teleop Inabled");
         if (autonomousCommand != null) autonomousCommand.cancel();
     }
 

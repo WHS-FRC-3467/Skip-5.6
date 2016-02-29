@@ -2,45 +2,76 @@ package org.usfirst.frc.team3467.robot.subsystems.DriveBase.commands;
 
 import org.usfirst.frc.team3467.robot.commands.CommandBase;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.PIDController;
+import edu.wpi.first.wpilibj.PIDOutput;
+import edu.wpi.first.wpilibj.PIDSource;
+import edu.wpi.first.wpilibj.PIDSourceType;
 
+/**
+ * Turn the given distance in degrees (negative values go counterclockwise).
+ * Uses a local PID controller to run a simple PID loop that is only
+ * enabled while this command is running. The input is the yaw() value from AHRS.
+ */
 public class AutoRotateToAngle extends CommandBase {
 
-	double degrees;
-	double speed;
-	
-	public AutoRotateToAngle(double degree, double speed) {
-		requires (driveBase);
-		this.degrees = degree;
-		this.speed = speed;
-		this.setInterruptible(false);
-	}
-	
-	protected void initialize() {
-		ahrs.GyroReset();
-		ahrs.turnController.reset();
-		ahrs.turnController.setSetpoint(degrees);
-		ahrs.turnController.reset();
-		ahrs.turnController.enable();
-		
-		SmartDashboard.putNumber("Rotating: ", degrees);
-	}
+	private PIDController pid;
 
-	protected void execute() {
-		driveBase.driveArcade(0, ahrs.turnController.get(), false);
-	}
+    public AutoRotateToAngle(double degrees) {
+    
+    	requires(driveBase);
+    	
+        pid = new PIDController(2, 0, 0,
+                new PIDSource() {
+                    PIDSourceType m_sourceType = PIDSourceType.kDisplacement;
 
-	protected boolean isFinished() {
-		// TODO Auto-generated method stub
-		return false;
-	}
+                    public double pidGet() {
+                        return ahrs.getGyroYaw();
+                    }
 
-	protected void end() {
-		ahrs.turnController.disable();
-		driveBase.driveArcade(0, 0, false);
-	}
+                    public void setPIDSourceType(PIDSourceType pidSource) {
+                      m_sourceType = pidSource;
+                    }
 
-	protected void interrupted() {
-		driveBase.driveArcade(0, 0, false);
-	}
+                    public PIDSourceType getPIDSourceType() {
+                        return m_sourceType;
+                    }
+                },
+                new PIDOutput() {
+                	
+                	public void pidWrite(double d) {
+                		// Spin with the magnitude returned by the PID calculation, 
+                		driveBase.driveArcade(0, d, false);
+                }});
+        pid.setAbsoluteTolerance(2.0);
+        pid.setSetpoint(degrees);
+    }
+
+    // Called just before this Command runs the first time
+    protected void initialize() {
+    	// Get everything in a safe starting state.
+        ahrs.gyroReset();
+    	pid.reset();
+        pid.enable();
+    }
+
+    // Called repeatedly when this Command is scheduled to run
+    protected void execute() {}
+
+    // Make this return true when this Command no longer needs to run execute()
+    protected boolean isFinished() {
+        return pid.onTarget();
+    }
+
+    // Called once after isFinished returns true
+    protected void end() {
+    	// Stop PID and the wheels
+    	pid.disable();
+        driveBase.driveArcade(0, 0, false);
+    }
+
+    // Called when another command which requires one or more of the same
+    // subsystems is scheduled to run
+    protected void interrupted() {
+        end();
+    }
 }

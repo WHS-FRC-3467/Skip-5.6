@@ -5,13 +5,18 @@ import java.util.Vector;
 import org.usfirst.frc.team3467.robot.subsystems.Brownout.PowerConsumer;
 import org.usfirst.frc.team3467.robot.subsystems.Brownout.commands.checkPower;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Brownout extends Subsystem {
 
-	public int CHILLVOLTAGE = 9;
-	public int CRITICALVOLTAGE = 7;
+	public static final double CHILLVOLTAGE = 9.0;
+	public static final double CRITICALVOLTAGE = 6.9;
+
+	// Brownout is a singleton
+	private static Brownout instance = new Brownout();
 
 	public PowerDistributionPanel pdp; 
 
@@ -35,7 +40,6 @@ public class Brownout extends Subsystem {
 	    private PowerLevel(int value) {
 	      this.value = value;
 	    }
-
 	}
 	
 	// The current Power Level
@@ -44,8 +48,19 @@ public class Brownout extends Subsystem {
 	// Create vector of consumers to callback
 	public static Vector <PowerConsumer> callbackList;
 
-	//Brownout Class Constructor
-	public Brownout() {
+	// Get an instance of Brownout
+	public static Brownout getInstance() {
+	    return Brownout.instance;
+	}
+
+	/*
+	 * Brownout Class Constructor
+	 *
+	 * The singleton instance is created statically with
+	 * the instance static member variable.
+	 */
+	protected Brownout() {
+		
 		//Instantiate PowerDistributionPanel
 		pdp = new PowerDistributionPanel();
 		
@@ -68,8 +83,15 @@ public class Brownout extends Subsystem {
 		return pdp.getVoltage();
 	}
 	
+	public double getTotalCurrent() {
+		return pdp.getTotalCurrent();
+	}
+	
+	public double getCurrent(int channel) {
+		return pdp.getCurrent(channel);
+	}
+	
 	public PowerLevel getLevel() {
-		
 		return batteryLevel;
 	}
 		
@@ -77,22 +99,28 @@ public class Brownout extends Subsystem {
 		PowerLevel oldLevel = batteryLevel;
 
 		double voltage = pdp.getVoltage();
-		
-		//Sets first battery level to above 9 volts
+
+		// If voltage is "Chill" level or above, then we're cool
 		if (voltage >= CHILLVOLTAGE) {
 			batteryLevel = PowerLevel.Normal;
+			SmartDashboard.putString("Brownout Subsystem", "Normal");
 		}
 			
-		//Sets second level to between 7 and 9 volts
+		// If voltage has dropped but is still above "Critical" level,
+		// then set a warning
 		else if (voltage < CHILLVOLTAGE && voltage >= CRITICALVOLTAGE) {
 			batteryLevel = PowerLevel.Chill;
+			SmartDashboard.putString("Brownout Subsystem", "Warning");
 		}
 			
-		//Sets third and final level to below 7 volts
+		// If voltage below "Critical" level...
 		else if (voltage < CRITICALVOLTAGE) {
 			batteryLevel = PowerLevel.Critical;
+			SmartDashboard.putString("Brownout Subsystem", "Critical");
 		}
 		
+		
+		// If level has changed, then let everyone who cares know about it
 		if (batteryLevel!= oldLevel) {
 			notifyConsumers();
 		}

@@ -13,7 +13,8 @@ import org.usfirst.frc.team3467.robot.subsystems.NavX_MXP.MXP_AHRS;
 import org.usfirst.frc.team3467.robot.subsystems.utilitybar.Pnumatic_system;
 import org.usfirst.frc.team3467.robot.subsystems.Intake.Intake;
 import org.usfirst.frc.team3467.robot.subsystems.Shooter.Shooter;
-
+import org.usfirst.frc.team3467.robot.subsystems.Vision.Flashlight;
+import org.usfirst.frc.team3467.robot.subsystems.Vision.Video;
 
 public abstract class CommandBase extends Command {
 	
@@ -26,13 +27,15 @@ public abstract class CommandBase extends Command {
 	public static Pnumatic_system utilitybar;
 	public static Shooter pultaCat;
 	public static Intake intake;
+	public static Flashlight light;
+	public static Video video;
 	
-		//Create vector of with subsystems as elements
+		//Create vector with subsystemss as elements for global subsystem commands
 	public static Vector <Subsystem> subsystemList;
 	
 	
 	public static void init() {
-		SmartDashboard.putString("Yo", "Sup");
+		System.out.println("Command Base Initialized");
 		
 		//Make instance of vector known as subsystemList
 		subsystemList = new Vector<Subsystem>();
@@ -40,7 +43,7 @@ public abstract class CommandBase extends Command {
 		//Add instances of subsystems
 		driveBase = new DriveBase();
 		subsystemList.addElement(driveBase);
-		brownout = new Brownout();
+		brownout = Brownout.getInstance();
 		subsystemList.addElement(brownout);
 		ahrs = new MXP_AHRS();
 		subsystemList.addElement(ahrs);
@@ -50,9 +53,14 @@ public abstract class CommandBase extends Command {
 		subsystemList.addElement(pultaCat);
 		intake = new Intake();
 		subsystemList.addElement(intake);
+		light = new Flashlight();
+		subsystemList.addElement(light);
 		
-		//Make instance of operator interface
+		video = new Video();
 		oi = new OI();
+//		oi.BindCommands(oi.getUserlogin());
+//		oi.getUserlogin();
+		oi.BindCommands();
 	}
 	
 	public CommandBase() {
@@ -62,5 +70,4 @@ public abstract class CommandBase extends Command {
 	public CommandBase (String name) {
 		super(name);
 	}
-	
 }
