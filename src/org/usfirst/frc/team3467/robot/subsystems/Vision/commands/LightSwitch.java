@@ -19,12 +19,7 @@ public class LightSwitch extends CommandBase {
 	
 	protected void execute() {
 		if(On) {
-			try {
-				light.lightPulse();
-					}
-			catch (Exception Interupted) {
-				Interupted.printStackTrace();
-			}
+			light.lightOn();
 		}
 		else {
 			light.lightOff();

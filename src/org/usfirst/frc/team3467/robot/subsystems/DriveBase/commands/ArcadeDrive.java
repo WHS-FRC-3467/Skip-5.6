@@ -2,6 +2,8 @@ package org.usfirst.frc.team3467.robot.subsystems.DriveBase.commands;
 
 import org.usfirst.frc.team3467.robot.commands.CommandBase;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 public class ArcadeDrive extends CommandBase {
 	
 	public ArcadeDrive() {
@@ -18,6 +20,7 @@ public class ArcadeDrive extends CommandBase {
 		driveBase.driveArcade(oi.getPrimeY(), oi.getPrimeX(), true);
 		// Alternate Method?
 		//driveBase.driveArcade(oi.getPrimeY(), oi.getPrimeTwist(), true);
+		SmartDashboard.putNumber("Arcade Gyro Yaw", ahrs.getGyroYaw());
 	}
 
 	protected boolean isFinished() {

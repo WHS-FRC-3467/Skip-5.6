@@ -21,7 +21,7 @@ public class DriveStraight extends CommandBase {
     
     	requires(driveBase);
     	
-        pid = new PIDController(4, 0, 0,
+        pid = new PIDController(2, 0, 0,
                 new PIDSource() {
                     PIDSourceType m_sourceType = PIDSourceType.kDisplacement;
 
@@ -43,7 +43,7 @@ public class DriveStraight extends CommandBase {
                 		// Drive with the magnitude returned by the PID calculation, 
                 		// and curve the opposite way from the current yaw reading
                 		// (Divide yaw by 180 so as to normalize to -1.0 / + 1.0)
-                		driveBase.drive(d, -(ahrs.getGyroYaw()/180.));
+                		driveBase.drive(-d, -(ahrs.getGyroYaw()/240.));
                 }});
         pid.setAbsoluteTolerance(50);
         pid.setSetpoint(distance);
