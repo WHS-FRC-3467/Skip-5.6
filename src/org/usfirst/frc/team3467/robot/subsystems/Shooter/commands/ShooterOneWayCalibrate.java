@@ -7,12 +7,9 @@ import org.usfirst.frc.team3467.robot.commands.CommandBase;
  *
  */
 public class ShooterOneWayCalibrate extends CommandBase {
-
-	boolean gotoLatch = false;
 	
-	public ShooterOneWayCalibrate(boolean latch) {
+	public ShooterOneWayCalibrate() {
         requires(pultaCat);
-        gotoLatch = latch;
     }
 
     // Called just before this Command runs the first time
@@ -22,17 +19,18 @@ public class ShooterOneWayCalibrate extends CommandBase {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	// TODO: Add code to call Shooter calibration routine 
-    	
+    		pultaCat.driveManual(0.2);
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return false;
+        return pultaCat.checkClearLimit();
     }
 
     // Called once after isFinished returns true
     protected void end() {
+    	pultaCat.driveManual(0.0);
+    	pultaCat.cataCalibrate();
     }
 
     // Called when another command which requires one or more of the same

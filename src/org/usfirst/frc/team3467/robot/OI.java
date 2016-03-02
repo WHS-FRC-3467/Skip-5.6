@@ -132,7 +132,7 @@ public class OI {
 	
 	//Catapult
 		// Halt Reset Bar PID and switch to manual mode
-		new JoystickButton(operator, Gamepad.startButton)
+		new JoystickButton(operator, Gamepad.leftStickPress)
 			.whileHeld(new ShooterReset());
 		
 		//Reload Catapult
@@ -191,9 +191,8 @@ public class OI {
 			.whenActive(new Finger_actuate(Pnumatic_system.kIn));
 		
 		// SmartDashboard Buttons
-		SmartDashboard.putData("Shooter Calibrate", new ShooterCalibrate());
 		SmartDashboard.putData("Drivebase: Reset Encoders", new ResetDriveEncoders());
-
+		SmartDashboard.putData("Shooter Calibrate", new ShooterOneWayCalibrate());
 	}
 }
 

@@ -24,7 +24,6 @@ import org.usfirst.frc.team3467.robot.subsystems.Shooter.commands.ShooterReset;
  
  */
 
-
 public class Shooter extends PIDSubsystem implements PowerConsumer {
 
 	// Controls display to SmartDashboard
@@ -60,15 +59,29 @@ public class Shooter extends PIDSubsystem implements PowerConsumer {
 	// The roboRio Preferences
 	Preferences prefs = Preferences.getInstance();
 	
+	// If true, reverse solenoid outputs (3 is release, 4 is latch)
+	boolean isCompBot = true;
+	
+	// Has the robot been calibrated
+	boolean hasBeenCalibrated = false;
+	
 	//Shooter Constructor
-	public Shooter() {
-
+	public Shooter(boolean IScompBot) {
+	
 		super("Shooter", SHOOT_P, SHOOT_I, SHOOT_D);
 
+		isCompBot = IScompBot;
+		
 		resetAngle = new AnalogPotentiometer(new AnalogInput(RobotMap.catapult_potentiometer_port));
 		resetBar = new CANTalon(RobotMap.catapult_Talon);
-		catLatch = new DoubleSolenoid(RobotMap.catapult_solenoid_latch, RobotMap.catapult_solenoid_release);
-
+		
+		if (isCompBot) {
+			catLatch = new DoubleSolenoid(RobotMap.catapult_solenoid_latch, RobotMap.catapult_solenoid_release);
+		}
+		else {
+			catLatch = new DoubleSolenoid(RobotMap.catapult_solenoid_release, RobotMap.catapult_solenoid_latch);
+		}
+		
 		// Start with setpoint at the current potentiometer reading 
 		m_resetBarSetpoint = resetAngle.get();
 		m_usePID = false;
@@ -99,7 +112,7 @@ public class Shooter extends PIDSubsystem implements PowerConsumer {
 	}
 	
 	public void initManualMode() {
-
+		
 		if (m_usePID) {
 			m_usePID = false;
 			this.disable();
@@ -127,8 +140,8 @@ public class Shooter extends PIDSubsystem implements PowerConsumer {
 		m_resetBarSetpoint = angle;
 	}
 
-	public boolean initPIDMode() {
-
+	public boolean initPIDMode() 
+	{
 		if (!m_usePID) {
 			m_usePID = true;
 
@@ -139,7 +152,6 @@ public class Shooter extends PIDSubsystem implements PowerConsumer {
 		    	SmartDashboard.putBoolean("Shooter PID Enabled", true);
 		}
 		return true;
-		
 	}
 	
 	/*
@@ -172,7 +184,6 @@ public class Shooter extends PIDSubsystem implements PowerConsumer {
 		return (resetAngle.get() >= clearPoint);
 	}
 	
-	
 	// Control the solenoid that latches the catapult
 	public void cataLatch() {
 		catLatch.set(DoubleSolenoid.Value.kForward);
@@ -198,6 +209,19 @@ public class Shooter extends PIDSubsystem implements PowerConsumer {
 		default:
 			break;
 		}
+	}
+	
+	//Is called during init
+	public void cataCalibrate() {
+		
+		clearPoint = resetAngle.get();
+		latchPoint = clearPoint - 0.4;
+		hasBeenCalibrated = true;
+	}
+	
+	//Has the robot been calibrated before?
+	public boolean HasBeenCalibrated() {
+		return hasBeenCalibrated;
 	}
 	
 	// Check Clear catapult limit switch
