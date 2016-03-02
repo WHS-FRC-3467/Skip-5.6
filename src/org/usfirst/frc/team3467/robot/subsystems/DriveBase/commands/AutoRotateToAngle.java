@@ -21,7 +21,7 @@ public class AutoRotateToAngle extends CommandBase {
     
     	requires(driveBase);
     	
-        pid = new PIDController(2, 0, 0,
+        pid = new PIDController(2, 1, 0,
                 new PIDSource() {
                     PIDSourceType m_sourceType = PIDSourceType.kDisplacement;
 

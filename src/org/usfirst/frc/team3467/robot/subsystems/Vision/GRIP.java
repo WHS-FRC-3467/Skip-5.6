@@ -16,7 +16,7 @@ public class GRIP {
 	public static final int TOP_TARGET_HEIGHT = 97;
 	
 	//Camera angles are different for different camera
-	public static final int
+	public static final int FOVy= 0;
 	
 	final double targetx = 150.1;
 	final double targety = 0.0;
@@ -50,7 +50,7 @@ public class GRIP {
 				if (functiony[i] >= targety - TOLERANCEy && functiony[i] <= targety + TOLERANCEy) {
 					onTargety = true;
 				}
-				System.out.println("Centery" + functiony[j]);
+				System.out.println("Centery" + functiony[i]);
 				
 				System.out.println("Centerx" + functionx[i]);
 			}
