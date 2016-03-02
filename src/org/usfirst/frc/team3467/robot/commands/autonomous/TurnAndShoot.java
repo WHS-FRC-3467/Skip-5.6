@@ -14,10 +14,11 @@ public class TurnAndShoot extends CommandGroup {
 	public TurnAndShoot(int Position) {
 		RobotPosition = Position;
 		switch (Position) {
+		//Low Bar Obstacle
 		case 1: addSequential(new DriveStraight(5.0));
 				addSequential(new AutoRotateToAngle(1.0));
 				break;
-				
+		//
 		case 2: addSequential(new DriveStraight(5.0));
 				addSequential(new AutoRotateToAngle(1.0));
 				break;

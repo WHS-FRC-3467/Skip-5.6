@@ -30,6 +30,8 @@ public abstract class CommandBase extends Command {
 	public static Flashlight light;
 	public static Video video;
 	
+	public static boolean ISCompBot = true;
+	
 		//Create vector with subsystemss as elements for global subsystem commands
 	public static Vector <Subsystem> subsystemList;
 	
@@ -49,7 +51,7 @@ public abstract class CommandBase extends Command {
 		subsystemList.addElement(ahrs);
 		utilitybar = new Pnumatic_system();
 		subsystemList.addElement(utilitybar);
-		pultaCat = new Shooter();
+		pultaCat = new Shooter(ISCompBot);
 		subsystemList.addElement(pultaCat);
 		intake = new Intake();
 		subsystemList.addElement(intake);
