@@ -15,13 +15,43 @@ import edu.wpi.first.wpilibj.PIDSourceType;
  */
 public class DriveStraight extends CommandBase {
 
-	private PIDController pid;
+	private static final double TOLERANCE = 100;
+	
+	private PIDController m_pid;
+	private double m_maxSpeed = 0.5;
+	private double m_distance = 0.0;
+	
+	private double KP = 2.0;
+	private double KI = 0.0;
+	private double KD = 0.0;
+	
+    public DriveStraight(double distance, double maxSpeed, double kp, double ki, double kd) {
+        
+    	requires(driveBase);
+    	KP = kp; KI = ki; KD = kd;
+    	m_maxSpeed = maxSpeed;
+    	m_distance = distance;
+    	buildController();
+    }
 
-    public DriveStraight(double distance) {
+    public DriveStraight(double distance, double maxSpeed) {
     
     	requires(driveBase);
-    	
-        pid = new PIDController(2, 0, 0,
+    	m_maxSpeed = maxSpeed;
+    	m_distance = distance;
+    	buildController();
+    }
+	
+	public DriveStraight(double distance) {
+    
+    	requires(driveBase);
+    	m_distance = distance;
+    	buildController();
+	}
+	
+	private void buildController() {
+		
+		m_pid = new PIDController(KP, KI, KD,
                 new PIDSource() {
                     PIDSourceType m_sourceType = PIDSourceType.kDisplacement;
 
@@ -45,8 +75,10 @@ public class DriveStraight extends CommandBase {
                 		// (Divide yaw by 180 so as to normalize to -1.0 / + 1.0)
                 		driveBase.drive(-d, -(ahrs.getGyroYaw()/240.));
                 }});
-        pid.setAbsoluteTolerance(50);
-        pid.setSetpoint(distance);
+		
+        m_pid.setAbsoluteTolerance(TOLERANCE);
+        m_pid.setOutputRange((m_maxSpeed * -1.0), m_maxSpeed);
+        m_pid.setSetpoint(m_distance);
     }
 
     // Called just before this Command runs the first time
@@ -54,8 +86,8 @@ public class DriveStraight extends CommandBase {
     	// Get everything in a safe starting state.
         driveBase.resetEncoders();
         ahrs.gyroReset();
-    	pid.reset();
-        pid.enable();
+    	m_pid.reset();
+        m_pid.enable();
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -63,13 +95,13 @@ public class DriveStraight extends CommandBase {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return pid.onTarget();
+        return m_pid.onTarget();
     }
 
     // Called once after isFinished returns true
     protected void end() {
     	// Stop PID and the wheels
-    	pid.disable();
+    	m_pid.disable();
         driveBase.drive(0, 0);
     }
 
