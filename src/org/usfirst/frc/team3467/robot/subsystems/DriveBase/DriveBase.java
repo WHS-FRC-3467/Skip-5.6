@@ -156,13 +156,13 @@ public class DriveBase extends Subsystem implements PowerConsumer {
 
 	// return the distance driven (average of left and right encoders).
 	public double getDistance() {
-		return (Math.abs(leftTalon.getPosition()) + Math.abs(rightTalon.getPosition()))/2;
+		return (leftTalon.getPosition() + (rightTalon.getPosition() * -1.0))/2;
 	}
 
 
 	public void reportEncoders() {
 		SmartDashboard.putNumber("Left Encoder", leftTalon.getPosition());
-		SmartDashboard.putNumber("Right Encoder", rightTalon.getPosition());			
+		SmartDashboard.putNumber("Right Encoder", rightTalon.getPosition() * -1.0);			
 	}
 
 	public void resetEncoders() {
@@ -173,6 +173,7 @@ public class DriveBase extends Subsystem implements PowerConsumer {
 	public void setTalonBrakes(boolean setBrake) {
 		leftTalon.enableBrakeMode(setBrake);
 		rightTalon.enableBrakeMode(setBrake);
+		SmartDashboard.putBoolean("Brake Mode", setBrake);
 	}
 	
 }

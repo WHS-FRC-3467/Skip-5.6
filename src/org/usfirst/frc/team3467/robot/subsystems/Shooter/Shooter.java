@@ -46,7 +46,7 @@ public class Shooter extends PIDSubsystem implements PowerConsumer {
 	private static final double SHOOT_I = 0.5;
 	private static final double SHOOT_D = 0.0;
 	
-	private static final double TOLERANCE = 0.01;
+	private static final double TOLERANCE = 0.05;
 	
 	// PID variables
 	double m_resetBarSetpoint;
@@ -111,6 +111,16 @@ public class Shooter extends PIDSubsystem implements PowerConsumer {
 		this.setSetpoint(setpoint);
 	}
 	
+	public boolean isOnSetPoint() {
+		double error = this.getPIDController().getError();
+		if (error >= 0 && error <= TOLERANCE) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	
 	public void initManualMode() {
 		
 		if (m_usePID) {
@@ -140,8 +150,7 @@ public class Shooter extends PIDSubsystem implements PowerConsumer {
 		m_resetBarSetpoint = angle;
 	}
 
-	public boolean initPIDMode() 
-	{
+	public boolean initPIDMode() {
 		if (!m_usePID) {
 			m_usePID = true;
 
@@ -163,6 +172,8 @@ public class Shooter extends PIDSubsystem implements PowerConsumer {
 		
 		// Save the position
 		m_resetBarSetpoint = latchPoint;
+		
+		SmartDashboard.putNumber("Latch Point", latchPoint);
 		
 		if (debugging)
 			SmartDashboard.putNumber("Shooter Setpoint", m_resetBarSetpoint);

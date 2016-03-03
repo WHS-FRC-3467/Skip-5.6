@@ -2,6 +2,8 @@ package org.usfirst.frc.team3467.robot.subsystems.Intake.commands;
 
 import org.usfirst.frc.team3467.robot.commands.CommandBase;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+
 public class Roller_Actuate extends CommandBase {
 
 	private boolean EXTEND;
@@ -9,6 +11,7 @@ public class Roller_Actuate extends CommandBase {
 	public Roller_Actuate(boolean Extend) {
 		requires(intake);
 		EXTEND = Extend;
+		setTimeout(1);
 	}
 	
 	protected void initialize() {
@@ -25,11 +28,11 @@ public class Roller_Actuate extends CommandBase {
 	}
 
 	protected boolean isFinished() {
-		return false;
+		return isTimedOut();
 	}
 
 	protected void end() {
-
+		intake.rollerSolenoid.set(Value.kOff);
 	}
 
 	protected void interrupted() {

@@ -2,6 +2,8 @@ package org.usfirst.frc.team3467.robot.subsystems.Shooter.commands;
 
 import org.usfirst.frc.team3467.robot.commands.CommandBase;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 
 /**
  *
@@ -25,7 +27,7 @@ public class ShooterLatch extends CommandBase {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return (pultaCat.onTarget() || pultaCat.checkLatchLimit());
+        return (pultaCat.isOnSetPoint() || pultaCat.checkLatchLimit());
     }
 
     // Called once after isFinished returns true

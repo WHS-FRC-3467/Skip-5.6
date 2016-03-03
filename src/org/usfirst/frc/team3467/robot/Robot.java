@@ -14,11 +14,15 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 
+
+
 //Import subsystem classes from subsystem packages
 import org.usfirst.frc.team3467.robot.commands.CommandBase;
 	
+import org.usfirst.frc.team3467.robot.commands.autonomous.AutoCheval;
 //Import robot commands from command packages
 import org.usfirst.frc.team3467.robot.commands.autonomous.AutoDriveStraight;
+import org.usfirst.frc.team3467.robot.commands.autonomous.AutoLowBar;
 import org.usfirst.frc.team3467.robot.commands.autonomous.AutoNon;
 import org.usfirst.frc.team3467.robot.commands.autonomous.JustDriveFor5;
 import org.usfirst.frc.team3467.robot.subsystems.DriveBase.commands.AutoRotateToAngle;
@@ -63,6 +67,8 @@ public class Robot extends IterativeRobot {
 		autoChooser.addObject("Turn 45", new AutoRotateToAngle(45));
 		autoChooser.addObject("Turn 90", new AutoRotateToAngle(90));
 		autoChooser.addObject("Drive for 5 secs", new JustDriveFor5());
+		autoChooser.addObject("Auto Cheval", new AutoCheval());
+		autoChooser.addObject("Auto Low Bar", new AutoLowBar());
 		
 		SmartDashboard.putData("Auto", autoChooser);
     }
@@ -106,7 +112,7 @@ public class Robot extends IterativeRobot {
         if(CommandBase.pultaCat != null) {
         	//If the Shooter has not been calibrated, will calibrate
         	if (CommandBase.pultaCat.HasBeenCalibrated() == false) {
-        		Scheduler.getInstance().add(new ShooterOneWayCalibrate());
+        	//	Scheduler.getInstance().add(new ShooterOneWayCalibrate());
         	}
         }
     }

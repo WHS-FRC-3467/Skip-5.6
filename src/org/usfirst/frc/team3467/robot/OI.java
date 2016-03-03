@@ -34,6 +34,7 @@ public class OI {
 	public static final int Tank = 1;
 	public static final int Arcade = 2;
 	public int userlogin = 2;
+	public boolean CalibrationMode = false;
 	
 /*
  * Joystick Mappings (done elsewhere in code)
@@ -91,11 +92,9 @@ public class OI {
 				CommandBase.driveBase.setDriveMode(false);
 				break;
 		}
-		
-		
-	//Interupts the previous command
-		//new JoystickButton(operator, Gamepad.leftBumper);
-		
+
+	//Calibration Mode buttons for Calibration
+		//new JoystickButton()
 		
 	//DriveBase
 		//Toggle in and out of precision angle mode
@@ -132,7 +131,7 @@ public class OI {
 	
 	//Catapult
 		// Halt Reset Bar PID and switch to manual mode
-		new JoystickButton(operator, Gamepad.leftStickPress)
+		new JoystickButton(operator, Gamepad.leftTrigger_Axis)
 			.whileHeld(new ShooterReset());
 		
 		//Reload Catapult

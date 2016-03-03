@@ -61,6 +61,12 @@ public class GRIP {
 		}
 	}
 	
+	public double CalcAngle() {
+		return 0.0;
+	}
+	
+	
+	
 	public double[] getCenterX() {
 		return functionx;
 	}
