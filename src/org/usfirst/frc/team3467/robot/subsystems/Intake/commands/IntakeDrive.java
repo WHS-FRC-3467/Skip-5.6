@@ -45,8 +45,6 @@ public class IntakeDrive extends CommandBase {
 		}
 		
 		intake.driveManual(speed);
-		
-		
 	}
 	
 	protected boolean isFinished() {
