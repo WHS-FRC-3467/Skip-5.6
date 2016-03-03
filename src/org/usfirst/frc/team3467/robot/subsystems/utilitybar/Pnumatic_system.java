@@ -54,6 +54,14 @@ public class Pnumatic_system extends Subsystem {
 		fingerSolenoid.set(actuate);
 	}
 	
+	public Value getBarState() {
+		return barSolenoid.get();
+	}
+	
+	public Value getFingerState() {
+		return fingerSolenoid.get();
+	}
+	
 	//Turns compressor on or off based on a boolean
 	public void setCompressorEnabled() {
 		scorpioncompressor.start();
