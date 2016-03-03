@@ -97,7 +97,7 @@ public class AutoRotateToAngle extends CommandBase {
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
     	double e = m_pid.getError();
-    	
+
     	return ((e >= 0 && e <= TOLERANCE) || isTimedOut() || m_pid.onTarget());
     }
 
@@ -106,6 +106,7 @@ public class AutoRotateToAngle extends CommandBase {
     	// Stop PID and the wheels
     	m_pid.disable();
         driveBase.driveArcade(0, 0, false);
+        System.out.println("AutoRotate has finished");
     }
 
     // Called when another command which requires one or more of the same

@@ -18,18 +18,22 @@ public class AutoLowBar extends CommandGroup {
 	public AutoLowBar() {
 		addSequential(new Roller_Actuate(true));
 		
-		if (CommandBase.utilitybar.getFingerState() == Pnumatic_system.kIn) {
-			addSequential(new Finger_actuate(Pnumatic_system.kOut));
-		}
+		//if (CommandBase.utilitybar.getFingerState() == Pnumatic_system.kIn) {
+		//	addSequential(new Finger_actuate(Pnumatic_system.kOut));
+		//}
 		addSequential(new Bar_actuate(Pnumatic_system.kIn));
 		addSequential(new Finger_actuate(Pnumatic_system.kOut));
 		addSequential(new Bar_actuate(Pnumatic_system.kOut));
 		addSequential(new DriveStraight(10000, 0.6));
 		addSequential(new Roller_Actuate(false));
 		addSequential(new AutoIntake(false));
-		//addSequential(new TurnAndShoot(1));
+		addSequential(new AutoRotateToAngle(60.0, 0.3));
 		addSequential(new Shoot());
 		addSequential(new ShooterPrepare());
-		end();
+
+		//addSequential(new TurnAndShoot(1));
+		//addSequential(new Shoot());
+		//addSequential(new ShooterPrepare());
+		//end();
 	}
 }

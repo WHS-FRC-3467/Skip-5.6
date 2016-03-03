@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 
+
 //Import subsystem classes from subsystem packages
 import org.usfirst.frc.team3467.robot.commands.CommandBase;
 	
@@ -26,6 +27,7 @@ import org.usfirst.frc.team3467.robot.commands.autonomous.AutoLowBar;
 import org.usfirst.frc.team3467.robot.commands.autonomous.AutoNon;
 import org.usfirst.frc.team3467.robot.commands.autonomous.JustDriveFor5;
 import org.usfirst.frc.team3467.robot.subsystems.DriveBase.commands.AutoRotateToAngle;
+import org.usfirst.frc.team3467.robot.subsystems.Shooter.commands.Shoot;
 import org.usfirst.frc.team3467.robot.subsystems.Shooter.commands.ShooterOneWayCalibrate;
 
 /**
@@ -69,6 +71,7 @@ public class Robot extends IterativeRobot {
 		autoChooser.addObject("Drive for 5 secs", new JustDriveFor5());
 		autoChooser.addObject("Auto Cheval", new AutoCheval());
 		autoChooser.addObject("Auto Low Bar", new AutoLowBar());
+		autoChooser.addObject("Shoot", new Shoot());
 		
 		SmartDashboard.putData("Auto", autoChooser);
     }

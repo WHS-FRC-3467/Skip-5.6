@@ -22,13 +22,13 @@ public class AutoCheval extends CommandGroup {
 	
 	public AutoCheval() {
 		addSequential(new Bar_actuate(Pnumatic_system.kIn));
-		addSequential(new DriveStraight(3500));
+		addSequential(new DriveStraight(3500, 0.2));
 		
 		if (new DriveStraight(0).hasStalled()) {
-			addSequential(new DriveStraight(-50));
+			addSequential(new DriveStraight(-100));
 		}
 		addSequential(new Bar_actuate(Pnumatic_system.kOut));
-		addSequential(new DriveStraight(6000, 0.4));
+		//addSequential(new DriveStraight(6000, 0.4));
 		addSequential(new Bar_actuate(Pnumatic_system.kOff));
 		addParallel(new Finger_actuate(Pnumatic_system.kOff));
 	}
