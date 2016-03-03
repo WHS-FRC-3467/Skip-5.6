@@ -174,7 +174,7 @@ public class OI {
 		
 		
 	//Utility Bar/Finger
-			//Extend Using the Right Trigger
+			//Extend Using the Right Joystick Trigger
 		new JoystickButton(PrimaryStick, 1)
 			.whenPressed(new Bar_actuate(Pnumatic_system.kOut));
 		
