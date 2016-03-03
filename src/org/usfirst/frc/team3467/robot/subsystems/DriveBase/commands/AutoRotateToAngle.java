@@ -21,7 +21,7 @@ public class AutoRotateToAngle extends CommandBase {
     
     	requires(driveBase);
     	
-        pid = new PIDController(2, 1, 0,
+        pid = new PIDController(2, 0, 0,
                 new PIDSource() {
                     PIDSourceType m_sourceType = PIDSourceType.kDisplacement;
 
@@ -51,6 +51,7 @@ public class AutoRotateToAngle extends CommandBase {
     protected void initialize() {
     	// Get everything in a safe starting state.
     	pid.reset();
+    	ahrs.gyroReset();
         pid.enable();
     }
 
@@ -59,7 +60,7 @@ public class AutoRotateToAngle extends CommandBase {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return pid.onTarget();
+        return (pid.onTarget() || (pid.getError() >= 0 && pid.getError() <= 0.1));
     }
 
     // Called once after isFinished returns true

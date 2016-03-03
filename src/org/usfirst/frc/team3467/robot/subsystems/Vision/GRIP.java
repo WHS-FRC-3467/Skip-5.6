@@ -16,7 +16,7 @@ public class GRIP {
 	public static final int TOP_TARGET_HEIGHT = 97;
 	
 	//Camera angles are different for different camera
-	public static final int FOVy= 0;
+	public static final double FOVx= 47.0;
 	
 	final double targetx = 150.1;
 	final double targety = 0.0;
@@ -35,44 +35,46 @@ public class GRIP {
 	
 	public void createImage () {
 		
-		while (true) {
-			double[] centerx = table.getNumberArray("centerX", defaultValue);
-			double[] centery = table.getNumberArray("centerY", defaultValue);
-			
-			for (int i = 0; i <= centerx.length; i++) {
-				functionx[i] = centerx[i];
-				functiony[i] = centery[i];
+		double[] centerx = table.getNumberArray("centerX", defaultValue);
+		double[] centery = table.getNumberArray("centerY", defaultValue);
+		
+		if (centerx.length == 1) {
+		
+				functionx[0] = centerx[0];
+				functiony[0] = centery[0];
 				
-				if(functionx[i] >= targetx - TOLERANCEx && functionx[i] <= targetx + TOLERANCEx) {
+				if(functionx[0] >= targetx - TOLERANCEx && functionx[0] <= targetx + TOLERANCEx) {
 					onTargetx = true;
 				}
 				
-				if (functiony[i] >= targety - TOLERANCEy && functiony[i] <= targety + TOLERANCEy) {
+				if (functiony[0] >= targety - TOLERANCEy && functiony[0] <= targety + TOLERANCEy) {
 					onTargety = true;
 				}
-				System.out.println("Centery" + functiony[i]);
+				System.out.println("Centery" + functiony[0]);
 				
-				System.out.println("Centerx" + functionx[i]);
+				System.out.println("Centerx" + functionx[0]);
 			}
 			
 			if (onTargetx && onTargety) {
 				imageOnTarget = true;
 			}
 		}
-	}
 	
 	public double CalcAngle() {
 		return 0.0;
 	}
 	
-	
-	
-	public double[] getCenterX() {
-		return functionx;
+	public double getVisionAngle() {
+		double amgle;
+		return 0.0;
 	}
 	
-	public double[] getCenterY() {
-		return functiony;
+	public double getCenterX() {
+		return functionx[0];
+	}
+	
+	public double getCenterY() {
+		return functiony[0];
 	}
 	
 	public boolean onGoalx() {

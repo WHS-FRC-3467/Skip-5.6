@@ -46,7 +46,7 @@ public class Shooter extends PIDSubsystem implements PowerConsumer {
 	private static final double SHOOT_I = 0.5;
 	private static final double SHOOT_D = 0.0;
 	
-	private static final double TOLERANCE = 0.05;
+	private static final double TOLERANCE = 0.01;
 	
 	// PID variables
 	double m_resetBarSetpoint;
@@ -112,13 +112,17 @@ public class Shooter extends PIDSubsystem implements PowerConsumer {
 	}
 	
 	public boolean isOnSetPoint() {
+		boolean onset;
 		double error = this.getPIDController().getError();
 		if (error >= 0 && error <= TOLERANCE) {
-			return true;
+			onset = true;
 		}
 		else {
-			return false;
+			onset = false;
 		}
+		SmartDashboard.putBoolean("On SetPoint", onset);
+		return onset;
+		
 	}
 	
 	public void initManualMode() {
@@ -224,9 +228,8 @@ public class Shooter extends PIDSubsystem implements PowerConsumer {
 	
 	//Is called during init
 	public void cataCalibrate() {
-		
 		clearPoint = resetAngle.get();
-		latchPoint = clearPoint - 0.4;
+		latchPoint = clearPoint - 0.39;
 		hasBeenCalibrated = true;
 	}
 	
@@ -265,17 +268,17 @@ public class Shooter extends PIDSubsystem implements PowerConsumer {
 	}
 
 	private double check4Endpoints(double speed) {
-		SmartDashboard.putBoolean("Shooter Out of Calibration", false);
+		SmartDashboard.putBoolean("Shooter Calibrated", true);
 		// If trying to drive and a limit switch is hit, then stop...
 		if(checkClearLimit() && speed > 0.0) {
 			speed = 0.0;
 			if (Math.abs(resetAngle.get() - clearPoint) > .2)
-				SmartDashboard.putBoolean("Shooter Out of Calibration", true);
+				SmartDashboard.putBoolean("Shooter Calibrated", false);
 		}
 		else if(checkLatchLimit() && speed < 0.0) {
 			speed = 0.0;
 			if (Math.abs(resetAngle.get() - latchPoint) > .2)
-				SmartDashboard.putBoolean("Shooter Out of Calibration", true);
+				SmartDashboard.putBoolean("Shooter Calibrated", false);
 		}
 		return(speed);
 	}

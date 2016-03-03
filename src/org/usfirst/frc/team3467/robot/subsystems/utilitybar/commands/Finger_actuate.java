@@ -11,6 +11,7 @@ public class Finger_actuate extends CommandBase {
 	public Finger_actuate(Value inORout) {
 		requires(utilitybar);
 		INorOUT = inORout;
+		setTimeout(1);
 	}
 	
 	protected void initialize() {
@@ -22,7 +23,7 @@ public class Finger_actuate extends CommandBase {
 	}
 
 	protected boolean isFinished() {
-		return false;
+		return isTimedOut();
 	}
 
 	protected void end() {

@@ -27,12 +27,13 @@ public class ShooterLatch extends CommandBase {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return (pultaCat.isOnSetPoint() || pultaCat.checkLatchLimit());
+        return (pultaCat.onTarget() || pultaCat.isOnSetPoint() || pultaCat.checkLatchLimit());
     }
 
     // Called once after isFinished returns true
     protected void end() {
     	pultaCat.cataStop();
+    	SmartDashboard.putString("Latch", "Latched");
     }
 
     // Called when another command which requires one or more of the same
