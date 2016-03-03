@@ -230,7 +230,7 @@ public class Shooter extends PIDSubsystem implements PowerConsumer {
 	public void cataCalibrate() {
 		
 		clearPoint = resetAngle.get();
-		latchPoint = clearPoint - 0.4;
+		latchPoint = clearPoint - 0.39;
 		hasBeenCalibrated = true;
 	}
 	

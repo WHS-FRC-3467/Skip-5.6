@@ -11,7 +11,6 @@ public class Shoot extends CommandBase {
 	}
 	
 	protected void initialize() {
-		
 	}
 
 	protected void execute() {
