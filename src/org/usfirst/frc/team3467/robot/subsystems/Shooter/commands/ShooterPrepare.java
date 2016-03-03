@@ -10,6 +10,8 @@ public class ShooterPrepare extends CommandGroup {
     public  ShooterPrepare() {
         
     	addSequential(new ShooterLatch());
+    	System.out.println("Shooter Prepare: Latched");
     	addSequential(new ShooterClear());
+    	System.out.println("Shooter Prepare: Cleared");
     }
 }

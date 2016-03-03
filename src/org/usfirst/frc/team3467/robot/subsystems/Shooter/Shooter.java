@@ -111,6 +111,21 @@ public class Shooter extends PIDSubsystem implements PowerConsumer {
 		this.setSetpoint(setpoint);
 	}
 	
+	public boolean isOnSetPoint() {
+		boolean onset;
+		double error = this.getPIDController().getError();
+		
+		if (error >= 0 && error <= TOLERANCE) {
+			onset = true;
+		}
+		else {
+			onset = false;
+		}
+		
+		SmartDashboard.putBoolean("Shooter On SetPoint", onset);
+		return onset;
+	}
+	
 	public void initManualMode() {
 		
 		if (m_usePID) {

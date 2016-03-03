@@ -9,6 +9,7 @@ public class Roller_Actuate extends CommandBase {
 	public Roller_Actuate(boolean Extend) {
 		requires(intake);
 		EXTEND = Extend;
+		setTimeout(0.5);
 	}
 	
 	protected void initialize() {
@@ -25,7 +26,7 @@ public class Roller_Actuate extends CommandBase {
 	}
 
 	protected boolean isFinished() {
-		return false;
+		return isTimedOut();
 	}
 
 	protected void end() {

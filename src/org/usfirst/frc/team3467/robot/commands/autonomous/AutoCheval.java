@@ -11,19 +11,25 @@ public class AutoCheval extends CommandGroup {
 	
 	/*
 	 * Autonomous for cheval de Freeze
+	 * 		-Utilitybar in
 	 * 		-Moves Forward
-	 * 		-Lowers Cheval De Freeze
-	 *		-Drives Forward Again
+	 * 		-Utilitybar out
+	 *		-Moves Forward Again
+	 *		-Finger in
+	 *		-Turns and shoots
 	 *		-Stops
 	 */
 	
 	public AutoCheval() {
-		addSequential(new DriveStraight(5.0));
+		addSequential(new Bar_actuate(Pnumatic_system.kIn));
+		addSequential(new DriveStraight(3500));
+		
+		if (new DriveStraight(0).hasStalled()) {
+			addSequential(new DriveStraight(-50));
+		}
 		addSequential(new Bar_actuate(Pnumatic_system.kOut));
-		addParallel(new Finger_actuate(Pnumatic_system.kOut));
-		addSequential(new DriveStraight(5.0));
+		addSequential(new DriveStraight(6000, 0.4));
 		addSequential(new Bar_actuate(Pnumatic_system.kOff));
 		addParallel(new Finger_actuate(Pnumatic_system.kOff));
 	}
-
 }
