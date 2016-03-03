@@ -12,6 +12,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 
+
+
 //Import subsystem classes from subsystem packages
 import org.usfirst.frc.team3467.robot.commands.CommandBase;
 	
@@ -19,7 +21,8 @@ import org.usfirst.frc.team3467.robot.commands.CommandBase;
 import org.usfirst.frc.team3467.robot.commands.autonomous.AutoDriveStraight;
 import org.usfirst.frc.team3467.robot.commands.autonomous.AutoNon;
 import org.usfirst.frc.team3467.robot.commands.autonomous.JustDriveFor5;
-
+import org.usfirst.frc.team3467.robot.subsystems.DriveBase.commands.AutoRotateToAngle;
+import org.usfirst.frc.team3467.robot.subsystems.Shooter.commands.ShooterOneWayCalibrate;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -51,10 +54,14 @@ public class Robot extends IterativeRobot {
         // Initialize all subsystems
     	CommandBase.init();
 
+    	
+    	
     	// Add autonomous selector
 		autoChooser = new SendableChooser();
 		autoChooser.addDefault("Default Auto", new AutoNon());
 		autoChooser.addObject("Drive Straight", new AutoDriveStraight());
+		autoChooser.addObject("Turn 45", new AutoRotateToAngle(45));
+		autoChooser.addObject("Turn 90", new AutoRotateToAngle(90));
 		autoChooser.addObject("Drive for 5 secs", new JustDriveFor5());
 		
 		SmartDashboard.putData("Auto", autoChooser);
@@ -87,12 +94,21 @@ public class Robot extends IterativeRobot {
     }
 
     public void teleopInit() {
-		// This makes sure that the autonomous stops running when
-        // teleop starts running. If you want the autonomous to 
-        // continue until interrupted by another command, remove
-        // this line or comment it out.
+		
+    	/* This makes sure that the autonomous stops running when
+        	teleop starts running. If you want the autonomous to 
+        	continue until interrupted by another command, remove
+         	this line or comment it out.
+         */
     	SmartDashboard.putString("Robot", "Teleop Inabled");
         if (autonomousCommand != null) autonomousCommand.cancel();
+    
+        if(CommandBase.pultaCat != null) {
+        	//If the Shooter has not been calibrated, will calibrate
+        	if (CommandBase.pultaCat.HasBeenCalibrated() == false) {
+        		Scheduler.getInstance().add(new ShooterOneWayCalibrate());
+        	}
+        }
     }
 
     /**

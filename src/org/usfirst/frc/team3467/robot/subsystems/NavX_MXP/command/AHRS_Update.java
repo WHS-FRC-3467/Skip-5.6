@@ -24,6 +24,7 @@ public class AHRS_Update extends CommandBase {
 		else {
 			SmartDashboard.putNumber("Gyro Angle", ahrs.getGyroAngle());
 			SmartDashboard.putNumber("Gyro Yaw", ahrs.getGyroYaw());
+			counter = 0;
 		}
 	}
 
