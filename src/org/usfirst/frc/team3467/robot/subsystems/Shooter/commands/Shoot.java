@@ -8,9 +8,11 @@ public class Shoot extends CommandBase {
 	
 	public Shoot() {
 		requires(pultaCat);
+		setInterruptible(false);
 	}
 	
 	protected void initialize() {
+        System.out.println("Shoot initialized");
 	}
 
 	protected void execute() {
@@ -23,13 +25,17 @@ public class Shoot extends CommandBase {
 	}
 
 	public boolean isFinished() {
-		return shotFired;
+        System.out.println("Is Shoot finished?");
+ 		return shotFired;
 	}
 	
 	public void end() {
+        System.out.println("Shoot has ended");
+
 	}
 
 	protected void interrupted() {
+        System.out.println("Shoot interuppted");
 		end();
 	}
 

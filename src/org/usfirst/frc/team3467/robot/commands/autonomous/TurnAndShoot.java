@@ -19,6 +19,12 @@ public class TurnAndShoot extends CommandGroup {
 	//Constructor for TurnAndShoot
 	public TurnAndShoot(int Position) {
 		
+		addSequential(new AutoRotateToAngle(60.0, 0.3));
+		System.out.println("Successful AutoRotation");
+		addSequential(new Shoot());
+		addSequential(new ShooterPrepare());
+		complete = true;
+		/*
 		if (CommandBase.utilitybar.getBarState() == Pnumatic_system.kIn) {
 			addSequential(new Bar_actuate(Pnumatic_system.kOut));
 		}
@@ -26,8 +32,7 @@ public class TurnAndShoot extends CommandGroup {
 		RobotPosition = Position;
 		switch (Position) {
 		//Low Bar Obstacle
-		case 1: addSequential(new DriveStraight(0));
-				addSequential(new AutoRotateToAngle(60.0, 0.3));
+		case 1:	addSequential(new AutoRotateToAngle(60.0, 0.3));
 				System.out.println("Successful AutoRotation");
 				addSequential(new Shoot());
 				addSequential(new ShooterPrepare());
@@ -53,5 +58,6 @@ public class TurnAndShoot extends CommandGroup {
 		default: complete = true; 
 				break;
 		}		
+		*/
 	}
 }

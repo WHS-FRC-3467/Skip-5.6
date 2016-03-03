@@ -84,7 +84,7 @@ public class DriveStraight extends CommandBase {
 	//If the robot has hit a wall, SAY SOMETHING!
 	public boolean hasStalled() {
 		double pastDistance = driveBase.getDistance();
-		if (driveBase.getDistance() - pastDistance <= 100) {
+		if (driveBase.getDistance() - pastDistance <= 1) {
 			return true;
 		}
 		else {

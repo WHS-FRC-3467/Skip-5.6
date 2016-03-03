@@ -29,7 +29,7 @@ public class AutoIntake extends CommandBase {
 	}
 
 	protected void end() {
-	
+		intake.driveManual(0.0);
 	}
 
 	protected void interrupted() {
