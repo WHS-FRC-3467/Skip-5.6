@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * Turn the robot to a given heading (in degrees relative to last reset heading;
@@ -15,7 +16,7 @@ import edu.wpi.first.wpilibj.PIDSourceType;
  */
 public class AutoRotateToAngle extends CommandBase {
 
-	private static final double TOLERANCE = 10;
+	private static final double TOLERANCE = 1.0;
 	
 	private PIDController m_pid;
 	private double m_maxSpeed = 0.3;
@@ -32,6 +33,7 @@ public class AutoRotateToAngle extends CommandBase {
     	m_maxSpeed = maxSpeed;
     	m_degrees = degrees;
     	buildController();
+    	setTimeout(2);
     }
 
 	public AutoRotateToAngle(double degrees, double maxSpeed) {
@@ -40,6 +42,7 @@ public class AutoRotateToAngle extends CommandBase {
     	m_maxSpeed = maxSpeed;
     	m_degrees = degrees;
     	buildController();
+    	setTimeout(2);
 	}
     	
 	public AutoRotateToAngle(double degrees) {
@@ -47,6 +50,7 @@ public class AutoRotateToAngle extends CommandBase {
     	requires(driveBase);
     	m_degrees = degrees;
     	buildController();
+    	setTimeout(2);
 	}
     	
     private void buildController() {
@@ -83,15 +87,18 @@ public class AutoRotateToAngle extends CommandBase {
     	// Get everything in a safe starting state.
     	m_pid.reset();
         m_pid.enable();
+        SmartDashboard.putNumber("Rotate SetPoint", m_pid.getSetpoint());
     }
 
     // Called repeatedly when this Command is scheduled to run
-    protected void execute() {}
+    protected void execute() {
+    }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-    	double e = Math.abs(m_pid.getError());
-    	return (e > 0 && e < TOLERANCE);
+    	double e = m_pid.getError();
+
+    	return ((e >= 0 && e <= TOLERANCE) || isTimedOut() || m_pid.onTarget());
     }
 
     // Called once after isFinished returns true
@@ -99,6 +106,7 @@ public class AutoRotateToAngle extends CommandBase {
     	// Stop PID and the wheels
     	m_pid.disable();
         driveBase.driveArcade(0, 0, false);
+        System.out.println("AutoRotate has finished");
     }
 
     // Called when another command which requires one or more of the same

@@ -15,15 +15,15 @@ import edu.wpi.first.wpilibj.PIDSourceType;
  */
 public class DriveStraight extends CommandBase {
 
-	private static final double TOLERANCE = 100;
+	private static final double TOLERANCE = 50;
 	
 	private PIDController m_pid;
-	private double m_maxSpeed = 0.5;
+	private double m_maxSpeed = 0.6;
 	private double m_distance = 0.0;
 	
 	private double KP = 2.0;
 	private double KI = 0.0;
-	private double KD = 0.0;
+	private double KD = 1.0;
 	
     public DriveStraight(double distance, double maxSpeed, double kp, double ki, double kd) {
         
@@ -81,6 +81,18 @@ public class DriveStraight extends CommandBase {
         m_pid.setSetpoint(m_distance);
     }
 
+	//If the robot has hit a wall, SAY SOMETHING!
+	public boolean hasStalled() {
+		double pastDistance = driveBase.getDistance();
+		if (driveBase.getDistance() - pastDistance <= 1) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	
+	
     // Called just before this Command runs the first time
     protected void initialize() {
     	// Get everything in a safe starting state.
@@ -95,7 +107,8 @@ public class DriveStraight extends CommandBase {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return m_pid.onTarget();
+    	double error = m_pid.getError();
+        return (error >= 0 && error <= TOLERANCE);
     }
 
     // Called once after isFinished returns true

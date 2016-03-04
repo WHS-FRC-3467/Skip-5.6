@@ -2,26 +2,25 @@ package org.usfirst.frc.team3467.robot.subsystems.Intake.commands;
 
 import org.usfirst.frc.team3467.robot.commands.CommandBase;
 
-public class Roller_Actuate extends CommandBase {
+public class AutoIntake extends CommandBase {
 
-	private boolean EXTEND;
+	boolean Out;
 	
-	public Roller_Actuate(boolean Extend) {
+	public AutoIntake(boolean driveOut) {
 		requires(intake);
-		EXTEND = Extend;
-		setTimeout(0.5);
+		Out = driveOut;
+		setTimeout(1);
 	}
 	
 	protected void initialize() {
-
 	}
-
+	
 	protected void execute() {
-		if (EXTEND) {
-			intake.extend();
+		if (Out) {
+			intake.driveManual(intake.kIntakeFast);
 		}
 		else {
-			intake.retract();
+			intake.driveManual((intake.kEjectFast));
 		}
 	}
 
@@ -30,10 +29,9 @@ public class Roller_Actuate extends CommandBase {
 	}
 
 	protected void end() {
-
+		intake.driveManual(0.0);
 	}
 
 	protected void interrupted() {
-
 	}
 }

@@ -99,10 +99,10 @@ public class OI {
 		
 	//DriveBase
 		//Toggle in and out of precision angle mode
-		new JoystickButton(PrimaryStick, 9)
+		new JoystickButton(PrimaryStick, 5)
 		.whenPressed(new PreciseRotateToAngle());
 		
-		new JoystickButton(PrimaryStick, 10)
+		new JoystickButton(PrimaryStick, 6)
 		.whenPressed(new ArcadeDrive());
 		
 	//Intake
@@ -162,7 +162,8 @@ public class OI {
 		 */
 		
 		// Quick latch reset (emergency use only)
-		new DoubleButton(SecondaryStick, 7, 12).whenActive(new ShooterRetryUnlatch());
+		new DoubleButton(SecondaryStick, 7, 12)
+		.whenActive(new ShooterRetryUnlatch());
 		
 		
 	//Camera Commands
@@ -174,7 +175,7 @@ public class OI {
 		
 		
 	//Utility Bar/Finger
-			//Extend Using the Right Trigger
+			//Extend Using the Right Joystick Trigger
 		new JoystickButton(PrimaryStick, 1)
 			.whenPressed(new Bar_actuate(Pnumatic_system.kOut));
 		

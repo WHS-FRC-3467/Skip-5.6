@@ -2,7 +2,6 @@ package org.usfirst.frc.team3467.robot.subsystems.Shooter.commands;
 
 import org.usfirst.frc.team3467.robot.commands.CommandBase;
 
-
 /**
  *
  */
@@ -36,7 +35,8 @@ public class ShooterClear extends CommandBase {
     // Called once after isFinished returns true
     protected void end() {
     	pultaCat.cataStop();
-    	pultaCat.cataCalibrate();
+    	//pultaCat.cataCalibrate();
+    	System.out.println("Shooter Cleared");
     }
 
     // Called when another command which requires one or more of the same
