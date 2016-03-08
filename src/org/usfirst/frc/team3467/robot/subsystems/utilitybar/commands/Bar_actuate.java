@@ -12,6 +12,7 @@ public class Bar_actuate extends CommandBase {
 	public Bar_actuate(Value inORout) {
 	 requires(utilitybar);
 	 INorOUT = inORout;
+	 setTimeout(0.5);
 	}
 	
 	public Bar_actuate() {
@@ -28,7 +29,7 @@ public class Bar_actuate extends CommandBase {
 
 	protected boolean isFinished() {
 		// TODO Auto-generated method stub
-		return false;
+		return isTimedOut();
 	}
 
 	protected void end() {

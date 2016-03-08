@@ -16,7 +16,7 @@ public class GRIP {
 	public static final int TOP_TARGET_HEIGHT = 97;
 	
 	//Camera angles are different for different camera
-	public static final int
+	public static final double FOVx = 47.0;
 	
 	final double targetx = 150.1;
 	final double targety = 0.0;
@@ -34,32 +34,27 @@ public class GRIP {
 	
 	
 	public void createImage () {
-		
-		while (true) {
+			
 			double[] centerx = table.getNumberArray("centerX", defaultValue);
 			double[] centery = table.getNumberArray("centerY", defaultValue);
-			
-			for (int i = 0; i <= centerx.length; i++) {
-				functionx[i] = centerx[i];
-				functiony[i] = centery[i];
+		
+		if  (centerx.length == 0) {
+				functionx[0] = centerx[0];
+				functiony[0] = centery[0];
 				
-				if(functionx[i] >= targetx - TOLERANCEx && functionx[i] <= targetx + TOLERANCEx) {
+				if(functionx[0] >= targetx - TOLERANCEx && functionx[0] <= targetx + TOLERANCEx) {
 					onTargetx = true;
 				}
 				
-				if (functiony[i] >= targety - TOLERANCEy && functiony[i] <= targety + TOLERANCEy) {
+				if (functiony[0] >= targety - TOLERANCEy && functiony[0] <= targety + TOLERANCEy) {
 					onTargety = true;
 				}
-				System.out.println("Centery" + functiony[j]);
-				
-				System.out.println("Centerx" + functionx[i]);
 			}
 			
 			if (onTargetx && onTargety) {
 				imageOnTarget = true;
 			}
 		}
-	}
 	
 	public double[] getCenterX() {
 		return functionx;

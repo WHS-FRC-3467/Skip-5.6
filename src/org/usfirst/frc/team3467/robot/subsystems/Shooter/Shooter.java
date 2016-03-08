@@ -111,6 +111,21 @@ public class Shooter extends PIDSubsystem implements PowerConsumer {
 		this.setSetpoint(setpoint);
 	}
 	
+	public boolean isOnSetPoint() {
+		boolean onset;
+		double error = this.getPIDController().getError();
+		
+		if (error >= 0 && error <= TOLERANCE) {
+			onset = true;
+		}
+		else {
+			onset = false;
+		}
+		
+		SmartDashboard.putBoolean("Shooter On SetPoint", onset);
+		return onset;
+	}
+	
 	public void initManualMode() {
 		
 		if (m_usePID) {
@@ -215,7 +230,7 @@ public class Shooter extends PIDSubsystem implements PowerConsumer {
 	public void cataCalibrate() {
 		
 		clearPoint = resetAngle.get();
-		latchPoint = clearPoint - 0.4;
+		latchPoint = clearPoint - 0.39;
 		hasBeenCalibrated = true;
 	}
 	
